@@ -2259,7 +2259,7 @@ function loadRouteParamsState() {
                 let quantBoundHash = stateAndQuantBounds[1];
                 chooseNextState(justStateHash, quantBoundHash, rethrow);
             } else {
-                chooseNextState(stateHash, null, rethrow);
+                chooseNextState(stateHash, undefined, rethrow);
             }
         }
     }
