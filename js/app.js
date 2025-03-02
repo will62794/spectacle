@@ -1972,10 +1972,11 @@ let resize_initial_pos_x = null;
 function resize_mousemove(e){
     const leftPane = document.querySelector("#mid-pane");
     const rightPane = document.querySelector("#trace-container");
+    const panelContainer = document.querySelector(".panel-container");
 
     // Expand/contract left and right panes.
     leftPane.style.width = e.x - leftPane.getBoundingClientRect().left + 'px';
-    rightPane.style.width = rightPane.getBoundingClientRect().right - e.x +  'px';
+    rightPane.style.width = panelContainer.getBoundingClientRect().width - e.x + 'px';
 }
 
 function resize_mouseup(e){
