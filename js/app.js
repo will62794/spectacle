@@ -132,6 +132,14 @@ const exampleSpecs = {
         constant_vals: {
             "N": "3"
         }
+    },
+    "BlockingQueue (animated)": {
+        specpath: "./specs/BlockingQueue.tla",
+        constant_vals: {
+            "Producers": "{p1,p2}",
+            "Consumers": "{c}",
+            "BufCapacity": 1
+        }
     }
 
 };
