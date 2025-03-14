@@ -383,6 +383,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             { "spec": "set_dot_notation", "constvals": undefined },
             { "spec": "record_literal_eval", "constvals": undefined },
             { "spec": "seq_append", "constvals": undefined },
+            { "spec": "empty_domain_and_seq", "constvals": undefined },
             { "spec": "primed_tuple", "constvals": undefined },
             { "spec": "mldr_init_only", "constvals": undefined },
             { "spec": "tla_expr_eval", "constvals": undefined },
