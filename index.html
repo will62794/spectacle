@@ -1,13 +1,3 @@
-<!--
-  Based on:
-  - https://github.com/tree-sitter/tree-sitter/blob/master/cli/src/web_ui.html
-  - https://github.com/stsewd/tree-sitter-rst/blob/master/docs/index.html
-  
-  Assets from:
-  - https://github.com/tree-sitter/tree-sitter/blob/master/docs/assets/js/playground.js
-  - https://github.com/tree-sitter/tree-sitter.github.io/blob/master/tree-sitter.js
-  - https://github.com/tree-sitter/tree-sitter.github.io/blob/master/tree-sitter.wasm
--->
 <head>
     <meta charset="utf-8">
     <title>Spectacle</title>
@@ -31,8 +21,6 @@
 </head>
   
   <body>
-  <script src="js/lib/mithril.min.js"></script>
-
 
     <!-- <div id="toggle-spec-button" onclick="toggleSpec()">Toggle Spec</div> -->
 
@@ -55,25 +43,27 @@
     <!-- <div id="trace-container">
     </div> -->
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js" integrity="sha512-2iwCHjuj+PmdCyvb88rMOch0UcKQxVHi/gsAml1fN3eg82IDaO/cdzzeXX4iF2VzIIes7pODE1/G0ts3QBwslA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.45.0/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clusterize.js/0.18.0/clusterize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Frameworks and libraries. -->
+    <script src="js/lib/mithril.min.js"></script>
+    <script src="js/lib/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="js/lib/jquery-ui.min.js"></script>
+    <script src="js/lib/lodash.min.js"></script>
+    <script src="js/lib/codemirror.min.js"></script>
+    <script src="js/lib/clusterize.min.js"></script>
+    <script src="js/lib/popper.min.js"></script>
+    <script src="js/lib/bootstrap.bundle.min.js"></script>
 
     <!-- CytoscapeJS (for graph visualizations) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.min.js" integrity="sha512-cjmYAonfXK+azDmWqvnqq8xmygHRHqVI7S0zuRxQnvcYVeoakwthRX6pPKoXfG1oIjDvMUtteRV9PhQjJwKWxQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/dagre@0.7.4/dist/dagre.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+    <script src="js/lib/cytoscape.min.js"></script>
+    <script src="js/lib/dagre.js"></script>
+    <script src="js/lib/cytoscape-dagre.min.js"></script>
 
     <script src="js/addon/mode/simple.js"></script>
 
-    <script src="js/object_hash.js" crossorigin="anonymous"></script>
-    <script src="js/hash-sum/hash-sum.js" crossorigin="anonymous"></script>
+    <script src="js/object_hash.js"></script>
+    <script src="js/hash-sum/hash-sum.js"></script>
 
+    <!-- Application code. -->
     <script src=js/tlamode.js></script>
     <script src=js/test_spec.js></script>
     <script src=js/eval.js></script>
