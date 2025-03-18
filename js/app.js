@@ -1693,7 +1693,12 @@ function toggleTracePaneButton(){
 function componentButtonsContainer() {
     return [m("div", {class: "btn-toolbar", role:"toolbar"}, [
         m("div", { id: "trace-buttons", class:"btn-group mr-2", role:"group" }, [
-            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-back-button", onclick: traceStepBack }, "Back"),
+            m("button", { 
+                class: "btn btn-sm btn-outline-primary button-bagse", 
+                id: "trace-back-button", 
+                disabled: model.currTrace.length === 0,
+                onclick: traceStepBack 
+            }, "Back"),
             m("button", { 
                 class: "btn btn-sm btn-outline-primary button-bagse", 
                 id: "trace-forward-button", 
