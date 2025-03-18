@@ -2367,9 +2367,13 @@ async function loadApp() {
                 codeEditor = CodeMirror.fromTextArea(codeInput, {
                     lineNumbers: true,
                     showCursorWhenSelecting: true,
+                    fontSize: "11px",
+                    theme: "default",
                     // TODO: Work out tlaplus mode functionality for syntax highlighting.
                     // mode:"tlaplus"
                 });
+                // Set font size using CSS
+                codeEditor.getWrapperElement().style.fontSize = "11px";
             }
         },
         onupdate: function () {
