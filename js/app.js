@@ -35,6 +35,8 @@ let model = {
     currTrace: [],
     currTraceActions: [],
     currTraceAliasVals: [],
+    forwardHistory: [], // Stack to store states we've stepped back from
+    forwardHistoryActions: [], // Stack to store actions we've stepped back from
     spec: null,
     specTreeObjs: null,
     specDefs: null,
@@ -699,6 +701,13 @@ function traceStepBack() {
         model.lassoTo = null;
         return;
     }
+    
+    // Save current state to forward history before stepping back
+    if (model.currTrace.length > 0) {
+        model.forwardHistory.push(model.currTrace[model.currTrace.length - 1]);
+        model.forwardHistoryActions.push(model.currTraceActions[model.currTraceActions.length - 1]);
+    }
+    
     model.currTrace = model.currTrace.slice(0, model.currTrace.length - 1);
     model.currTraceActions = model.currTraceActions.slice(0, model.currTraceActions.length - 1);
     updateTraceRouteParams();
@@ -716,30 +725,23 @@ function traceStepBack() {
     }
 }
 
-function traceStepForward(){
-    if(model.lockedTrace === null){
+function traceStepForward() {
+    // If no forward history, we can't step forward
+    if (model.forwardHistory.length === 0) {
         return;
     }
-    // model.currTrace = model.lockedTrace;
-    // model.currTraceActions = model.lockedTraceActions;
-    // updateTraceRouteParams();
 
-    model.currTrace = model.lockedTrace.slice(0, model.currTrace.length + 1);
-    model.currTraceActions = model.lockedTrace.slice(0, model.currTraceActions.length + 1);
+    // Pop the last state from forward history and add it to current trace
+    let nextState = model.forwardHistory.pop();
+    let nextAction = model.forwardHistoryActions.pop();
+    
+    model.currTrace.push(nextState);
+    model.currTraceActions.push(nextAction);
     updateTraceRouteParams();
 
-    // Back to initial states.
-    if (model.currTrace.length === 0) {
-        console.log("Back to initial states.")
-        reloadSpec();
-        return;
-    } else {
-        console.log("stepping back");
-        let lastState = model.currTrace[model.currTrace.length - 1];
-        let nextStates = recomputeNextStates(lastState["state"]);
-        model.currNextStates = _.cloneDeep(nextStates);
-    }
-
+    // Update next states
+    let nextStates = recomputeNextStates(nextState["state"]);
+    model.currNextStates = _.cloneDeep(nextStates);
 }
 
 // Adds the given new params to the current route params and updates the route.
@@ -815,6 +817,10 @@ function actionIdForNextState(nextStateHash) {
 }
 
 function chooseNextState(statehash_short, quantBoundsHash, rethrow = false) {
+    // Clear forward history since we're taking a new path
+    model.forwardHistory = [];
+    model.forwardHistoryActions = [];
+    
     // console.log("currNextStates:", JSON.stringify(currNextStates));
     // console.log("chooseNextState: ", statehash_short);
 
@@ -1618,6 +1624,9 @@ async function handleCodeChange(editor, changes) {
 }
 
 function resetTrace() {
+    // Clear forward history when resetting
+    model.forwardHistory = [];
+    model.forwardHistoryActions = [];
     reloadSpec();
     updateTraceRouteParams();
 }
@@ -1682,32 +1691,20 @@ function toggleTracePaneButton(){
 }
 
 function componentButtonsContainer() {
-
     return [m("div", {class: "btn-toolbar", role:"toolbar"}, [
         m("div", { id: "trace-buttons", class:"btn-group mr-2", role:"group" }, [
-            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-bacfk-button", onclick: traceStepBack }, "Back"),
-            // 
-            // TODO: Enable trace locking once clearing up all allowable state transitions.
-            //
-            // m("button", { 
-            //     class: "btn btn-sm btn-outline-primary button-bagse", 
-            //     id: "trace-bacfk-button", 
-            //     disabled: (model.lockedTrace !== null && model.currTrace.length === model.lockedTrace.length), 
-            //     hidden: (model.lockedTrace === null), 
-            //     onclick: traceStepForward 
-            // }, "Forward"),
-            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-refset-button", onclick: resetTrace }, "Reset"),
-            // m("button", { 
-            //     class: "btn btn-sm btn-outline-primary button-bagse", 
-            //     id: "trace-refset-button", 
-            //     onclick: model.lockedTrace === null ? lockTrace : unlockTrace, 
-            //     // hidden: (model.lockedTrace !== null) 
-            // }, model.lockedTrace === null ? "Lock trace" : "Unlock trace"),
+            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-back-button", onclick: traceStepBack }, "Back"),
+            m("button", { 
+                class: "btn btn-sm btn-outline-primary button-bagse", 
+                id: "trace-forward-button", 
+                disabled: model.forwardHistory.length === 0,
+                onclick: traceStepForward 
+            }, "Forward"),
+            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-reset-button", onclick: resetTrace }, "Reset"),
             m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-refset-button", onclick: copyTraceLinkToClipboard }, "Copy trace link"),
             // Explode dropdown.
             explodeButtonDropdown(),
             // Add trace expression.
-            // m("div", { class: "button-base trace-button", id: "trace-reset-button", onclick: () => checkInv(model.traceExprInputText) }, "Check Invariant"),
             m("button", { 
                 class: "btn btn-sm btn-outline-primary", 
                 disabled: model.traceExprInputText.length === 0,
