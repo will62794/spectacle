@@ -1964,7 +1964,7 @@ function midPane() {
     return [
         m("div", { 
             id: "mid-pane", 
-            style: {width: model.tracePaneHidden ? "85%" : "49%"} 
+            style: {width: model.tracePaneHidden ? "85%" : "40%"} 
         }, tabs)
     ];
 }
@@ -2046,8 +2046,7 @@ function tracePane() {
 
     return m("div", { 
             id: "trace-container", 
-            // hidden: model.tracePaneHidden,
-            // style: {width: model.tracePaneHidden ? "10%" : "50%"}
+            style: {width: model.tracePaneHidden ? "10%" : "60%"}
         }, [
         tabs,
         otherTabs
