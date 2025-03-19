@@ -335,7 +335,12 @@ class TupleValue extends TLAValue {
 
     // Tuples can be interpreted as functions with a domain over a subset of the natural numbers.
     getDomain(){
-        return new SetValue(_.range(1, this.elems.length + 1).map(v => new IntValue(v)));
+        return _.range(1, this.elems.length + 1).map(v => new IntValue(v));
+    }
+    
+    // Tuples can be interpreted as functions with a range of values.
+    getValues(){
+        return this.elems;
     }
 
     toJSON() {
@@ -3424,7 +3429,7 @@ function evalBoundPrefix(node, ctx) {
 
         // Tuples are considered as functions with natural number domains.
         if (rhsVal instanceof TupleValue) {
-            return [ctx.withVal(rhsVal.getDomain())];
+            return [ctx.withVal(new SetValue(rhsVal.getDomain()))];
         }
 
         evalLog("rhsVal: ", rhsVal);
