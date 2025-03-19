@@ -110,7 +110,7 @@ Next == \/ \E p \in Producers: Put(p, p) \* Add some data to buffer
  
 \*  Empty == [a \in {} |-> {}] \* Cannot be <<>>, which is certainly a bug in Spectacle!!!
 
- \* Fix to the above issued in https://github.com/will62794/spectacle/commit/6b7a2bd
+ \* Fix to the above issued in https://github.com/will62794/spectacle/commit/f84efe7
  Empty == <<>>
  
  \* The element of buffer at index i or empty string if i is out-of-bounds.
