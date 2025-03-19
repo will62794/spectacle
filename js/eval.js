@@ -333,6 +333,11 @@ class TupleValue extends TLAValue {
         return "<<" + this.elems.map(x => x.toString()).join(",") + ">>";
     }
 
+    // Tuples can be interpreted as functions with a domain over a subset of the natural numbers.
+    getDomain(){
+        return new SetValue(_.range(1, this.elems.length + 1).map(v => new IntValue(v)));
+    }
+
     toJSON() {
         return this.elems;
     }
@@ -3419,11 +3424,7 @@ function evalBoundPrefix(node, ctx) {
 
         // Tuples are considered as functions with natural number domains.
         if (rhsVal instanceof TupleValue) {
-            evalLog("rhsVal is Tuple");
-            // Tuples are 1-indexed in TLA+.
-            let rangeVals = _.range(1, rhsVal.length() + 1).map(v => new IntValue(v));
-            let domainVal = new SetValue(rangeVals);
-            return [ctx.withVal(domainVal)];
+            return [ctx.withVal(rhsVal.getDomain())];
         }
 
         evalLog("rhsVal: ", rhsVal);
