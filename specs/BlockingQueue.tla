@@ -108,7 +108,10 @@ Next == \/ \E p \in Producers: Put(p, p) \* Add some data to buffer
  
  SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
  
- Empty == [a \in {} |-> {}] \* Cannot be <<>>, which is certainly a bug in Spectacle!!!
+\*  Empty == [a \in {} |-> {}] \* Cannot be <<>>, which is certainly a bug in Spectacle!!!
+
+ \* Fix to the above issued in https://github.com/will62794/spectacle/commit/6b7a2bd
+ Empty == <<>>
  
  \* The element of buffer at index i or empty string if i is out-of-bounds.
  ElemAt(i) == 
