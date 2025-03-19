@@ -1,5 +1,5 @@
 --------------------------- MODULE BlockingQueue ---------------------------
-EXTENDS Naturals, Sequences, FiniteSets
+EXTENDS Naturals, Sequences, FiniteSets, TLC
 
 \* Please see https://github.com/lemmy/BlockingQueue for the original spec.
 
