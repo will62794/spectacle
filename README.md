@@ -40,7 +40,11 @@ The current tool expects that a specification has defined its initial state pred
 
 Eventually this will be made configurable, but the current tool looks for these hard-coded definitions. Also, there is incomplete support for user module imports, so specs are largely expected to be written in a single module. The interpreter does, however, support most operators from the [TLA+ standard modules](https://github.com/tlaplus/tlaplus/tree/c25a01393ef7d9b0315f3d3b1581988e7a4a57b2/tlatools/org.lamport.tlatools/src/tla2sany/StandardModules) by default.
 
-You can also see a live demo of the tool and its features in [this presentation](https://www.youtube.com/watch?v=kSSWmxQLvmw), which also gives a very high level overview of the tool architecture and implementation details.
+You can also see a live demo of the tool and its features in [this presentation](https://www.youtube.com/watch?v=kSSWmxQLvmw), which also gives a very high level overview of the tool architecture and implementation details. 
+
+### Running Locally
+
+If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running `make serve` from the root directory. This will start up a local Python server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
 
 <!-- Note that in addition to copying and pasting in the text of a TLA+ spec or writing it in the browser interface, you can also load a spec file from a given URL by using the following URL path format: -->
 <!-- ``` -->
