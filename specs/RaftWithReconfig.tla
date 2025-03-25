@@ -16,6 +16,10 @@ CONSTANTS Follower, Candidate, Leader
 \* A reserved value.
 CONSTANTS Nil
 
+\* Flag that disables the condition necessary to avoid original Raft reconfig bug described in
+\* https://groups.google.com/g/raft-dev/c/t4xj6dJTP6E.
+CONSTANT EnableSingleNodeBug
+
 ----
 \* Global variables
 
@@ -186,7 +190,7 @@ Reconfig(i, newConfig) ==
     /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
        IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
-    \* /\ \E entry \in committedEntries : entry.term = currentTerm[i] \* Condition to disable to introduce the original bug.
+    /\ (~EnableSingleNodeBug) => \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
     /\ LET entry == [term  |-> currentTerm[i], configVersion |-> Len(configs) + 1]
            newLog == Append(log[i], entry)
