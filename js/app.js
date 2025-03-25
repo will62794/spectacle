@@ -1281,10 +1281,11 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
     // Trace expression values, if any are present.
     let traceExprRows = model.traceExprs.map((expr, ind) => {
         let ctx = new Context(null, state, model.specDefs, {}, model.specConstVals);
-        // TODO: Will eventually need to propagate through cached module table in these expression evaluations,
-        // to support evaluation of expressions that may be defined in imported modules.
+        // All definitions in the root module should be accessible.
+        ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
+        ctx.setGlobalDefTable(model.spec.globalDefTable);
+        ctx.setSpecObj(model.spec);
         let exprVal = evalExprStrInContext(ctx, expr);
-        console.log("exprVal:", exprVal);
         let cols = [
             m("td", { class: "th-state-traceexpr" }, m("span", expr)),
             m("td", { class: "td-state-traceexpr" }, [tlaValView(exprVal)]),
@@ -1308,6 +1309,11 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         let exprVal;
         try {
             let ctx = new Context(null, state, model.specDefs, {}, model.specConstVals);
+
+            // All definitions in the root module should be accessible.
+            ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
+            ctx.setGlobalDefTable(model.spec.globalDefTable);
+            ctx.setSpecObj(model.spec);
             exprVal = evalExprStrInContext(ctx, model.traceExprInputText);
             console.log("exprVal:", exprVal);
         }
