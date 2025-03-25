@@ -2168,8 +2168,6 @@ class TLASpec {
             }
         }
 
-        console.log("ACTIONS: ", actions);
-
         // Ensure unique ids assigned to each action.
         for (var i = 0; i < actions.length; i++) {
             actions[i].id = i;
