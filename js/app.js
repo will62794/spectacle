@@ -1293,7 +1293,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             m("td", {
                 class: "trace-expr-delete",
                 onclick: (e) => { _.remove(model.traceExprs, v => (v === expr)) }
-            }, m("span", "Delete")), // placeholder row.
+            }, "✖"), // placeholder row.
         ]
 
         // Demarcate trace expressions.

@@ -584,7 +584,7 @@ body {
 
   .trace-expr-delete{
     cursor: pointer;
-    font-size:9px;
+    font-size:13px;
     /* font-weight:bold; */
     color:gray;
     text-align:center;
