@@ -2098,9 +2098,7 @@ function replPane(hidden) {
                         ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
                         ctx.setGlobalDefTable(model.spec.globalDefTable);
                         ctx.setSpecObj(model.spec);
-                        console.log("REPL:", ctx);
                         let res = evalExprStrInContext(ctx, model.replInput);
-                        console.log(res);
                         model.replResult = res;
                     } catch (error) {
                         // swallow parse errors here.

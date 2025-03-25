@@ -793,7 +793,7 @@ class SyntaxRewriter {
             rewriteBatch = this.genSyntaxRewrites(specTree);
         }
         const duration = (performance.now() - start).toFixed(1);
-        console.log(`Completed spec rewriting in ${duration}ms`)
+        evalLog(`Completed spec rewriting in ${duration}ms`)
         // console.log(specTextRewritten);
         return specTextRewritten;
     }
@@ -1522,7 +1522,6 @@ class TLASpec {
     parseSync() {
         // First resolve any module imports, and then parse the spec
         // and any modules in the module import hierarchy.
-        console.log("specPath", this.specPath);
         this.moduleTable = {};
         let parsedSpec = this.parseSpecModule(this.specText);
         this.spec_obj = parsedSpec;
