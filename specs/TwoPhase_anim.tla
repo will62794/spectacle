@@ -192,7 +192,7 @@ RMIdDomain == 1..Cardinality(RM)
 TMElem == Circle(50, 85, 10, [fill |-> IF tmState = "committed" THEN CommitColor ELSE IF tmState = "init" THEN "gray" ELSE AbortColor])
 RMTextElems == 
     [i \in RMIdDomain |->
-        Text(40 * i, 10, RMId[i], ("fill" :> "black" @@ "text-anchor" :> "middle"))
+        Text(40 * i, 20, RMId[i], ("fill" :> "black" @@ "text-anchor" :> "middle"))
     ]
     \* <<Text(10, 10, "RM1", [fill |-> "black"]), Text(20, 10, "RM2", [fill |-> "black"]), Text(40, 50, "TM", [fill |-> "black"])>>
 TMTextElems == <<
@@ -201,7 +201,7 @@ TMTextElems == <<
 >>
 TextElems == RMTextElems \o TMTextElems
 \* RM elements node circles with corresponding colors.
-RMElems == [i \in RMIdDomain |-> Circle(40 * i, 25, 10, 
+RMElems == [i \in RMIdDomain |-> Circle(40 * i, 35, 10, 
         [fill |-> 
             IF rmState[RMId[i]] = "prepared" 
                 THEN "steelblue" 

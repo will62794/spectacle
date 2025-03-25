@@ -161,6 +161,6 @@ Next == \/ \E p \in Producers: Put(p, p) \* Add some data to buffer
  
  AnimView == 
      Group(Prod \o Buffer \o Cons, 
-         ("transform" :> "scale(0.75) translate(60 -50)"))
+         ("transform" :> "scale(0.75) translate(60 10)"))
  
 =============================================================================
