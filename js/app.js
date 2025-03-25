@@ -1195,7 +1195,14 @@ function animationViewForTraceState(state){
     initCtx["defns_curr_context"] = model.spec.getDefinitionByName(model.animViewDefName)["curr_defs_context"];
     let start = performance.now();
     // evalNodeGraph = [];
-    let ret = evalExpr(viewNode, initCtx);
+    try{
+        ret = evalExpr(viewNode, initCtx);
+    }
+    catch(e){
+        console.error(e);
+        console.error("Error evaluating animation view.");
+        return null;
+    }
     console.log("evalNodeGraph:", evalNodeGraph.length);
     const duration = (performance.now() - start).toFixed(1);
     console.log(`Animation view computed in ${duration}ms.`);
@@ -2077,6 +2084,14 @@ function animationPane(hidden) {
         // Last state in trace.
         let state = model.currTrace[model.currTrace.length - 1]["state"];
         let viewSvgObj = animationViewForTraceState(state);
+
+        if(viewSvgObj === null){
+            return m("div", { hidden: hidden }, [
+                componentButtonsContainer(),
+                m("div", { id: "anim-div", style: "color:red;" }, `Error evaluating animation view expression: '${model.animViewDefName}'.`)
+            ]);
+        }
+
         return m("div", { hidden: hidden }, [
             componentButtonsContainer(),
             m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 -20 200 200" }, [viewSvgObj]))
