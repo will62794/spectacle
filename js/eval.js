@@ -1237,7 +1237,6 @@ function evalExprStrInContext(evalCtx, exprStr) {
 
     let opDefs = dummyTreeObjs["op_defs"];
     let exprNode = spec.getDefinitionByName("Expr").node
-    console.log(exprNode);
 
     let exprVal = evalExpr(exprNode, evalCtx)[0]["val"];
 
