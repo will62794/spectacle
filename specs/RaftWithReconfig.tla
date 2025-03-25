@@ -310,6 +310,18 @@ Rect(x, y, w, h, attrs) ==
                      height |-> h] IN
     SVGElem("rect", Merge(svgAttrs, attrs), <<>>, "")
 
+Image(x, y, width, height, href, attrs) == 
+    LET svgAttrs == ("xlink:href" :> href @@
+                     "x"         :> x @@
+                     "y"         :> y @@
+                     "width"     :> width @@
+                     "height"    :> height) IN
+    SVGElem("image", Merge(svgAttrs, attrs), <<>>, "")
+
+CrownIcon == "assets/crown.svg"
+
+CrownElem(xbase, rmid, i) == Image(xbase, i * 30, 13, 13, CrownIcon, IF state[rmid] # Leader THEN [hidden |-> "true"] ELSE <<>>)
+
 \* Establish a fixed mapping to assign an ordering to elements in these sets.
 \* ServerId == CHOOSE f \in [Server -> 1..Cardinality(Person)] : Injective(f)
 SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
@@ -321,18 +333,21 @@ c2 == Circle(20, 10, 5, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(Server)
 Spacing == 40
-XBase == -50
+XBase == -30
 logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(20 * ind + 160, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
-                                   Text(20 * ind + 165, ybase + 14, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "12px"))>>, [h \in {} |-> {}])
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 160, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
+                                   Text(18 * ind + 165, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 10)]
-cs == [i \in RMIdDomain |-> Circle(XBase + 20, i * Spacing, 10, 
+cs == [i \in RMIdDomain |-> 
+        Group(<<Circle(XBase + 20, i * Spacing, 10, 
         [stroke |-> "black", fill |-> 
             IF state[RMId[i]] = Leader 
-                THEN "green" 
+                THEN "gold" 
             ELSE IF state[RMId[i]] = Follower THEN "gray" 
-            ELSE IF state[RMId[i]] = Follower THEN "red" ELSE "gray"])]
+            ELSE IF state[RMId[i]] = Follower THEN "red" ELSE "gray"]),
+            CrownElem(XBase-10, RMId[i],i)>>, [h \in {} |-> {}])
+        ]
 \* configStr(i) ==  " (" \o ToString(configVersion[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
 configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
 labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
