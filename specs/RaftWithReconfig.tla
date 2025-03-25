@@ -186,7 +186,7 @@ Reconfig(i, newConfig) ==
     /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
        IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
-    /\ \E entry \in committedEntries : entry.term = currentTerm[i]
+    \* /\ \E entry \in committedEntries : entry.term = currentTerm[i] \* Condition to disable to introduce the original bug.
     /\ configs' = Append(configs, newConfig)
     /\ LET entry == [term  |-> currentTerm[i], configVersion |-> Len(configs) + 1]
            newLog == Append(log[i], entry)
@@ -263,4 +263,7 @@ CONSTANT MaxLogLen
 StateConstraint == 
     /\ \A s \in Server : currentTerm[s] <= MaxTerm
     /\ \A s \in Server : Len(log[s]) <= MaxLogLen
+
+Symmetry == Permutations(Server)
+
 ===============================================================================

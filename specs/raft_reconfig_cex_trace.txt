@@ -1,0 +1,212 @@
+TLC2 Version 2.20 of Day Month 20?? (rev: 3bc8fa1)
+Warning: Please run the Java VM, which executes TLC with a throughput optimized garbage collector, by passing the "-XX:+UseParallelGC" property.
+(Use the -nowarning option to disable this warning.)
+Running breadth-first search Model-Checking with fp 33 and seed 5579387498315818579 with 10 workers on 12 cores with 9216MB heap and 64MB offheap memory [pid: 43817] (Mac OS X 15.3.2 aarch64, Oracle Corporation 23.0.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /Users/william.schultz/Documents/projects/spectacle/specs/RaftWithReconfig.tla
+Parsing file /private/var/folders/sk/lgn4t7hj49n553snly1k5w640000gp/T/tlc-4092414869075026645/Naturals.tla (jar:file:/usr/local/bin/tla2tools-v1.8.jar!/tla2sany/StandardModules/Naturals.tla)
+Parsing file /private/var/folders/sk/lgn4t7hj49n553snly1k5w640000gp/T/tlc-4092414869075026645/FiniteSets.tla (jar:file:/usr/local/bin/tla2tools-v1.8.jar!/tla2sany/StandardModules/FiniteSets.tla)
+Parsing file /private/var/folders/sk/lgn4t7hj49n553snly1k5w640000gp/T/tlc-4092414869075026645/Sequences.tla (jar:file:/usr/local/bin/tla2tools-v1.8.jar!/tla2sany/StandardModules/Sequences.tla)
+Parsing file /private/var/folders/sk/lgn4t7hj49n553snly1k5w640000gp/T/tlc-4092414869075026645/TLC.tla (jar:file:/usr/local/bin/tla2tools-v1.8.jar!/tla2sany/StandardModules/TLC.tla)
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module RaftWithReconfig
+Starting... (2025-03-24 16:50:56)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2025-03-24 16:50:56.
+Progress(9) at 2025-03-24 16:50:59: 490,282 states generated (490,282 s/min), 98,793 distinct states found (98,793 ds/min), 68,487 states left on queue.
+Progress(13) at 2025-03-24 16:51:59: 22,816,049 states generated (22,325,767 s/min), 3,871,057 distinct states found (3,772,264 ds/min), 2,398,330 states left on queue.
+Progress(13) at 2025-03-24 16:52:59: 46,151,041 states generated (23,334,992 s/min), 7,738,089 distinct states found (3,867,032 ds/min), 4,740,957 states left on queue.
+Progress(14) at 2025-03-24 16:53:59: 69,486,494 states generated (23,335,453 s/min), 11,549,668 distinct states found (3,811,579 ds/min), 7,017,002 states left on queue.
+Error: Invariant CommittedSafety is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s3 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Follower @@ s2 :> Follower @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}>>
+/\ currentTerm = (s1 :> 0 @@ s2 :> 0 @@ s3 :> 0 @@ s4 :> 0)
+
+State 2: <BecomePrimary(s1,{s1, s2, s4}) line 136, col 5 to line 146, col 37 of module RaftWithReconfig>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s3 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Leader @@ s2 :> Follower @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 1 @@ s3 :> 0 @@ s4 :> 1)
+
+State 3: <BecomePrimary(s2,{s2, s3, s4}) line 136, col 5 to line 146, col 37 of module RaftWithReconfig>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s3 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 2 @@ s3 :> 2 @@ s4 :> 2)
+
+State 4: <Reconfig(s2,{s1, s2, s3}) line 181, col 5 to line 194, col 49 of module RaftWithReconfig>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 2 @@ s3 :> 2 @@ s4 :> 2)
+
+State 5: <AppendOplog(s3,s2) line 98, col 5 to line 103, col 58 of module RaftWithReconfig>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 2 @@ s3 :> 2 @@ s4 :> 2)
+
+State 6: <Reconfig(s1,{s1, s2, s4}) line 181, col 5 to line 194, col 49 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 1, configVersion |-> 3] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 2 @@ s3 :> 2 @@ s4 :> 2)
+
+State 7: <AdvanceCommitPoint(s2,{s2, s3}) line 160, col 5 to line 171, col 45 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 1, configVersion |-> 3] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 1 @@ s2 :> 2 @@ s3 :> 2 @@ s4 :> 2)
+
+State 8: <BecomePrimary(s2,{s1, s2}) line 136, col 5 to line 146, col 37 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 1, configVersion |-> 3] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Follower @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 3 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 2)
+
+State 9: <BecomePrimary(s1,{s1, s4}) line 136, col 5 to line 146, col 37 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 1, configVersion |-> 3] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 4)
+
+State 10: <RollbackOplog(s1,s2) line 117, col 5 to line 121, col 58 of module RaftWithReconfig>
+/\ log = ( s1 :> <<[term |-> 0, configVersion |-> 1]>> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 4)
+
+State 11: <Reconfig(s1,{s1, s2, s4}) line 181, col 5 to line 194, col 49 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 4, configVersion |-> 4] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :> <<[term |-> 0, configVersion |-> 1]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 4)
+
+State 12: <AppendOplog(s4,s1) line 98, col 5 to line 103, col 58 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 4, configVersion |-> 4] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :>
+      <<[term |-> 0, configVersion |-> 1], [term |-> 4, configVersion |-> 4]>> )
+/\ committedEntries = {[index |-> 1, term |-> 0], [index |-> 2, term |-> 2]}
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 4)
+
+State 13: <AdvanceCommitPoint(s1,{s1, s4}) line 160, col 5 to line 171, col 45 of module RaftWithReconfig>
+/\ log = ( s1 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 4, configVersion |-> 4] >> @@
+  s2 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s3 :>
+      << [term |-> 0, configVersion |-> 1],
+         [term |-> 2, configVersion |-> 2] >> @@
+  s4 :>
+      <<[term |-> 0, configVersion |-> 1], [term |-> 4, configVersion |-> 4]>> )
+/\ committedEntries = { [index |-> 1, term |-> 0],
+  [index |-> 2, term |-> 2],
+  [index |-> 2, term |-> 4] }
+/\ state = (s1 :> Leader @@ s2 :> Leader @@ s3 :> Follower @@ s4 :> Follower)
+/\ configs = <<{s1, s2, s3, s4}, {s1, s2, s3}, {s1, s2, s4}, {s1, s2, s4}>>
+/\ currentTerm = (s1 :> 4 @@ s2 :> 3 @@ s3 :> 2 @@ s4 :> 4)
+
+82691275 states generated, 13738310 distinct states found, 8331361 states left on queue.
+The depth of the complete state graph search is 14.
+Finished in 03min 37s at (2025-03-24 16:54:34)
