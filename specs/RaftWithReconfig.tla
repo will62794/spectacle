@@ -334,14 +334,14 @@ cs == [i \in RMIdDomain |-> Circle(XBase + 20, i * Spacing, 10,
             ELSE IF state[RMId[i]] = Follower THEN "gray" 
             ELSE IF state[RMId[i]] = Follower THEN "red" ELSE "gray"])]
 \* configStr(i) ==  " (" \o ToString(configVersion[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
-configStr(i) == "config" \*  " (" \o ToString(ServerViewOn(RMId[i])) \o ") "
+configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
 labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
         ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
         [fill |-> 
             IF state[RMId[i]] = Leader 
                 THEN "black" 
             ELSE IF state[RMId[i]] = Follower THEN "black" 
-            ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "11px"))] 
+            ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))] 
 AnimView == Group(cs \o labels \o logElems, [i \in {} |-> {}])
 
 ===============================================================================
