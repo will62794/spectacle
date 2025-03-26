@@ -334,27 +334,21 @@ function componentChooseConstants(hidden) {
 
     let chooseConstsElems = [];
     for (const constDecl in model.specConsts) {
-        // console.log(constDecl);
-        let newDiv = m("div", {}, [
-            m("span", {}, m.trust("" + constDecl + " &#8592; ")),
-            m("input", {
-                class: "const-input",
+        let newRow = m("tr", {}, [
+            m("td", { style: { "vertical-align": "middle" } }, constDecl),
+            m("td", { style: { "vertical-align": "middle" } }, "←"),
+            m("td", {}, m("input", {
+                class: "const-input form-control form-control-sm",
                 id: `const-val-input-${constDecl}`,
                 oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
                 value: model.specConstInputVals[constDecl],
                 placeholder: "Enter TLA+ value."
-            }),
-            // m("button", {
-            //     // class: "const-input",
-            //     // id: `const-val-input-${constDecl}`,
-            //     onclick: (e) => setConstantAsString(constDecl),
-            //     value: model.specConstInputVals[constDecl],
-            //     placeholder: "Enter TLA+ value.",
-            //     innerHTML: "Set as string"
-            // })
+            }))
         ])
-        chooseConstsElems.push(newDiv);
+        chooseConstsElems.push(newRow);
     }
+
+    chooseConstsTable = m("table", {id:"choose-constants-table"}, chooseConstsElems);
 
 
     function hideButtonDiv(){
@@ -388,7 +382,7 @@ function componentChooseConstants(hidden) {
         // m("div", { id: "set-constants-button" }, setButtonDiv),
         m("div", { id: "constant-buttons-div" }, constantButtons()),
             // ]),
-        m("div", { id: "choose-constants-elems", hidden: model.constantsPaneHidden }, chooseConstsElems),
+        m("div", { id: "choose-constants-elems", hidden: model.constantsPaneHidden }, chooseConstsTable),
     ]);
 }
 

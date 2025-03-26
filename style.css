@@ -57,7 +57,11 @@ body {
   }
   .const-input{
       margin:3px;
-      width:180px;
+      width:240px;
+  }
+
+  #choose-constants-table td{
+    font-size: 14px;
   }
 
   #garden {
