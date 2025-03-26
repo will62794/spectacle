@@ -657,6 +657,7 @@ function recomputeNextStates(fromState) {
             // console.log("FROM:", fromState)
             const start = performance.now();
             cloneTime = 0;
+            numClones = 0;
 
             let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
             // console.log("nextStatesForAction", nextStatesForAction); 
@@ -669,8 +670,9 @@ function recomputeNextStates(fromState) {
 
             const duration = (performance.now() - start).toFixed(1);
 
-            console.log(`Generating next states for action '${action.name}' took ${duration}ms, (${nextStatesForAction.length} distinct states generated, clone time: ${cloneTime.toFixed(2)}ms)`)
+            console.log(`Generating next states for action '${action.name}' took ${duration}ms, (${nextStatesForAction.length} distinct states generated, clone time: ${cloneTime.toFixed(2)}ms, ${numClones} clones)`)
             cloneTime = 0;
+            numClones = 0;
     
         }
         nextStates = nextStatesByAction;

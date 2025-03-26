@@ -10,6 +10,7 @@
 // For debugging.
 let depth = 0;
 let cloneTime = 0.0;
+let numClones = 0;
 const TLA_STANDARD_MODULES = [
     "TLC",
     "FiniteSets",
@@ -2323,6 +2324,7 @@ class Context {
         // For diagnostics to measure clone time and its impact on eval performance.
         const duration = (performance.now() - start);
         cloneTime = cloneTime + duration;
+        numClones = numClones + 1;
 
         let ctxNew = new Context(
             valNew, stateNew, defnsNew, quant_boundNew, constants, prev_func_val,
