@@ -1223,12 +1223,12 @@ function checkModelValSet(exprNode){
 /**
  * Evaluate a TLA+ expression, given as a string, in the given context.
  */
-function evalExprStrInContext(evalCtx, exprStr) {
+function evalExprStrInContext(evalCtx, exprStr, exprTagName = "temp") {
     let nullTree;
     let start = performance.now();
 
     // Create a dummy spec to parse/evaluate the expression.
-    let dummySpec = "---- MODULE dummy_eval_spec ----\n";
+    let dummySpec = `---- MODULE expr_eval_spec_${exprTagName} ----\n`;
     dummySpec += `Expr == ${exprStr}\n`;
     dummySpec += "====";
 

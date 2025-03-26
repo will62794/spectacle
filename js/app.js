@@ -889,7 +889,7 @@ function chooseNextState(statehash_short, quantBoundsHash, rethrow = false) {
 }
 
 function setConstantValues(reload = true) {
-    console.log("#setConstantValues");
+    console.log("Setting constant values");
     let constVals = {};
     let nullTree;
     let constTlaVals = {};
@@ -900,7 +900,7 @@ function setConstantValues(reload = true) {
         if (constValText === undefined) {
             throw "no constant value given for " + constDecl;
         }
-        console.log("constDecl:", constDecl, constValText);
+        // console.log("constDecl:", constDecl, constValText);
         constVals[constDecl] = constValText;
 
         let ctx = new Context(null, new TLAState({}), model.specDefs, {}, model.specConstVals);
@@ -913,15 +913,15 @@ function setConstantValues(reload = true) {
         // TODO: Eventually should more of this be handled directly in the interpreter?
         //
         let cVal = null;
-        console.log("model.specDefs:", model.specDefs);
+        // console.log("model.specDefs:", model.specDefs);
         if (_.find(model.specDefs, d => d.name === constValText) !== undefined) {
             cVal = constValText;
         } else {
             // Flag so that we treat unknown identifiers as model values during evaluation.
             ctx.evalModelVals = true;
-            cVal = evalExprStrInContext(ctx, constValText);
+            cVal = evalExprStrInContext(ctx, constValText, exprTagName = "CONSTANT");
         }
-        console.log("Setting constant value:", constDecl, "to", cVal);
+        console.log(`Setting constant value: '${constDecl}' to '${cVal}'`);
         constTlaVals[constDecl] = cVal;
     }
 
