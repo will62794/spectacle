@@ -143,3 +143,7 @@ ExprM3 == 45
 Need to continue working on and finish off conversion to have definitions stored and referenced by globally unique identifier ids, and all evaluations of identifers occur based on the "current context" in which those definitions were defined. Need to also make sure substitutions for module instantiations are working correctly.
 
 Also need to deal with function definitions, which I feel like could ultimately be merged into all other definition handling, and not made separate?
+
+## 2025-03-26
+
+Should it be the case that we really only need to clone at most as many times as there are branching choice calls in the expression? Have to think on that one.
