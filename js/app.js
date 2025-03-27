@@ -1295,7 +1295,10 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             // Button to delete trace expression.
             m("td", {
                 class: "trace-expr-delete",
-                onclick: (e) => { _.remove(model.traceExprs, v => (v === expr)) }
+                onclick: (e) => { 
+                    _.remove(model.traceExprs, v => (v === expr));
+                    updateRouteParams({traceExprs: model.traceExprs});
+                }
             }, "✖"), // placeholder row.
         ]
 
