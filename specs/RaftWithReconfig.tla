@@ -340,10 +340,10 @@ c2 == Circle(20, 10, 5, [fill |-> "red"])
 RMIdDomain == 1..Cardinality(Server)
 XBase == -30
 logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 160, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
-                                   Text(18 * ind + 165, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 130, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
+                                   Text(18 * ind + 135, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
-logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 10)]
+logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 cs == [i \in RMIdDomain |-> 
         Group(<<Circle(XBase + 20, i * Spacing, 10, 
         [stroke |-> "black", fill |-> 
@@ -354,7 +354,8 @@ cs == [i \in RMIdDomain |->
             CrownElem(XBase-10, RMId[i],i)>>, [h \in {} |-> {}])
         ]
 \* configStr(i) ==  " (" \o ToString(configVersion[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
-configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
+\* configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
+configStr(i) == ToString(ServerViewOn(RMId[i]))
 labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
         ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
         [fill |-> 
