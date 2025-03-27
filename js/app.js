@@ -2103,7 +2103,7 @@ function animationPane(hidden) {
         return m("div", { hidden: hidden }, [
             componentButtonsContainer(),
             traceStateCounter(),
-            m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 0 200 200" }, [viewSvgObj]))
+            m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 0 200 240" }, [viewSvgObj]))
         ]);
     }
 }
