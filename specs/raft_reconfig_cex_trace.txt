@@ -1,5 +1,5 @@
 Link:
-http://127.0.0.1:8000/#!/home?specpath=.%2Fspecs%2FRaftWithReconfig.tla&constants%5BServer%5D=%7Bs1%2Cs2%2Cs3%2Cs4%7D&constants%5BFollower%5D=%22F%22&constants%5BCandidate%5D=%22C%22&constants%5BLeader%5D=%22L%22&constants%5BNil%5D=%22Nil%22&constants%5BMaxTerm%5D=3&constants%5BMaxLogLen%5D=3&constants%5BEnableSingleNodeBug%5D=TRUE&traceExprs%5B0%5D=%5CA%20x%2Cy%20%5Cin%20committedEntries%20%3A%20(x.index%20%3D%20y.index)%20%3D%3E%20x.term%20%3D%20y.term&traceExprs%5B1%5D=NoTwoPrimariesInSameTerm&trace=607e05ed%2C02e2a09f_d8f53b9c%2C3d0b902e_2ce73454%2C3867d435_606ab528%2C34661f4f_46d81ba9%2Cce839a26_e223a450%2C386ec8c9_6513bb26%2C6f4f0f64_c630cb98%2C02ee71a2_ae0dff70%2C48a4e2c4_26e3c58d%2C59c92d0c_795463e5%2C7c92fbe5_79ef9634%2C0b23cc9d_235e9c79
+http://127.0.0.1:8000/#!/home?specpath=.%2Fspecs%2FRaftWithReconfig.tla&constants%5BServer%5D=%7Bs1%2Cs2%2Cs3%2Cs4%7D&constants%5BFollower%5D=%22F%22&constants%5BCandidate%5D=%22C%22&constants%5BLeader%5D=%22L%22&constants%5BNil%5D=%22Nil%22&constants%5BMaxTerm%5D=3&constants%5BMaxLogLen%5D=3&constants%5BEnableSingleNodeBug%5D=TRUE
 
 TLC2 Version 2.20 of Day Month 20?? (rev: 3bc8fa1)
 Warning: Please run the Java VM, which executes TLC with a throughput optimized garbage collector, by passing the "-XX:+UseParallelGC" property.
