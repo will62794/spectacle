@@ -322,9 +322,11 @@ Image(x, y, width, height, href, attrs) ==
                      "height"    :> height) IN
     SVGElem("image", Merge(svgAttrs, attrs), <<>>, "")
 
+Spacing == 40
+
 CrownIcon == "assets/crown.svg"
 
-CrownElem(xbase, rmid, i) == Image(xbase, i * 30, 13, 13, CrownIcon, IF state[rmid] # Leader THEN [hidden |-> "true"] ELSE <<>>)
+CrownElem(xbase, rmid, i) == Image(xbase, i * Spacing - 6, 13, 13, CrownIcon, IF state[rmid] # Leader THEN [hidden |-> "true"] ELSE <<>>)
 
 \* Establish a fixed mapping to assign an ordering to elements in these sets.
 \* ServerId == CHOOSE f \in [Server -> 1..Cardinality(Person)] : Injective(f)
@@ -336,7 +338,6 @@ c1 == Circle(10, 10, 5, [fill |-> "red"])
 c2 == Circle(20, 10, 5, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(Server)
-Spacing == 40
 XBase == -30
 logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
 logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 160, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
