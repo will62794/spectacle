@@ -69,11 +69,11 @@ Min(s) == CHOOSE x \in s : \A y \in s : x <= y
 Max(s) == CHOOSE x \in s : \A y \in s : x >= y
 
 \* The config version in the node's last entry.
-GetConfigVersion(i) == log[i][Len(log[i])].configVersion
+GetConfigVersion(i) == log[i][Len(log[i])].v
 
 \* Gets the node's first entry with a given config version.
 GetConfigEntry(i, configVersion) == LET configEntries == {index \in 1..Len(log[i]) : 
-                                                            log[i][index].configVersion = configVersion}
+                                                            log[i][index].v = configVersion}
                                     IN Min(configEntries)
 
 \* The servers that are in the same config as i.
@@ -87,7 +87,7 @@ Quorum(me) == {sub \in SUBSET(ServerViewOn(me)) : Cardinality(sub) * 2 > Cardina
 \* Define initial values for all variables
 InitServerVars == /\ currentTerm = [i \in Server |-> 0]
                   /\ state       = [i \in Server |-> Follower]
-InitLogVars == /\ log              = [i \in Server |-> << [term |-> 0, configVersion |-> 1] >>]
+InitLogVars == /\ log              = [i \in Server |-> << [term |-> 0, v |-> 1] >>]
                /\ committedEntries = {[term |-> 0, index |-> 1]}
 InitConfigs == configs = << Server >>
 Init == /\ InitServerVars
@@ -154,7 +154,7 @@ BecomePrimary(i, ayeVoters) ==
 \* Leader i receives a client request to add v to the log.
 ClientWrite(i) ==
     /\ state[i] = Leader
-    /\ LET entry == [term  |-> currentTerm[i], configVersion |-> GetConfigVersion(i)]
+    /\ LET entry == [term  |-> currentTerm[i], v |-> GetConfigVersion(i)]
            newLog == Append(log[i], entry)
        IN  log' = [log EXCEPT ![i] = newLog]
     /\ UNCHANGED <<serverVars, committedEntries, configs>>
@@ -193,7 +193,7 @@ Reconfig(i, newConfig) ==
     \* The primary must have committed an entry in its current term.
     /\ (~EnableSingleNodeBug) => \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
-    /\ LET entry == [term  |-> currentTerm[i], configVersion |-> Len(configs) + 1]
+    /\ LET entry == [term  |-> currentTerm[i], v |-> Len(configs) + 1]
            newLog == Append(log[i], entry)
        IN  log' = [log EXCEPT ![i] = newLog]
     /\ UNCHANGED <<serverVars, committedEntries>>
@@ -354,7 +354,7 @@ cs == [i \in RMIdDomain |->
             ELSE IF state[RMId[i]] = Follower THEN "red" ELSE "gray"]),
             CrownElem(XBase-10, RMId[i],i)>>, [h \in {} |-> {}])
         ]
-\* configStr(i) ==  " (" \o ToString(configVersion[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
+\* configStr(i) ==  " (" \o ToString(v[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
 \* configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
 configStr(i) == ToString(ServerViewOn(RMId[i]))
 labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
