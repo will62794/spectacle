@@ -2445,9 +2445,16 @@ async function loadApp() {
                         m("span", { class: "navbar-text", href: "https://github.com/will62794/spectacle", style: "padding-right:15px" },
                             [
                                 m("span", {}, [
-                                    m("span", { style: "font-weight:bold" }, "Root module:  "),
-                                    m("span", model.rootModName + (model.rootModName.length > 0 ? ".tla" : "")),
-                                    m("span", { style: { opacity: 0.5 } }, fetchingText),
+                                    m("span", { style: "font-weight:bold", "font-size": "14px" }, "Root module:  "),
+                                    m("span", {
+                                        ondblclick: () => {
+                                            model.debug = 1;
+                                            console.log("debug", model.debug);
+                                            m.redraw();
+                                        },
+                                        style: {cursor: "pointer", "font-family": "monospace", "font-size": "14px"}
+                                    },model.rootModName + (model.rootModName.length > 0 ? ".tla" : "")),
+                                    m("span", { style: { opacity: 0.5, "font-size": "14px" } }, fetchingText),
                                     spinner,
                                     parseError
                                 ]
