@@ -2075,6 +2075,15 @@ function replResult(){
     }
 }
 
+function traceStateCounter(){
+    let style = {"font-size": "14px"};
+    if(model.forwardHistory.length > 0){
+        return m("div", {style: style}, `Trace state ${model.currTrace.length} / ${model.currTrace.length + model.forwardHistory.length}`);
+    } else{
+        return m("div", {style: style}, `Trace state ${model.currTrace.length}`);
+    }
+}
+
 function animationPane(hidden) {
     if (model.animationExists && model.enableAnimationView && model.currTrace.length > 0) {
         // Last state in trace.
@@ -2090,6 +2099,7 @@ function animationPane(hidden) {
 
         return m("div", { hidden: hidden }, [
             componentButtonsContainer(),
+            traceStateCounter(),
             m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 0 200 200" }, [viewSvgObj]))
         ]);
     }
