@@ -184,6 +184,7 @@ UpdateTermThroughHeartbeat(i, j) ==
         
 Reconfig(i, newConfig) ==
     /\ state[i] = Leader
+    /\ newConfig # ServerViewOn(i)
     /\ i \in newConfig
     \* Only support single node addition/removal.
     /\ Cardinality(ServerViewOn(i) \ newConfig) + Cardinality(newConfig \ ServerViewOn(i)) <= 1
