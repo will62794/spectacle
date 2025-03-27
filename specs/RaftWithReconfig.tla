@@ -137,6 +137,7 @@ NotBehind(me, j) == \/ LastTerm(log[me]) > LastTerm(log[j])
 \* ACTION
 \* i = the new primary node.
 BecomePrimary(i, ayeVoters) ==
+    /\ i \in ayeVoters
     /\ \A j \in ayeVoters : /\ i \in ServerViewOn(j)
                             /\ NotBehind(i, j)
                             /\ currentTerm[j] <= currentTerm[i]
