@@ -2449,6 +2449,7 @@ async function loadApp() {
                                     m("span", {
                                         ondblclick: () => {
                                             model.debug = 1;
+                                            enableEvalTracing = true;
                                             console.log("debug", model.debug);
                                             m.redraw();
                                         },
