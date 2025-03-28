@@ -536,33 +536,30 @@ body {
     /* border-bottom:solid 1px black; */
   }
 
-  .action-choice-name, .action-choice-param{
+  .action-choice-name{
+    /* max-width:250px; */
+    /* border:solid 1px black; */
     color:black;
     font-size: 12px;
     min-width:80px;
     font-weight:bold;
     margin-top:3px;
     margin-bottom:3px;
-  }
-
-  .action-choice-name{
-    /* max-width:250px; */
-    /* border:solid 1px black; */
     border-right:solid 1px gray;
     padding:4px;   
     padding-right:12px;
     margin-right:10px;
     font-size:12px;
-
   }
 
   .action-choice-param {
     color:black;
     font-size: 12px;
     margin-left:5px;
-    font-weight:bold;
+    /* font-weight:bold; */
     border-radius: 6px; 
-    padding:4px;   
+    padding:4px; 
+    margin:3px;
     /* width: 100%; */
     border:solid 1px black;
     /* max-width:150px; */
