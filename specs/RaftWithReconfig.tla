@@ -224,7 +224,7 @@ Next ==
     \* --- Replication protocol
     \/ \E i,j \in Server : AppendOplog(i, j)
     \/ \E i,j \in Server : RollbackOplog(i, j)
-    \/ \E i \in Server : \E ayeVoters \in SUBSET(Server) : BecomePrimary(i, ayeVoters)
+    \/ \E i \in Server : \E ayeVoters \in (SUBSET(Server) \ {Server}) : BecomePrimary(i, ayeVoters)
     \/ \E i \in Server : ClientWrite(i)
     \/ \E leader \in Server : \E ack \in SUBSET Server : AdvanceCommitPoint(leader, ack)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : Reconfig(i, newConfig)
@@ -340,10 +340,10 @@ c1 == Circle(10, 10, 5, [fill |-> "red"])
 c2 == Circle(20, 10, 5, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(Server)
-XBase == -30
+XBase == -15
 logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 130, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
-                                   Text(18 * ind + 135, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
+                                   Text(18 * ind + 115, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 cs == [i \in RMIdDomain |-> 
@@ -358,13 +358,21 @@ cs == [i \in RMIdDomain |->
 \* configStr(i) ==  " (" \o ToString(v[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(ServerViewOn(RMId[i]))
 \* configStr(i) == " (" \o ToString(ServerViewOn(RMId[i])) \o "," \o ToString(GetConfigVersion(RMId[i])) \o ") "
 configStr(i) == ToString(ServerViewOn(RMId[i]))
-labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
-        ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
+labels == [i \in RMIdDomain |-> Text(XBase + 38, i * Spacing + 5, 
+        \* ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
+        ToString(RMId[i]) \o "     " \o configStr(i), 
         [fill |-> 
             IF state[RMId[i]] = Leader 
                 THEN "black" 
             ELSE IF state[RMId[i]] = Follower THEN "black" 
             ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))] 
-AnimView == Group(cs \o labels \o logElems, [i \in {} |-> {}])
+termLabels == [i \in RMIdDomain |-> Text(XBase + 40 + currentTerm[RMId[i]] * 12, i * Spacing + 18, 
+        "" \o ToString(currentTerm[RMId[i]]), 
+        [fill |-> 
+            IF state[RMId[i]] = Leader 
+                THEN "black" 
+            ELSE IF state[RMId[i]] = Follower THEN "black" 
+            ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px"))] 
+AnimView == Group(cs \o labels \o termLabels \o logElems, [i \in {} |-> {}])
 
 ===============================================================================
