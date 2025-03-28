@@ -2487,10 +2487,10 @@ async function loadApp() {
                                     m("span", { style: "font-weight:bold", "font-size": "14px" }, "Root module:  "),
                                     m("span", {
                                         ondblclick: () => {
-                                            model.debug = 1;
-                                            enableEvalTracing = true;
+                                            model.debug = 1 - model.debug;
+                                            enableEvalTracing = model.debug === 1;
                                             console.log("debug", model.debug);
-                                            updateRouteParams({debug: 1});
+                                            updateRouteParams({debug: model.debug});
                                             m.redraw();
                                         },
                                         style: {cursor: "pointer", "font-family": "monospace", "font-size": "14px"}
