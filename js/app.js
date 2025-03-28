@@ -2012,6 +2012,9 @@ function tracePane() {
         m("li", {
             class: "nav-item",
             onclick: () => model.selectedTraceTab = TraceTab.Trace,
+            ondblclick: () => {
+                model.tracePaneHidden = true;
+            },
         }, m("a", {class: model.selectedTraceTab === TraceTab.Trace ? "nav-link active" : "nav-link"}, "Trace")),
         m("li", {
             class: "nav-item",
