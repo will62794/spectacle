@@ -5234,7 +5234,7 @@ evalExpr = function (...args) {
     if (parent !== null) {
         let parentNodeText = parent.text + boundCtxStr(parentCtx);
         // console.log("nodeedge:", "\"" + currNode.text + "\"", "->", "\"" + parent.text + "\"");
-        edge = [nodeText, parentNodeText]
+        edge = [{textId:nodeText, type:currNode.type}, {textId:parentNodeText, type:parent.type}]
         // evalNodeGraph.push([currNode.text, parent.text]);
     }
 
