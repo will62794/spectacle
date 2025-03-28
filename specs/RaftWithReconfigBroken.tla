@@ -166,10 +166,6 @@ AdvanceCommitPoint(leader, ack) ==
     /\ state[leader] = Leader
     /\ ack \subseteq Agree(leader, Len(log[leader]))
     /\ ack \in Quorum(leader)
-    \* If we comment out the following line, a replicated log entry from old primary will voilate the safety.
-    \* [ P (2), S (), S ()]
-    \* [ S (2), S (), P (3)]
-    \* [ S (2), S (2), P (3)] !!! the log from term 2 shouldn't be considered as committed.
     /\ LogTerm(leader, Len(log[leader])) = currentTerm[leader]
     \* If an acknowledger has a higher term, the leader would step down.
     /\ \A j \in ack : currentTerm[j] <= currentTerm[leader]
