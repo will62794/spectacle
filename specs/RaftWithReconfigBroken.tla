@@ -1,4 +1,4 @@
---------------------------------- MODULE RaftWithReconfig --------------------------------
+--------------------------------- MODULE RaftWithReconfigBroken --------------------------------
 \* 
 \* This is a formal specification for the Raft consensus algorithm with reconfiguration.
 \* It allows reconfig using the protocol for single server membership changes described in Raft.
@@ -9,16 +9,9 @@ EXTENDS Naturals, FiniteSets, Sequences, TLC, Integers
 \* The set of server IDs
 CONSTANTS Server
 
-\* Server states.
-\* Candidate is not used, but this is fine.
-CONSTANTS Follower, Candidate, Leader
-
-\* A reserved value.
-CONSTANTS Nil
-
 \* Flag that disables the condition necessary to avoid original Raft reconfig bug described in
 \* https://groups.google.com/g/raft-dev/c/t4xj6dJTP6E.
-CONSTANT EnableSingleNodeBug
+EnableSingleNodeBug == TRUE
 
 ----
 \* Global variables
@@ -54,6 +47,14 @@ logVars == <<log, committedEntries>>
 
 \* All variables; used for stuttering (asserting state hasn't changed).
 vars == <<serverVars, logVars, configs>>
+
+
+\* Server states.
+Leader == "Leader"
+Candidate == "Candidate"
+Follower == "Follower"
+
+Nil == "Nil"
 
 ----
 \* Helpers
