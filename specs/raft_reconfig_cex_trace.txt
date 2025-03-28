@@ -1,6 +1,10 @@
 Link:
 http://127.0.0.1:8000/#!/home?specpath=.%2Fspecs%2FRaftWithReconfig.tla&constants%5BServer%5D=%7Bs1%2Cs2%2Cs3%2Cs4%7D&constants%5BFollower%5D=%22F%22&constants%5BCandidate%5D=%22C%22&constants%5BLeader%5D=%22L%22&constants%5BNil%5D=%22Nil%22&constants%5BMaxTerm%5D=3&constants%5BMaxLogLen%5D=3&constants%5BEnableSingleNodeBug%5D=TRUE
 
+other trace link:
+http://127.0.0.1:8000/#!/home?specpath=.%2Fspecs%2FRaftWithReconfig.tla&constants%5BServer%5D=%7Bs1%2Cs2%2Cs3%2Cs4%7D&constants%5BFollower%5D=%22F%22&constants%5BCandidate%5D=%22C%22&constants%5BLeader%5D=%22L%22&constants%5BNil%5D=%22Nil%22&constants%5BMaxTerm%5D=3&constants%5BMaxLogLen%5D=3&constants%5BEnableSingleNodeBug%5D=TRUE&trace=174da3e0%2C51ad33c6_d8f53b9c%2C2b0b31d6_2ce73454%2Cb3c251b8_24d47b63%2C9c903186_335d170d%2C0f692a13_26e3c58d%2C072f0fc2_e223a450%2C3335eca2_6513bb26%2C69cfa48d_ae0dff70%2C7252710d_f013900a%2C245c865c_79ef9634
+
+
 TLC2 Version 2.20 of Day Month 20?? (rev: 3bc8fa1)
 Warning: Please run the Java VM, which executes TLC with a throughput optimized garbage collector, by passing the "-XX:+UseParallelGC" property.
 (Use the -nowarning option to disable this warning.)
