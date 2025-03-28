@@ -2484,6 +2484,7 @@ async function loadApp() {
                                             model.debug = 1;
                                             enableEvalTracing = true;
                                             console.log("debug", model.debug);
+                                            updateRouteParams({debug: 1});
                                             m.redraw();
                                         },
                                         style: {cursor: "pointer", "font-family": "monospace", "font-size": "14px"}
