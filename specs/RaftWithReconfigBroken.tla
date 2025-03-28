@@ -169,7 +169,9 @@ AdvanceCommitPoint(leader, ack) ==
     /\ LogTerm(leader, Len(log[leader])) = currentTerm[leader]
     \* If an acknowledger has a higher term, the leader would step down.
     /\ \A j \in ack : currentTerm[j] <= currentTerm[leader]
-    /\ committedEntries' = committedEntries \union {[term |-> LastTerm(log[leader]), index |-> Len(log[leader])]}
+    \* Has new entries to commit.
+    /\ [term |-> LastTerm(log[leader]), index |-> Len(log[leader])] \notin committedEntries
+    /\ committedEntries' = committedEntries \union {[term |-> log[leader][i].term, index |-> i] : i \in DOMAIN log[leader]}
     /\ UNCHANGED <<serverVars, log, configs>>
        
 UpdateTermThroughHeartbeat(i, j) ==
