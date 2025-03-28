@@ -1745,9 +1745,15 @@ function componentButtonsContainer() {
                 onclick: traceStepForward 
             }, "Forward"),
             m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-reset-button", onclick: resetTrace }, "Reset"),
-            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-refset-button", onclick: copyTraceLinkToClipboard }, "Copy trace link"),
             // Explode dropdown.
             explodeButtonDropdown(),
+            m("button", { 
+                class: "btn btn-sm btn-outline-primary button-bagse", 
+                id: "trace-refset-button", 
+                onclick: (e) => {
+                    copyTraceLinkToClipboard();
+                }
+            }, "Copy link"),
             // Add trace expression.
             m("button", { 
                 class: "btn btn-sm btn-outline-primary", 
