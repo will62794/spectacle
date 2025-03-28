@@ -241,19 +241,44 @@ function displayEvalGraph(nodeGraph) {
                 size: "auto",
                 style: {
                     'label': function (el) {
-                        return el.data()["expr_text"].replaceAll("\n", "");
+                        // return el.data()["expr_text"].replaceAll("\n", "");
+                        // if(el.data().expr_text.includes("' = ")) {
+                            // let cleanStr = el.data()["expr_text"].replaceAll("\n", "");
+                            // cleanStr.indexOf("' = ");
+                            // let ret = cleanStr.substring(0,cleanStr.indexOf("' = ") + 1);
+                            // if (ret.length < 100){
+                            if(el.data().expr_type === "bound_infix_op"){
+                                return "(" + el.data().expr_type + ") " + el.data().expr_text
+                            }
+                            if(el.data().expr_type === "function_evaluation"){
+                                return "(" + el.data().expr_type + ") " + el.data().expr_text
+                            }
+                            return el.data().expr_type;
+                            // }
+                            // return el.data()["expr_text"].replaceAll("\n", "");
+                        // }
+                        // return "";
                     },
                     // "width": function(el){
                     //     console.log(el);
                     //     return el.data().expr_text.length * 10 + 20;
                     // },
-                    // "height": 15,
-                    "background-color": "white",
+                    "width": 15,
+                    "height": 15,
+                    "background-color": function(el){
+                        if(el.data().expr_type === "conj_list"){
+                            return "orange";
+                        }
+                        if(el.data().expr_text.includes("' = ")) {
+                            return "red";
+                        }
+                        return "blue";
+                    },
                     "text-valign": "center",
                     // "text-halign": "center",
                     "border-style": "solid",
                     "border-width": "1",
-                    "border-color": "white",
+                    "border-color": "gray",
                     "font-family": "monospace",
                     "font-size": "8px",
                     "shape": "rectangle"
@@ -262,13 +287,14 @@ function displayEvalGraph(nodeGraph) {
         ]
     });
 
-    let nodes = _.uniq(_.flatten(nodeGraph.map(d => d[0])))
+    let nodes = _.uniqBy(_.flatten(nodeGraph.map(d => d[0])), "textId")
     for (const node of nodes) {
         cy.add({
             group: 'nodes',
             data: { 
-                id: hashSum(node), 
-                expr_text: node 
+                id: hashSum(node.textId), 
+                expr_text: node.textId,
+                expr_type: node.type
             },
             position: { x: 200, y: 200 }
         });
@@ -283,9 +309,10 @@ function displayEvalGraph(nodeGraph) {
         cy.add({
             group: 'edges', data: {
                 id: 'e' + eind,
-                source: hashSum(edge[0]),
-                target: hashSum(edge[1]),
-                label: retVal[0]["val"].toString() + " " + edgeOrder + "(" + retVal.length + ") [" + evalDur + "ms]"
+                source: hashSum(edge[0].textId),
+                target: hashSum(edge[1].textId),
+                // label: retVal[0]["val"].toString() + " " + edgeOrder + "(" + retVal.length + ") [" + evalDur + "ms]"
+                label: edgeOrder + "(" + retVal.length + ") [" + evalDur + "ms]"
             }
         });
         eind++;
