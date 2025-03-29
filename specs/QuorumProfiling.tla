@@ -11,14 +11,17 @@ CONSTANTS Server
 
 \* Server states.
 \* Candidate is not used, but this is fine.
-CONSTANTS Follower, Candidate, Leader
+
+Follower == "Follower"
+Candidate == "Candidate"
+Leader == "Leader"
 
 \* A reserved value.
-CONSTANTS Nil
+Nil == "Nil"
 
 \* Flag that disables the condition necessary to avoid original Raft reconfig bug described in
 \* https://groups.google.com/g/raft-dev/c/t4xj6dJTP6E.
-CONSTANT EnableSingleNodeBug
+EnableSingleNodeBug == TRUE
 
 ----
 \* Global variables
@@ -261,18 +264,6 @@ TwoPrimariesInSameTerm ==
         /\ state[j] = Leader
 
 NoTwoPrimariesInSameTerm == ~TwoPrimariesInSameTerm
-
----------------------------------------------------------------
-
-CONSTANT MaxTerm
-CONSTANT MaxLogLen
-
-StateConstraint == 
-    /\ \A s \in Server : currentTerm[s] <= MaxTerm
-    /\ \A s \in Server : Len(log[s]) <= MaxLogLen
-
-Symmetry == Permutations(Server)
-
 
 ------------------------------------------------------------
 
