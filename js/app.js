@@ -2277,7 +2277,7 @@ function componentEvalGraphPane(hidden){
     }
     
     return m("div", {hidden: hidden}, [
-        m("div", {class: "btn-group", role: "group", style: {"margin-left": "10px", "margin-bottom": "20px"}}, actionSelectButtons),
+        m("div", {class: "btn-group", role: "group", style: {"margin-left": "10px", "margin-bottom": "20px", "margin-top": "8px"}}, actionSelectButtons),
         m("div", { id: "eval-graph-pane", hidden: hidden }, [
             m("h4", {style: {margin:"10px"}}, "Eval graph pane"),
             m("div", { id: "eval-graph" })
