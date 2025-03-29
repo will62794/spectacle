@@ -1227,7 +1227,7 @@ function animationViewForTraceState(state){
         console.error("Error evaluating animation view.");
         return null;
     }
-    console.log("evalNodeGraph:", evalNodeGraph.length);
+    // console.log("evalNodeGraph:", evalNodeGraph.length);
     const duration = (performance.now() - start).toFixed(1);
     console.log(`Animation view computed in ${duration}ms.`);
     // displayEvalGraph(evalNodeGraph);
