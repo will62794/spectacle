@@ -2319,8 +2319,8 @@ class Context {
 
         let substitutionsNew = _.cloneDeep(this.substitutions);
         let module_eval_namespace_prefix_new = _.cloneDeep(this.module_eval_namespace_prefix);
-        let var_decls_context_new = _.cloneDeep(this.var_decls_context);
-        let defns_curr_context_new = _.cloneDeep(this.defns_curr_context);
+        let var_decls_context_new = _.clone(this.var_decls_context);
+        let defns_curr_context_new = _.clone(this.defns_curr_context);
         // For diagnostics to measure clone time and its impact on eval performance.
         const duration = (performance.now() - start);
         cloneTime = cloneTime + duration;
