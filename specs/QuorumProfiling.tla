@@ -229,16 +229,16 @@ TestAction(i, ayeVoters) ==
     /\ state' = [state EXCEPT ![i] = Leader]
     /\ UNCHANGED <<currentTerm, log, configs, committedEntries>>
 
-TestAction2(i, ayeVoters) ==
-    /\ ayeVoters \notin Quorum(i)
+Other(i, ayeVoters) ==
+    /\ ayeVoters \in {Server}
     /\ state' = [state EXCEPT ![i] = Leader]
     /\ UNCHANGED <<currentTerm, log, configs, committedEntries>>
 
 
 \* Defines how the variables may transition.
 Next ==
-    \/ \E i \in Server : \E ayeVoters \in SUBSET(Server) \cap {Server} : TestAction(i, ayeVoters)
-    \/ \E i \in Server : \E ayeVoters \in SUBSET(Server) \cap {Server} : TestAction2(i, ayeVoters)
+    \/ \E i \in Server : \E ayeVoters \in SUBSET(Server) : TestAction(i, ayeVoters)
+    \/ \E i \in Server : \E ayeVoters \in SUBSET(Server) : Other(i, ayeVoters)
 
 
 \* The specification must start with the initial state and transition according
