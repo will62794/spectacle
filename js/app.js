@@ -2131,7 +2131,11 @@ function animationPane(hidden) {
     if (model.animationExists && model.enableAnimationView && model.currTrace.length > 0) {
         // Last state in trace.
         let state = model.currTrace[model.currTrace.length - 1]["state"];
-        let viewSvgObj = animationViewForTraceState(state);
+        // If hidden, no need to compute the animation view.
+        viewSvgObj = m("span", "");
+        if(!hidden){
+            viewSvgObj = animationViewForTraceState(state);
+        }
 
         if(viewSvgObj === null){
             return m("div", { hidden: hidden }, [
