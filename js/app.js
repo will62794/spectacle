@@ -153,7 +153,7 @@ let App;
 const urlSearchParams = new URLSearchParams(window.location.search);
 const urlParams = Object.fromEntries(urlSearchParams.entries());
 let enableEvalTracing = false;
-
+let evalNodeGraphsPerAction = {};
 
 function displayStateGraph() {
     // TODO: Will need to flesh out this functionality further.
@@ -675,6 +675,8 @@ function recomputeNextStates(fromState) {
     let interp = new TlaInterpreter();
     let nextStates;
 
+    evalNodeGraphsPerAction = {};
+
     // Compute next states broken down by action.
     // TODO: Consider if this functionality more appropriately lives inside the interpreter logic.
     if (model.actions.length > 1) {
@@ -686,6 +688,7 @@ function recomputeNextStates(fromState) {
             cloneTime = 0;
             numClones = 0;
 
+
             let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
             // console.log("nextStatesForAction", nextStatesForAction); 
             nextStatesForAction = nextStatesForAction.map(c => {
@@ -695,12 +698,13 @@ function recomputeNextStates(fromState) {
             // nextStatesForActionQuantBound = nextStatesForActionQuantBound.map(c => c["quant_bound"]);
             nextStatesByAction[action.id] = nextStatesForAction;
 
+            evalNodeGraphsPerAction[action.id] = evalNodeGraph;
+
             const duration = (performance.now() - start).toFixed(1);
 
             console.log(`Generating next states for action '${action.name}' took ${duration}ms, (${nextStatesForAction.length} distinct states generated, clone time: ${cloneTime.toFixed(2)}ms, ${numClones} clones)`)
             cloneTime = 0;
             numClones = 0;
-    
         }
         nextStates = nextStatesByAction;
     } else {
@@ -711,9 +715,6 @@ function recomputeNextStates(fromState) {
             });
     }
 
-    if (model.debug === 1) {
-        displayEvalGraph();
-    }
     return nextStates;
 }
 
@@ -1970,7 +1971,10 @@ function headerTabBar() {
         m("div", {
             // id: "eval-graph-tab-button", 
             class: "nav-item",
-            onclick: () => model.selectedTab = Tab.EvalGraph,
+            onclick: () => {
+                model.selectedTab = Tab.EvalGraph;
+                model.tracePaneHidden = true;
+            }
             // style: "background-color:" + ((model.selectedTab === Tab.EvalGraph) ? "lightgray" : "none")
         }, m("a", {class: model.selectedTab === Tab.EvalGraph ? "nav-link active" : "nav-link"}, "Eval Graph")),
     ]
@@ -2265,9 +2269,19 @@ function componentExplorerPane() {
 
 function componentEvalGraphPane(hidden){
     // Eval graph pane.
-    return m("div", { id: "eval-graph-pane", hidden: hidden }, [
-        m("h1", "eval graph"),
-        m("div", { id: "eval-graph" })
+    let actionSelectButtons = [];
+    if(model.actions &&model.actions.length > 1){
+        actionSelectButtons = model.actions.map(action => m("button", {class: "btn btn-sm btn-outline-primary", onclick: () => {
+            displayEvalGraph(evalNodeGraphsPerAction[action.id]);
+        }}, action.name));
+    }
+    
+    return m("div", {hidden: hidden}, [
+        m("div", {class: "btn-group", role: "group", style: {"margin-left": "10px", "margin-bottom": "20px"}}, actionSelectButtons),
+        m("div", { id: "eval-graph-pane", hidden: hidden }, [
+            m("h1", "eval graph"),
+            m("div", { id: "eval-graph" })
+        ])
     ])
 }
 
