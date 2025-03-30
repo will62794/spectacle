@@ -351,8 +351,11 @@ XBase == -15
 \* 
 \* Define log elements visuals.
 \* 
-logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
+logEntryStyle(i,ind) == 
+    IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term 
+        THEN ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px")
+        ELSE ("fill" :> "lightgray" @@ "stroke" :> "black" @@ "stroke-width" :> "1px")
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)), 
                                    Text(18 * ind + 115, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
@@ -380,13 +383,24 @@ labels == [i \in RMIdDomain |-> Text(XBase + 38, i * Spacing + 5,
             ELSE IF state[RMId[i]] = Follower THEN "black" 
             ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))] 
 
-termLabels == [i \in RMIdDomain |-> Text(XBase + 40 + currentTerm[RMId[i]] * 12, i * Spacing + 18, 
+termLabels == 
+    [i \in RMIdDomain |-> 
+        Group(<<Text(XBase + 38 + currentTerm[RMId[i]] * 11, i * Spacing + 20, 
         "" \o ToString(currentTerm[RMId[i]]), 
-        [fill |-> 
-            IF state[RMId[i]] = Leader 
-                THEN "black" 
-            ELSE IF state[RMId[i]] = Follower THEN "black" 
-            ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px"))] 
+            [fill |-> 
+                IF state[RMId[i]] = Leader 
+                    THEN "black" 
+                ELSE IF state[RMId[i]] = Follower THEN "black" 
+                ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px")),
+        Text(XBase + 10, i * Spacing + 20, 
+        "term:", 
+            [fill |-> 
+                IF state[RMId[i]] = Leader 
+                    THEN "black" 
+                ELSE IF state[RMId[i]] = Follower THEN "black" 
+                ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px")),
+        Rect(XBase + 35, i * Spacing + 20, 100, 1, [fill |-> "white"])
+        >>, <<>>)]
 
 \* 
 \* Visualize committed safety violation at appropriate index.
