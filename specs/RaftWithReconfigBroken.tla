@@ -323,6 +323,12 @@ Image(x, y, width, height, href, attrs) ==
                      "height"    :> height) IN
     SVGElem("image", Merge(svgAttrs, attrs), <<>>, "")
 
+
+\* 
+\* Define Raft protocol state visualization.
+\* 
+
+
 Spacing == 40
 
 CrownIcon == "assets/crown.svg"
@@ -342,15 +348,18 @@ c2 == Circle(20, 10, 5, [fill |-> "red"])
 RMIdDomain == 1..Cardinality(Server)
 XBase == -15
 
-
+\* 
 \* Define log elements visuals.
+\* 
 logEntryStroke(i,ind) == IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term THEN "orange" ELSE "black"
 logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
                                    Text(18 * ind + 115, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 
+\* 
 \* Define server elements visuals.
+\* 
 cs == [i \in RMIdDomain |-> 
         Group(<<Circle(XBase + 20, i * Spacing, 10, 
         [stroke |-> "black", fill |-> 
@@ -379,11 +388,12 @@ termLabels == [i \in RMIdDomain |-> Text(XBase + 40 + currentTerm[RMId[i]] * 12,
             ELSE IF state[RMId[i]] = Follower THEN "black" 
             ELSE IF state[RMId[i]] = Candidate THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px"))] 
 
+\* 
 \* Visualize committed safety violation at appropriate index.
+\* 
 
 \* Exists a different server with a conflicting committed entry at the same index.
-existsConflictingEntry(ind) == 
-    \E x,y \in committedEntries : x.index = ind /\ (x.index = y.index) /\ x.term # y.term
+existsConflictingEntry(ind) == \E x,y \in committedEntries : x.index = ind /\ (x.index = y.index) /\ x.term # y.term
 violationEntry(ybase, ind) == Image(16 * ind + 115, ybase + 9, 13, 13, BugIcon, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
 violationElem(ybase) == Group([ind \in 1..5 |-> violationEntry(ybase, ind)], <<>>)
 safetyViolationElems ==  <<violationElem(5)>>
