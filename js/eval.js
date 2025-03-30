@@ -2989,6 +2989,15 @@ function evalBoundInfix(node, ctx) {
         return [ctx.withVal(new IntValue(outVal))];
     }
 
+    if(symbol.type === "pow"){
+        evalLog("bound_infix_op, symbol 'pow'");
+        let lhsVal = evalExpr(lhs, ctx)[0]["val"];
+        let rhsVal = evalExpr(rhs, ctx)[0]["val"];
+        let outVal = Math.pow(lhsVal.getVal(), rhsVal.getVal());
+        // console.log("mul overall val:", outVal);
+        return [ctx.withVal(new IntValue(outVal))];       
+    }
+
     // Disjunction.
     if (symbol.type === "lor") {
         return evalLor(lhs, rhs, ctx);

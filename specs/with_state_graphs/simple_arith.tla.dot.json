@@ -14,20 +14,20 @@
         1
       ],
       "nodes": [
-        2,3,4,5,6,7,8,9,10,11
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
       ],
       "edges": [
-        0,1,2,3,4,5,6,7,8,9
+        0,1,2,3,4,5,6,7,8,9,10,11,12,13,14
       ]
     },
     {
-      "name": "%23",
+      "name": "%31",
       "color": "white",
       "nodesep": "0.35",
       "rank": "same",
       "_gvid": 1,
       "nodes": [
-        2,3,4,5,6,7,8,9,10,11
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
       ]
     },
     {
@@ -88,6 +88,36 @@
       "_gvid": 11,
       "name": "1855569396714172680",
       "label": "x = 10",
+      "style": "filled"
+    },
+    {
+      "_gvid": 12,
+      "name": "5710123397395560307",
+      "label": "x = 16",
+      "style": "filled"
+    },
+    {
+      "_gvid": 13,
+      "name": "6599696089129718395",
+      "label": "x = 243",
+      "style": "filled"
+    },
+    {
+      "_gvid": 14,
+      "name": "-6230161439325923452",
+      "label": "x = 1",
+      "style": "filled"
+    },
+    {
+      "_gvid": 15,
+      "name": "4923445692854152869",
+      "label": "x = 5",
+      "style": "filled"
+    },
+    {
+      "_gvid": 16,
+      "name": "1626912067271191492",
+      "label": "x = 46656",
       "style": "filled"
     }
   ],
@@ -168,6 +198,46 @@
       "_gvid": 9,
       "tail": 11,
       "head": 11,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 10,
+      "tail": 12,
+      "head": 12,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 11,
+      "tail": 13,
+      "head": 13,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 12,
+      "tail": 14,
+      "head": 14,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 13,
+      "tail": 15,
+      "head": 15,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 14,
+      "tail": 16,
+      "head": 16,
       "color": "black",
       "fontcolor": "black",
       "label": ""
