@@ -1,20 +1,16 @@
 --------------------------------- MODULE RaftWithReconfigBroken --------------------------------
 \* 
-\* This is a formal specification for the Raft consensus algorithm with reconfiguration.
-\* It allows reconfig using the protocol for single server membership changes described in Raft.
+\* This is an abstract formal specification of the Raft consensus algorithm with dynamic reconfiguration.
 \* 
+\* It allows for reconfiguration using the single server membership
+\* change protocol described in Raft. Specifically, it models the original,
+\* broken version of that protocol that included a critical safety bug.
+\*
 
 EXTENDS Naturals, FiniteSets, Sequences, TLC, Integers
 
 \* The set of server IDs
 CONSTANTS Server
-
-\* Flag that disables the condition necessary to avoid original Raft reconfig bug described in
-\* https://groups.google.com/g/raft-dev/c/t4xj6dJTP6E.
-EnableSingleNodeBug == TRUE
-
-----
-\* Global variables
 
 \* Servers in a given config version.
 \* e.g. << {S1, S2}, {S1, S2, S3} >>
@@ -24,9 +20,6 @@ VARIABLE configs
 \* "immediately committed" entries. It does not include "prefix committed"
 \* entries, which are allowed to roll back on minority nodes.
 VARIABLE committedEntries
-
-----
-\* The following variables are all per server (functions with domain Server).
 
 \* The server's term number.
 VARIABLE currentTerm
@@ -48,6 +41,10 @@ logVars == <<log, committedEntries>>
 \* All variables; used for stuttering (asserting state hasn't changed).
 vars == <<serverVars, logVars, configs>>
 
+
+\* Flag that disables the condition necessary to avoid original Raft reconfig bug described in
+\* https://groups.google.com/g/raft-dev/c/t4xj6dJTP6E.
+EnableSingleNodeBug == TRUE
 
 \* Server states.
 Leader == "Leader"
