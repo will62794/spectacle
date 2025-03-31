@@ -305,6 +305,10 @@ class SetValue extends TLAValue {
         return this.elems.length;
     }
 
+    contains(elem){
+        return this.elems.some(e => e.fingerprint() === elem.fingerprint());
+    }
+
     unionWith(otherSet) {
         return new SetValue(_.uniqWith(this.elems.concat(otherSet.getElems()), _.isEqual));
     }
