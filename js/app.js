@@ -465,10 +465,11 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
             onclick: () => chooseNextState(hash, hashQuantBounds(quantBounds)),
             // onmouseover: () => {
             //     // Enable if UI performance lag isn't too noticeable.
-            //     // model.nextStatePreview = st["state"];
+            //     console.log("onmouseover:", st["state"]);
+            //     model.nextStatePreview = st["state"];
             // },
             // onmouseout: () => {
-            //     // model.nextStatePreview = null;
+            //     model.nextStatePreview = null;
             // }
         }, 
         actionLabelText.params);
@@ -1076,16 +1077,23 @@ function reloadSpec() {
 }
 
 // Function for rendering a TLA+ value that appears in a state/trace, etc.
-function tlaValView(tlaVal) {
+// Optionally takes a previous value to check for diffs when rendering.
+function tlaValView(tlaVal, prevTlaVal = null) {
     if (tlaVal instanceof FcnRcdValue) {
         let valPairs = _.zip(tlaVal.getDomain(), tlaVal.getValues());
         let borderStyle = { style: "border:solid 0.5px gray" };
         return m("table", valPairs.map(p => {
             let key = p[0];
             let val = p[1];
+            // If checking for diff, do it now.
+            let diff = false;
+            if (prevTlaVal !== null && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
+                diff = true;
+            }
             return m("tr", borderStyle, [
                 m("td", borderStyle, key.toString()),
-                m("td", tlaValView(val)), // TODO: do we want to recursively apply?
+                // TOOD: Uniform diff styling.
+                m("td", {style: {"background-color": diff? "lightyellow" : "none"}},tlaValView(val)), // TODO: do we want to recursively apply?
             ]);
         }));
     }
@@ -1108,10 +1116,20 @@ function tlaValView(tlaVal) {
         let setElems = tlaVal.getElems().map((v, idx) => {
             pre = idx === 0 ? "{ " : "";
             suff = idx === (tlaVal.getElems().length - 1) ? " }" : ",";
+
+            // TODO: Consider how to show set diffs.
+            let diff = false;
+            if (prevTlaVal !== null && !prevTlaVal.contains(v)) {
+                diff = true;
+            }
+
+            let style = {}
+            // style = {"background-color": diff? "lightyellow" : "none"}};
+
             return m("tr", [
                 // TODO: Recursively apply value view function?
                 // m("td", m.trust(pre + v.toString() + suff)),
-                m("td", pre + v.toString() + suff),
+                m("td", {style: style}, pre + v.toString() + suff),
             ]);
         });
 
@@ -1272,35 +1290,44 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                 // console.log(selectedNextState);
                 let currState = model.currTrace[model.currTrace.length - 1]["state"];
                 varDiff = selectedNextState.varDiff(currState);
-                // console.log(varDiff);
+                // console.log("var diff:", varDiff);
             }
 
             // TODO: Enable to show modified variables.
-            if(ind === model.currTrace.length - 1 && ind > 0){
+            // if(ind === model.currTrace.length - 1 && ind > 0){
+            if(ind > 0){
                 varDiff = model.currTrace[ind]["state"].varDiff(model.currTrace[ind - 1]["state"]);
             }
 
             // Show modified variables in blue.
-            if (varDiff !== null && varDiff.includes(varname) && ind === model.currTrace.length - 1) {
-                // varnameCol = "lightblue";
+            // if (varDiff !== null && varDiff.includes(varname) && ind === model.currTrace.length - 1) {
+            if (varDiff !== null && varDiff.includes(varname) && ind > 0) {
+                // varnameCol = "none"; // Optionally disable highlighting.
+                varnameCol = "lightyellow";
+            } else{
                 varnameCol = "none";
             }
             let varVal = state.getVarVal(varname);
             if(param !== undefined){
                 varVal = varVal.applyArg(param);
             }
+            let prevVarVal = null;
+            if(ind > 0){
+                prevVarVal = model.currTrace[ind - 1]["state"].getVarVal(varname);
+            }
+            
             let cols = [
                 m("td", {
                     class: "th-state-varname",
-                    style: {"background-color": varnameCol},
+                    // style: {"background-color": varnameCol},
                     onclick: (e) => {
                         model.hiddenStateVars.push(varname);
                         // We also store hidden vars in route url params.
                         updateTraceRouteParams();
                     }
-                }, varname),
-                m("td", [tlaValView(varVal)]),
-                m("td", { style: "width:15px" }, ""), // placeholder row.
+                }, m("span", {style: {"background-color": varnameCol, "padding":"0px"}}, varname)),
+                m("td", {style: {"color": varnameCol}}, [tlaValView(varVal, prevVarVal)]),
+                m("td", { style: "width:15px", hidden: varnameCol === "none" }, ""), // placeholder row.
             ]
 
             return m("tr", { }, cols);
