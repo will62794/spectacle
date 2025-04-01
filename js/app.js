@@ -1297,6 +1297,28 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             // if(ind === model.currTrace.length - 1 && ind > 0){
             if(ind > 0){
                 varDiff = model.currTrace[ind]["state"].varDiff(model.currTrace[ind - 1]["state"]);
+
+                // For case of state being exploded on a parameter.
+                if(param !== undefined){
+                    function projectStateToParam(state, param){
+                        return new TLAState(_.mapValues(state.stateVars, v => {
+                            if(v instanceof FcnRcdValue){
+                                return v.applyArg(param);
+                            }
+                            return v;
+                        }));
+                    }
+
+                    // Project each state var to the param, and then diff.
+                    let stateVarParamProjected = projectStateToParam(model.currTrace[ind]["state"], param);
+                    let stateVarParamProjectedPrev = projectStateToParam(model.currTrace[ind - 1]["state"], param);
+
+                    // console.log("stateVarParamProjected:", stateVarParamProjected);
+                    // console.log("stateVarParamProjectedPrev:", stateVarParamProjectedPrev);
+
+                    varDiff = stateVarParamProjected.varDiff(stateVarParamProjectedPrev);
+
+                }
             }
 
             // Show modified variables in blue.
@@ -1314,6 +1336,9 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             let prevVarVal = null;
             if(ind > 0){
                 prevVarVal = model.currTrace[ind - 1]["state"].getVarVal(varname);
+                if(param !== undefined){
+                    prevVarVal = prevVarVal.applyArg(param);
+                }
             }
             
             let cols = [
