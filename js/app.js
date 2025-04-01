@@ -1326,7 +1326,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                         // updateTraceRouteParams();
                     }
                 }, [
-                    m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, varname),
+                    m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px 0px 0px 0px"}}, varname),
                     // m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, "  x")
                 ]),
                 m("td", {style: {}}, [tlaValView(varVal, prevVarVal)]),
