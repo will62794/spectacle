@@ -1321,13 +1321,26 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                     class: "th-state-varname",
                     // style: {"background-color": varnameCol},
                     onclick: (e) => {
-                        model.hiddenStateVars.push(varname);
+                        // model.hiddenStateVars.push(varname);
                         // We also store hidden vars in route url params.
-                        updateTraceRouteParams();
+                        // updateTraceRouteParams();
                     }
-                }, m("span", {style: {"background-color": varnameCol, "padding":"0px"}}, varname)),
+                }, [
+                    m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, varname),
+                    // m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, "  x")
+                ]),
                 m("td", {style: {"color": varnameCol}}, [tlaValView(varVal, prevVarVal)]),
-                m("td", { style: "width:15px", hidden: varnameCol === "none" }, ""), // placeholder row.
+                m("td", { style: "width:15px", hidden: false }, 
+                    m("img", {
+                        style: {"width": "11px", "height": "11px"},
+                        class: "hide-var-icon",
+                        src: "assets/hide-icon.svg",
+                        onclick: (e) => {
+                            model.hiddenStateVars.push(varname);
+                            // We also store hidden vars in route url params.
+                            updateTraceRouteParams();
+                        }
+                    })), // placeholder row.
             ]
 
             return m("tr", { }, cols);
@@ -1395,10 +1408,11 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         traceExprRows = traceExprRows.concat([currTraceExprRow]);
     }
 
-    let stateColorBg = isLastState ? "lightyellow" : "none";
+    let stateColorBg = "#eee";
     let lassoToInd = (model.lassoTo !== null) ? _.findIndex(model.currTrace, s => s.fingerprint() === model.lassoTo) + 1 : ""
     let lassoNote = ((model.lassoTo !== null) && isLastState) ? " (Back to State " + lassoToInd + ")" : "";
-    let lastStateNote = isLastState ? "  (Current) " : "";
+    // let lastStateNote = isLastState ? "  (Current) " : "";
+    let lastStateNote = isLastState ? "" : "";
     let stateIndLabel = "State " + (ind + 1) + " " + lastStateNote;
     let stateHeaderText = lassoNote;
     if (actionId !== null) {

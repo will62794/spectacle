@@ -428,8 +428,23 @@ body {
 
   .th-state-varname:hover{
     cursor:pointer;
-    color:gray;
+    /* color:gray; */
+    /* text-decoration: line-through; */
     /* color: #FF9494; */
+  }
+
+  .state-varname-text:hover{
+    color:gray;
+  }
+
+  .hide-var-icon{
+    cursor:pointer;
+    opacity:0.5;
+
+  }
+
+  .hide-var-icon:hover{
+    opacity:0.9;
   }
 
   #hidden-state-vars{
@@ -464,16 +479,19 @@ body {
   .hidden-state-var{
     padding-left: 5px;
     padding-right:5px;
+    padding-top:2px;    
+    padding-bottom:2px;
     margin-left:3px;
     margin-right:3px;
     border: solid 1px gray;
-    border-radius: 2px;
+    border-radius: 5px;
     font-size:11px;
   }
 
   .hidden-state-var:hover{
     cursor: pointer;
-    background-color: lightgreen;
+    background-color:steelblue;
+    color:white;
   }
 
   .trace-state-table .th-state-traceexpr,.td-state-traceexpr{
