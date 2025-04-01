@@ -1329,7 +1329,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                     m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, varname),
                     // m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, "  x")
                 ]),
-                m("td", {style: {"color": varnameCol}}, [tlaValView(varVal, prevVarVal)]),
+                m("td", {style: {}}, [tlaValView(varVal, prevVarVal)]),
                 m("td", { style: "width:15px", hidden: false }, 
                     m("img", {
                         style: {"width": "11px", "height": "11px"},
