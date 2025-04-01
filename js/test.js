@@ -574,7 +574,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 console.log("testid:", testId);
                 // Show the spec text and test name first.
                 let testHeader = document.createElement("div");
-                testHeader.innerHTML = `<b>Test: <a href='?test=${testId}&debug=1'> ${testId} </a></b>`;
+                testHeader.innerHTML = `<b>Test: <a href='?test=${testId}&debug=0'> ${testId} </a></b>`;
                 if (!urlParams.hasOwnProperty("test")) {
                     testHeader.href = "?test=" + testId;
                 } else {
