@@ -73,6 +73,7 @@ let model = {
     lockedTrace: null,
     lockedTraceActions: null,
     showStateDiffsInSelection: false,
+    copyLinkPressCooldown: false,
 }
 
 const exampleSpecs = {
@@ -1752,6 +1753,25 @@ function unlockTrace(){
     model.lockedTraceActions = null;
 }
 
+function linkIcon(){
+    return m("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        // width: "16",
+        // height: "16", 
+        style: {"width":"16px", "height":"16px", "margin-bottom":"3px"},
+        fill: "currentColor",
+        class: "bi bi-link fancy",
+        viewBox: "0 0 16 16"
+    }, [
+        m("path", {
+            d: "M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"
+        }),
+        m("path", {
+            d: "M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"
+        })
+    ])
+}
+
 function explodeButtonDropdown(){
     // Just limit to trace explosion on SetValues for now.
     let explodableConsts = Object.keys(model.specConstVals).filter(k => model.specConstVals[k] instanceof SetValue);
@@ -1815,13 +1835,19 @@ function componentButtonsContainer() {
             // Explode dropdown.
             explodeButtonDropdown(),
             m("button", { 
-                class: "btn btn-sm btn-outline-primary button-bagse", 
+                class: "btn btn-sm btn-outline-primary button-bagse" + (model.copyLinkPressCooldown ? " disabled" : ""), 
                 id: "trace-refset-button", 
+                style: {"opacity": model.copyLinkPressCooldown ? "0.6" : "1"},
                 onclick: (e) => {
                     copyTraceLinkToClipboard();
+                    this.innerHTML = "coped"
+                    model.copyLinkPressCooldown = true;
+                    setTimeout(() => {model.copyLinkPressCooldown = false;m.redraw();}, 900)
                 }
-            }, "Copy link"),
-            // Add trace expression.
+            }, [linkIcon(), model.copyLinkPressCooldown ? 
+                                m("span", {class: "", style: {}}, " Copy Link") : 
+                                m("span", {class: "fancy"}, " Copy Link")]
+                            ),
             m("button", { 
                 class: "btn btn-sm btn-outline-primary", 
                 disabled: model.traceExprInputText.length === 0,
