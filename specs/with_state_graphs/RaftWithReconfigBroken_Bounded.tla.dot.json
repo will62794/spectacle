@@ -1,0 +1,2091 @@
+{
+  "name": "DiskGraph",
+  "directed": true,
+  "strict": true,
+  "nodesep": "0.35",
+  "_subgraph_cnt": 5,
+  "objects": [
+    {
+      "name": "cluster_graph",
+      "color": "white",
+      "nodesep": "0.35",
+      "_gvid": 0,
+      "subgraphs": [
+        1,
+2,
+3,
+4
+      ],
+      "nodes": [
+        5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149
+      ],
+      "edges": [
+        0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20,19,21,22,23,24,25,26,27,28,29,32,30,31,33,34,35,38,36,39,37,40,41,42,43,44,45,46,47,48,49,50,51,53,52,55,54,56,57,58,59,60,61,62,63,64,65,67,66,69,68,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,91,90,93,92,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161
+      ]
+    },
+    {
+      "name": "%325",
+      "color": "white",
+      "nodesep": "0.35",
+      "rank": "same",
+      "_gvid": 1,
+      "nodes": [
+        5
+      ]
+    },
+    {
+      "name": "%327",
+      "color": "white",
+      "nodesep": "0.35",
+      "rank": "same",
+      "_gvid": 2,
+      "nodes": [
+        6,7,8,9,10,11
+      ]
+    },
+    {
+      "name": "%329",
+      "color": "white",
+      "nodesep": "0.35",
+      "rank": "same",
+      "_gvid": 3,
+      "nodes": [
+        12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41
+      ]
+    },
+    {
+      "name": "%331",
+      "color": "white",
+      "nodesep": "0.35",
+      "rank": "same",
+      "_gvid": 4,
+      "nodes": [
+        48,49,50,51,60,61,62,63,66,67,68,69,78,79,80,81,86,87,88,89,94,95,96,97
+      ]
+    },
+    {
+      "_gvid": 5,
+      "name": "5626357411093355656",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 0, s3 |-> 0]",
+      "style": "filled"
+    },
+    {
+      "_gvid": 6,
+      "name": "-7763382072020967545",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 7,
+      "name": "-1534184605247029571",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 8,
+      "name": "-8405400086427348703",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 9,
+      "name": "-6259296699777502106",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 10,
+      "name": "3963385154458892730",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 11,
+      "name": "7750646728217345479",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 12,
+      "name": "8202144607092462336",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 13,
+      "name": "3142458017170998260",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 14,
+      "name": "7983535326685158822",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 15,
+      "name": "-3496219740357537505",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 16,
+      "name": "-1856128514685531232",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 17,
+      "name": "1053649495659755547",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 18,
+      "name": "-6303637872964935494",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 19,
+      "name": "-8341525075765554828",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 20,
+      "name": "5875312769897567859",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 21,
+      "name": "997468537432529086",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 22,
+      "name": "-7437093442383025510",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 23,
+      "name": "8099942438962780449",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 24,
+      "name": "3092808116474731928",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 25,
+      "name": "-3380625670079364651",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 26,
+      "name": "5515907295031696917",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 27,
+      "name": "5869834703984871193",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 1, s3 |-> 0]"
+    },
+    {
+      "_gvid": 28,
+      "name": "-5216273634745520612",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 29,
+      "name": "3042807148792452904",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 30,
+      "name": "2769646885849957581",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 31,
+      "name": "-1686758554506649975",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 32,
+      "name": "7995287380281064274",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 33,
+      "name": "8290370894011703902",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 34,
+      "name": "7736674265429243767",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 35,
+      "name": "1421110187612620916",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 36,
+      "name": "5566528668226164172",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 37,
+      "name": "-5180533888239566981",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 0, s3 |-> 1]"
+    },
+    {
+      "_gvid": 38,
+      "name": "-6523612488839387261",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 39,
+      "name": "-708756067353705229",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 40,
+      "name": "1283343075376239025",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 41,
+      "name": "-1975925686157739258",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 1, s3 |-> 1]"
+    },
+    {
+      "_gvid": 42,
+      "name": "-4581563270426613600",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 43,
+      "name": "2939126710145981211",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 44,
+      "name": "-7339570517792180140",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 45,
+      "name": "8252423904055954415",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 46,
+      "name": "-8926543572291750804",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 47,
+      "name": "-7356863019481158304",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 48,
+      "name": "-2411892469358001073",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 49,
+      "name": "3901762982427342836",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 50,
+      "name": "-3704200268697882950",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 51,
+      "name": "-3359211850657564746",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 52,
+      "name": "264734638157465383",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 53,
+      "name": "-5673975416485698456",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 54,
+      "name": "1818365365007588122",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 55,
+      "name": "-1036173181632304991",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 56,
+      "name": "4432712229215038164",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 57,
+      "name": "-3087556090799859345",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 58,
+      "name": "2952115334115129559",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 59,
+      "name": "-2476057349746912672",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 60,
+      "name": "-310812089364474183",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 61,
+      "name": "1372791241421038850",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 62,
+      "name": "-5860867396048422456",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 63,
+      "name": "6625155224193471359",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 64,
+      "name": "-2667359062353103715",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 65,
+      "name": "1648685400361236200",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 66,
+      "name": "3813207667483366589",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 67,
+      "name": "-2573287689792526586",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 68,
+      "name": "1395847579123767995",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 69,
+      "name": "1055720415455609783",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 70,
+      "name": "4305483177729943583",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 71,
+      "name": "2754375334787658003",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 72,
+      "name": "-6260775034836118894",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 0]"
+    },
+    {
+      "_gvid": 73,
+      "name": "809038706264037357",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 74,
+      "name": "6722095486961502166",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 75,
+      "name": "4661236469816762074",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 76,
+      "name": "-4544268345262588190",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 77,
+      "name": "-2515783889619982354",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 78,
+      "name": "9159511140269242713",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 79,
+      "name": "7126024193944445013",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 80,
+      "name": "167153985797096539",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 81,
+      "name": "-645534138857197844",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 82,
+      "name": "-7933611239641288659",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 83,
+      "name": "7259069398913063578",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 84,
+      "name": "8091393575657251112",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 85,
+      "name": "-1146752913528749808",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 86,
+      "name": "-7864555300859058939",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 87,
+      "name": "8825252956510279358",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 88,
+      "name": "6316063267388000669",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 89,
+      "name": "-6702365979207048406",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 90,
+      "name": "7694827377782892240",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 91,
+      "name": "-6948272404526379929",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 92,
+      "name": "3155264454388464133",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 0, s3 |-> 2]"
+    },
+    {
+      "_gvid": 93,
+      "name": "-7159876768728772939",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 94,
+      "name": "-4155815018744946031",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 95,
+      "name": "-2618223437446399075",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 96,
+      "name": "2219647539136002185",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 97,
+      "name": "-1470840782834888130",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 98,
+      "name": "-8117537632447157673",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 99,
+      "name": "8792140539062534368",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 100,
+      "name": "-8328999022542395259",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 101,
+      "name": "7461514762544273480",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 0, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 102,
+      "name": "-5820718501238690338",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 103,
+      "name": "-5566166868692994862",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 104,
+      "name": "-3378227462643069923",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 105,
+      "name": "-3681824770356275951",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 106,
+      "name": "8802150982039356608",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 107,
+      "name": "-7888791420835956869",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 108,
+      "name": "1280647385250225722",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 109,
+      "name": "-475373498026627711",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 110,
+      "name": "-8471856740060136686",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 111,
+      "name": "9166699473849160101",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 112,
+      "name": "-843461242984588591",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 113,
+      "name": "76613708484538470",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 114,
+      "name": "8655923887840582135",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 115,
+      "name": "-8033611690376566196",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 116,
+      "name": "7918665280789783246",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 117,
+      "name": "-8843340895256178315",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 1, s2 |-> 2, s3 |-> 2]"
+    },
+    {
+      "_gvid": 118,
+      "name": "6326795667457830794",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 119,
+      "name": "5347158993117853318",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 120,
+      "name": "3020732800109284937",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 121,
+      "name": "3752179773233452869",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 122,
+      "name": "-9020030753028864364",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 123,
+      "name": "7669785748534342959",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 124,
+      "name": "-1643767150566106002",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 125,
+      "name": "113379634031013845",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Leader\", s3 |-> \"Follower\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 126,
+      "name": "-2005910560797269317",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 127,
+      "name": "1257297378613135372",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 128,
+      "name": "-8085138544421898175",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 129,
+      "name": "8831720361165099766",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 130,
+      "name": "1089678463193423529",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 131,
+      "name": "1362047707372799909",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 132,
+      "name": "1935303458814322064",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 133,
+      "name": "514030312027110556",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 1, s3 |-> 2]"
+    },
+    {
+      "_gvid": 134,
+      "name": "1978731159949956666",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 135,
+      "name": "-1283914891137303411",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 136,
+      "name": "7301279305537894393",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 137,
+      "name": "-8068170777074967218",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 138,
+      "name": "-1641506788284468001",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 139,
+      "name": "115640124285044580",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 140,
+      "name": "-217027438078160922",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 141,
+      "name": "1467631284484652125",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Leader\", s2 |-> \"Follower\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 142,
+      "name": "9042018017789074970",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 143,
+      "name": "-8637639309492308819",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s2\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 144,
+      "name": "1628597545094563040",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 145,
+      "name": "-2034866846983639465",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 2]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 3]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 146,
+      "name": "-7616306823841242616",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 147,
+      "name": "-8379836962146485500",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s1\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 148,
+      "name": "-8968437346732025551",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s1\", \"s2\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    },
+    {
+      "_gvid": 149,
+      "name": "-7030098838712090563",
+      "label": "\/\\\\ log = [ s1 |-> <<[term |-> 0, v |-> 1]>>,\\n  s2 |-> <<[term |-> 0, v |-> 1], [term |-> 2, v |-> 3]>>,\\n  s3 |-> <<[term |-> 0, v |-> 1], [term |-> 1, v |-> 2]>> ]\\n\/\\\\ committedEntries = {[index |-> 1, term |-> 0]}\\n\/\\\\ state = [s1 |-> \"Follower\", s2 |-> \"Leader\", s3 |-> \"Leader\"]\\n\/\\\\ configs = <<{\"s1\", \"s2\", \"s3\"}, {\"s2\", \"s3\"}, {\"s2\", \"s3\"}>>\\n\/\\\\ currentTerm = [s1 |-> 2, s2 |-> 2, s3 |-> 1]"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 5,
+      "head": 6,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 1,
+      "tail": 5,
+      "head": 7,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 2,
+      "tail": 5,
+      "head": 8,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 3,
+      "tail": 5,
+      "head": 9,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 4,
+      "tail": 5,
+      "head": 10,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 5,
+      "tail": 5,
+      "head": 11,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 6,
+      "tail": 6,
+      "head": 12,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 7,
+      "tail": 6,
+      "head": 13,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 8,
+      "tail": 6,
+      "head": 14,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 9,
+      "tail": 6,
+      "head": 15,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 10,
+      "tail": 6,
+      "head": 16,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 11,
+      "tail": 6,
+      "head": 17,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 12,
+      "tail": 7,
+      "head": 18,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 13,
+      "tail": 7,
+      "head": 19,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 14,
+      "tail": 7,
+      "head": 20,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 15,
+      "tail": 7,
+      "head": 21,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 16,
+      "tail": 7,
+      "head": 22,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 17,
+      "tail": 7,
+      "head": 23,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 18,
+      "tail": 8,
+      "head": 12,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 20,
+      "tail": 8,
+      "head": 24,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 19,
+      "tail": 8,
+      "head": 14,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 21,
+      "tail": 8,
+      "head": 25,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 22,
+      "tail": 8,
+      "head": 26,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 23,
+      "tail": 8,
+      "head": 27,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 24,
+      "tail": 9,
+      "head": 28,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 25,
+      "tail": 9,
+      "head": 29,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 26,
+      "tail": 9,
+      "head": 30,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 27,
+      "tail": 9,
+      "head": 31,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 28,
+      "tail": 9,
+      "head": 32,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 29,
+      "tail": 9,
+      "head": 33,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 32,
+      "tail": 10,
+      "head": 34,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 30,
+      "tail": 10,
+      "head": 19,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 31,
+      "tail": 10,
+      "head": 20,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 33,
+      "tail": 10,
+      "head": 35,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 34,
+      "tail": 10,
+      "head": 36,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 35,
+      "tail": 10,
+      "head": 37,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 38,
+      "tail": 11,
+      "head": 38,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 36,
+      "tail": 11,
+      "head": 29,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 39,
+      "tail": 11,
+      "head": 39,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 37,
+      "tail": 11,
+      "head": 31,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 40,
+      "tail": 11,
+      "head": 40,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 41,
+      "tail": 11,
+      "head": 41,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 42,
+      "tail": 12,
+      "head": 42,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 43,
+      "tail": 12,
+      "head": 43,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 44,
+      "tail": 13,
+      "head": 44,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 45,
+      "tail": 13,
+      "head": 45,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 46,
+      "tail": 14,
+      "head": 46,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 47,
+      "tail": 14,
+      "head": 47,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 48,
+      "tail": 15,
+      "head": 48,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 49,
+      "tail": 15,
+      "head": 49,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 50,
+      "tail": 15,
+      "head": 50,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 51,
+      "tail": 15,
+      "head": 51,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 53,
+      "tail": 16,
+      "head": 52,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 52,
+      "tail": 16,
+      "head": 48,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 55,
+      "tail": 17,
+      "head": 53,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 54,
+      "tail": 17,
+      "head": 49,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 56,
+      "tail": 18,
+      "head": 54,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 57,
+      "tail": 18,
+      "head": 55,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 58,
+      "tail": 19,
+      "head": 56,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 59,
+      "tail": 19,
+      "head": 57,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 60,
+      "tail": 20,
+      "head": 58,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 61,
+      "tail": 20,
+      "head": 59,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 62,
+      "tail": 21,
+      "head": 60,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 63,
+      "tail": 21,
+      "head": 61,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 64,
+      "tail": 21,
+      "head": 62,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 65,
+      "tail": 21,
+      "head": 63,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 67,
+      "tail": 22,
+      "head": 64,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 66,
+      "tail": 22,
+      "head": 60,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 69,
+      "tail": 23,
+      "head": 65,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 68,
+      "tail": 23,
+      "head": 61,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 70,
+      "tail": 24,
+      "head": 66,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 71,
+      "tail": 24,
+      "head": 67,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 72,
+      "tail": 24,
+      "head": 68,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 73,
+      "tail": 24,
+      "head": 69,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 74,
+      "tail": 25,
+      "head": 70,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 75,
+      "tail": 25,
+      "head": 71,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 76,
+      "tail": 26,
+      "head": 68,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 77,
+      "tail": 26,
+      "head": 72,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 78,
+      "tail": 27,
+      "head": 69,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 79,
+      "tail": 27,
+      "head": 73,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 80,
+      "tail": 28,
+      "head": 74,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 81,
+      "tail": 28,
+      "head": 75,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 82,
+      "tail": 29,
+      "head": 76,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 83,
+      "tail": 29,
+      "head": 77,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 84,
+      "tail": 30,
+      "head": 78,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 85,
+      "tail": 30,
+      "head": 79,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 86,
+      "tail": 30,
+      "head": 80,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 87,
+      "tail": 30,
+      "head": 81,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 88,
+      "tail": 31,
+      "head": 82,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 89,
+      "tail": 31,
+      "head": 83,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 91,
+      "tail": 32,
+      "head": 84,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 90,
+      "tail": 32,
+      "head": 78,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 93,
+      "tail": 33,
+      "head": 85,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 92,
+      "tail": 33,
+      "head": 79,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 94,
+      "tail": 34,
+      "head": 86,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 95,
+      "tail": 34,
+      "head": 87,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 96,
+      "tail": 34,
+      "head": 88,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 97,
+      "tail": 34,
+      "head": 89,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 98,
+      "tail": 35,
+      "head": 90,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 99,
+      "tail": 35,
+      "head": 91,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 100,
+      "tail": 36,
+      "head": 88,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 101,
+      "tail": 36,
+      "head": 92,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 102,
+      "tail": 37,
+      "head": 89,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 103,
+      "tail": 37,
+      "head": 93,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 104,
+      "tail": 38,
+      "head": 94,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 105,
+      "tail": 38,
+      "head": 95,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 106,
+      "tail": 38,
+      "head": 96,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 107,
+      "tail": 38,
+      "head": 97,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 108,
+      "tail": 39,
+      "head": 98,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 109,
+      "tail": 39,
+      "head": 99,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 110,
+      "tail": 40,
+      "head": 96,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 111,
+      "tail": 40,
+      "head": 100,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 112,
+      "tail": 41,
+      "head": 97,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 113,
+      "tail": 41,
+      "head": 101,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 114,
+      "tail": 48,
+      "head": 102,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 115,
+      "tail": 48,
+      "head": 103,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 116,
+      "tail": 49,
+      "head": 104,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 117,
+      "tail": 49,
+      "head": 105,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 118,
+      "tail": 50,
+      "head": 106,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 119,
+      "tail": 50,
+      "head": 107,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 120,
+      "tail": 51,
+      "head": 108,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 121,
+      "tail": 51,
+      "head": 109,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 122,
+      "tail": 60,
+      "head": 110,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 123,
+      "tail": 60,
+      "head": 111,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 124,
+      "tail": 61,
+      "head": 112,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 125,
+      "tail": 61,
+      "head": 113,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 126,
+      "tail": 62,
+      "head": 114,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 127,
+      "tail": 62,
+      "head": 115,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 128,
+      "tail": 63,
+      "head": 116,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 129,
+      "tail": 63,
+      "head": 117,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 130,
+      "tail": 66,
+      "head": 118,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 131,
+      "tail": 66,
+      "head": 119,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 132,
+      "tail": 67,
+      "head": 120,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 133,
+      "tail": 67,
+      "head": 121,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 134,
+      "tail": 68,
+      "head": 122,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 135,
+      "tail": 68,
+      "head": 123,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 136,
+      "tail": 69,
+      "head": 124,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 137,
+      "tail": 69,
+      "head": 125,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 138,
+      "tail": 78,
+      "head": 126,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 139,
+      "tail": 78,
+      "head": 127,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 140,
+      "tail": 79,
+      "head": 128,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 141,
+      "tail": 79,
+      "head": 129,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 142,
+      "tail": 80,
+      "head": 130,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 143,
+      "tail": 80,
+      "head": 131,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 144,
+      "tail": 81,
+      "head": 132,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 145,
+      "tail": 81,
+      "head": 133,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 146,
+      "tail": 86,
+      "head": 134,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 147,
+      "tail": 86,
+      "head": 135,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 148,
+      "tail": 87,
+      "head": 136,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 149,
+      "tail": 87,
+      "head": 137,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 150,
+      "tail": 88,
+      "head": 138,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 151,
+      "tail": 88,
+      "head": 139,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 152,
+      "tail": 89,
+      "head": 140,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 153,
+      "tail": 89,
+      "head": 141,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 154,
+      "tail": 94,
+      "head": 142,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 155,
+      "tail": 94,
+      "head": 143,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 156,
+      "tail": 95,
+      "head": 144,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 157,
+      "tail": 95,
+      "head": 145,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 158,
+      "tail": 96,
+      "head": 146,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 159,
+      "tail": 96,
+      "head": 147,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 160,
+      "tail": 97,
+      "head": 148,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 161,
+      "tail": 97,
+      "head": 149,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    }
+  ]
+}

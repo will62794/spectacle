@@ -497,6 +497,15 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             }
         },
         {
+            "spec": "RaftWithReconfigBroken_Bounded", 
+            "constvals": {
+                "Server": new SetValue([new StringValue("s1"), new StringValue("s2"), new StringValue("s3")]), 
+                // TODO: Set this to correct function value.
+                "MaxTerm": new IntValue(2),
+                "MaxLogLen": new IntValue(2),
+            }        
+        },
+        {
             "spec": "show521677",
             "constvals": {
                 "StrongConsistency" : new StringValue("StrongConsistency"),
