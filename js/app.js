@@ -2496,6 +2496,7 @@ function loadSpecText(text, specPath) {
         // }
 
         model.selectedTab = Tab.StateSelection;
+        model.selectedTraceTab = TraceTab.Trace;
     }
 }
 
