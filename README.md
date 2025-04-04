@@ -25,7 +25,7 @@ You can also explore some interesting (and infamous) traces of different protoco
 
 
 
-The tool implements a full [TLA+ interpreter](https://github.com/will62794/spectacle/blob/master/js/eval.js) in Javascript, building on top of the [TLA+ tree-sitter grammar](https://github.com/tlaplus-community/tree-sitter-tlaplus) for parsing specifications. This allows for interactive exploration of specs natively in the browser, without reliance on an external language server. 
+The tool implements a [full TLA+ interpreter in Javascript](https://github.com/will62794/spectacle/blob/master/js/eval.js), building on top of the [TLA+ tree-sitter grammar](https://github.com/tlaplus-community/tree-sitter-tlaplus) for parsing specifications. This allows for interactive exploration of specs natively in the browser, without reliance on an external language server. 
 
 <!-- The Javascript interpreter is likely slower than TLC, but highly efficient model checking isn't currently a goal of the tool.  -->
 
