@@ -98,8 +98,8 @@ Phase2b(a, b) ==
 
 Next ==
     \/ \E b \in Ballot : Phase1a(b)
-    \/ \E b \in Ballot : \E v \in Value : \E Q \in Quorum1 : Phase2a(b, v, Q)
     \/ \E a \in Acceptor : \E b \in Ballot : Phase1b(a, b)
+    \/ \E b \in Ballot : \E v \in Value : \E Q \in Quorum1 : Phase2a(b, v, Q)
     \/ \E a \in Acceptor, b \in Ballot : Phase2b(a, b)
 
 Spec == Init /\ [][Next]_vars
