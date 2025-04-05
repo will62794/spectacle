@@ -76,7 +76,8 @@ let model = {
     showStateDiffsInSelection: false,
     copyLinkPressCooldown: false,
     invariantExprToCheck: "",
-    invariantViolated: false
+    invariantViolated: false,
+    invariantViolationDuration: 0
 }
 
 const exampleSpecs = {
@@ -1588,6 +1589,7 @@ function componentTraceViewer(hidden) {
 // TODO: Think about more fully fledged worker execution framework.
 function startCheckInvariantWebWorker(invariantExpr){
     const myWorker = new Worker("js/worker.js");
+    model.invariantCheckerStart = performance.now()
     myWorker.postMessage({
         newText: model.specText,
         specPath: model.specPath,
@@ -1606,13 +1608,14 @@ function startCheckInvariantWebWorker(invariantExpr){
         if(response.invHolds !== undefined && !response.invHolds){
             // TODO: Display invariant violation.
             console.log("Invariant violation detected.");
-            model.invariantViolated = true;
             // Reconstruct trace from hash trace
             let traceStates = [];
             resetTrace()
             for (let stateHash of response.hashTrace) {
                 chooseNextState(stateHash)
             }
+            model.invariantViolated = true;
+            model.invariantViolationDuration = performance.now() - model.invariantCheckerStart;
             // Switch to trace tab after finding invariant violation
             // model.currPane = Pane.Trace;
         }
@@ -1753,6 +1756,8 @@ function resetTrace() {
     // Clear forward history when resetting
     model.forwardHistory = [];
     model.forwardHistoryActions = [];
+    model.invariantViolated = false;
+    model.invariantViolationDuration = 0;
     reloadSpec();
     updateTraceRouteParams();
 }
@@ -2337,7 +2342,7 @@ function checkPane(hidden) {
                 class: "btn btn-primary",
                 disabled: model.invariantExprToCheck === "",
                 onclick: () => {
-                    console.log("Starting web worker for checking invariant.")
+                    console.log(`Starting web worker for checking invariant expression: '${model.invariantExprToCheck}'.`)
                     model.invariantViolated = false;
                     startCheckInvariantWebWorker(model.invariantExprToCheck);
                 }
@@ -2347,7 +2352,7 @@ function checkPane(hidden) {
             ]),
         ]),
         m("div", {hidden: !model.invariantViolated, style: {color: "red"}}, [
-            "Invariant violated (",
+            `Invariant violated in ${model.invariantViolationDuration.toFixed(0)}ms (`,
             m("a", {
                 style: {cursor: "pointer", textDecoration: "underline"},
                 onclick: () => model.selectedTraceTab = TraceTab.Trace

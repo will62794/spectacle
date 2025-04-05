@@ -4,7 +4,7 @@ console.log("Worker is running...")
 
 self.importScripts('tree-sitter.js');
 self.importScripts('eval.js');
-self.importScripts('https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
+self.importScripts('lib/lodash.min.js');
 self.importScripts('hash-sum/hash-sum.js');
 
 let parser;

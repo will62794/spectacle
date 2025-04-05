@@ -5169,6 +5169,13 @@ class TlaInterpreter {
                     let vars = treeObjs["var_decls"];
                     let defns = treeObjs["op_defs"];
                     let ctx = new Context(null, nextState, defns, {}, constvals);
+
+
+                    // All definitions in the root module should be accessible.
+                    ctx["defns_curr_context"] = _.keys(spec.spec_obj["op_defs"]);
+                    ctx.setGlobalDefTable(spec.globalDefTable);
+                    ctx.setSpecObj(spec);
+
                     let res = evalExprStrInContext(ctx, checkInvExpr);
                     // console.log("invariant check: ", res);
                     // Invariant failed to hold in this state.
