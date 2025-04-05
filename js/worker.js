@@ -79,12 +79,13 @@ onmessage = async (e) => {
         let interp = new TlaInterpreter();
 
         let start = performance.now();
-        let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, false);
+        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, undefined, spec);
         const duration = (performance.now() - start).toFixed(1);
-        console.log("INIT STATES IN WEBWORKER.", initStates, `duration: ${duration}ms`);
+        console.log("Reachable states from WebWorker.", reachableStates, `duration: ${duration}ms`);
+        console.log(`Computed ${reachableStates.states.length} reachable states in ${duration}ms.`);
 
         // Seems it is fine to serialize TLAState objects back through the web worker.
-        postMessage(initStates[0]);
+        postMessage(reachableStates[0]);
 
 
     }).catch(function(e){
