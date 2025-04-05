@@ -172,7 +172,7 @@ AdvanceCommitPoint(leader, ack) ==
     /\ committedEntries' = committedEntries \union {[term |-> log[leader][i].term, index |-> i] : i \in DOMAIN log[leader]}
     /\ UNCHANGED <<serverVars, log, configs>>
        
-UpdateTermThroughHeartbeat(i, j) ==
+UpdateTerm(i, j) ==
     /\ j \in ServerViewOn(i)  \* j is in the config of i.
     /\ currentTerm[j] > currentTerm[i]
     /\ currentTerm' = [currentTerm EXCEPT ![i] = currentTerm[j]]
@@ -196,26 +196,6 @@ Reconfig(i, newConfig) ==
        IN  log' = [log EXCEPT ![i] = newLog]
     /\ UNCHANGED <<serverVars, committedEntries>>
 
-----
-AppendOplogAction ==
-    \E i,j \in Server : AppendOplog(i, j)
-
-RollbackOplogAction ==
-    \E i,j \in Server : RollbackOplog(i, j)
-
-BecomePrimaryAction ==
-    \E i \in Server : \E ayeVoters \in SUBSET(Server) : BecomePrimary(i, ayeVoters)
-
-ClientWriteAction ==
-    \E i \in Server : ClientWrite(i)
-    
-UpdateTermThroughHeartbeatAction ==
-    \E i,j \in Server : UpdateTermThroughHeartbeat(i, j)
-    
-ReconfigAction ==
-    \E i \in Server : \E newConfig \in SUBSET(Server) : Reconfig(i, newConfig)
-
-----
 \* Defines how the variables may transition.
 Next ==
     \* --- Replication protocol
@@ -225,18 +205,18 @@ Next ==
     \/ \E i \in Server : ClientWrite(i)
     \/ \E leader \in Server : \E ack \in SUBSET Server : AdvanceCommitPoint(leader, ack)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : Reconfig(i, newConfig)
-    \/ \E i,j \in Server : UpdateTermThroughHeartbeat(i, j)
+    \/ \E i,j \in Server : UpdateTerm(i, j)
 
-Liveness ==
-    /\ SF_vars(AppendOplogAction)
-    /\ SF_vars(RollbackOplogAction)
+\* Liveness ==
+    \* /\ SF_vars(AppendOplogAction)
+    \* /\ SF_vars(RollbackOplogAction)
     \* A new primary should eventually write one entry.
-    /\ WF_vars(\E i \in Server : LastTerm(log[i]) # currentTerm[i] /\ ClientWrite(i))
+    \* /\ WF_vars(\E i \in Server : LastTerm(log[i]) # currentTerm[i] /\ ClientWrite(i))
     \* /\ WF_vars(ClientWriteAction)
 
 \* The specification must start with the initial state and transition according
 \* to Next.
-Spec == Init /\ [][Next]_vars /\ Liveness
+\* Spec == Init /\ [][Next]_vars /\ Liveness
 
 \* RollbackCommitted and NeverRollbackCommitted are not actions.
 \* They are used for verification.
