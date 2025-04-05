@@ -5170,7 +5170,7 @@ class TlaInterpreter {
                     let defns = treeObjs["op_defs"];
                     let ctx = new Context(null, nextState, defns, {}, constvals);
                     let res = evalExprStrInContext(ctx, checkInvExpr);
-                    console.log("invariant check: ", res);
+                    // console.log("invariant check: ", res);
                     // Invariant failed to hold in this state.
                     if (!res.getVal()) {
                         console.log("invariant violated: ", res, nextState);
@@ -5188,6 +5188,9 @@ class TlaInterpreter {
                         trace = _.reverse(trace);
 
                         return {
+                            "initStates": initStatesOrig,
+                            "states": [],
+                            "edges": [],
                             "invHolds": false,
                             "invFirstViolatingState": nextState,
                             "hashTrace": trace

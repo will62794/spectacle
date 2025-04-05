@@ -17,6 +17,7 @@ onmessage = async (e) => {
     let newText = e.data.newText;
     let specPath = e.data.specPath;
     let constValInputs = e.data.constValInputs;
+    let invariantExpr = e.data.invariantExpr;
 
     await TreeSitter.init();
     parser = new TreeSitter();
@@ -79,10 +80,15 @@ onmessage = async (e) => {
         let interp = new TlaInterpreter();
 
         let start = performance.now();
-        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, undefined, spec);
+        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, invariantExpr, spec);
         const duration = (performance.now() - start).toFixed(1);
         console.log("Reachable states from WebWorker.", reachableStates, `duration: ${duration}ms`);
         console.log(`Computed ${reachableStates.states.length} reachable states in ${duration}ms.`);
+
+        if(!reachableStates.invHolds){
+            postMessage(reachableStates);
+            return;
+        }
 
         // Seems it is fine to serialize TLAState objects back through the web worker.
         postMessage(reachableStates[0]);

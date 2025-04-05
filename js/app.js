@@ -75,6 +75,8 @@ let model = {
     lockedTraceActions: null,
     showStateDiffsInSelection: false,
     copyLinkPressCooldown: false,
+    invariantExprToCheck: "",
+    invariantViolated: false
 }
 
 const exampleSpecs = {
@@ -1584,12 +1586,13 @@ function componentTraceViewer(hidden) {
 }
 
 // TODO: Think about more fully fledged worker execution framework.
-function startWebWorker(){
+function startCheckInvariantWebWorker(invariantExpr){
     const myWorker = new Worker("js/worker.js");
     myWorker.postMessage({
         newText: model.specText,
         specPath: model.specPath,
-        constValInputs: model.specConstInputVals
+        constValInputs: model.specConstInputVals,
+        invariantExpr: invariantExpr
     });
     console.log("Posted message to invariant checking worker.");
 
@@ -1598,6 +1601,21 @@ function startWebWorker(){
         let response = e.data;
         console.log("Response from worker:", response);
         model.generatingInitStates = false;
+        m.redraw();
+
+        if(response.invHolds !== undefined && !response.invHolds){
+            // TODO: Display invariant violation.
+            console.log("Invariant violation detected.");
+            model.invariantViolated = true;
+            // Reconstruct trace from hash trace
+            let traceStates = [];
+            resetTrace()
+            for (let stateHash of response.hashTrace) {
+                chooseNextState(stateHash)
+            }
+            // Switch to trace tab after finding invariant violation
+            // model.currPane = Pane.Trace;
+        }
         m.redraw();
     };
 }
@@ -1769,6 +1787,25 @@ function linkIcon(){
         }),
         m("path", {
             d: "M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"
+        })
+    ])
+}
+
+function gearIcon(){
+    return m("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        // width: "16",
+        // height: "16",
+        style: {"width":"16px", "height":"16px", "margin-bottom":"3px"},
+        fill: "currentColor",
+        class: "bi bi-gear",
+        viewBox: "0 0 16 16"
+    }, [
+        m("path", {
+            d: "M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"
+        }),
+        m("path", {
+            d: "M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"
         })
     ])
 }
@@ -2288,14 +2325,35 @@ function replPane(hidden) {
 
 function checkPane(hidden) {
     return m("div", {hidden: hidden, style: {margin: "20px"}}, [
-        m("button", {
-            class: "btn btn-primary",
-            onclick: () => {
-                // TODO: Add check invariant functionality
-                console.log("Starting web worker for checking invariant.")
-                startWebWorker();
-            }
-        }, "Check Invariant")
+        m("div", {style: {display: "flex", gap: "10px"}}, [
+            m("input", {
+                class: "form-control",
+                placeholder: "Enter TLA+ state predicate.",
+                value: model.invariantExprToCheck,
+                style: {width: "500px", "font-family": "monospace", "font-size": "14px"},
+                oninput: (e) => model.invariantExprToCheck = e.target.value
+            }),
+            m("button", {
+                class: "btn btn-primary",
+                disabled: model.invariantExprToCheck === "",
+                onclick: () => {
+                    console.log("Starting web worker for checking invariant.")
+                    model.invariantViolated = false;
+                    startCheckInvariantWebWorker(model.invariantExprToCheck);
+                }
+            }, [
+                gearIcon(),
+                " Check Invariant"
+            ]),
+        ]),
+        m("div", {hidden: !model.invariantViolated, style: {color: "red"}}, [
+            "Invariant violated (",
+            m("a", {
+                style: {cursor: "pointer", textDecoration: "underline"},
+                onclick: () => model.selectedTraceTab = TraceTab.Trace
+            }, "View Trace"),
+            ")."
+        ])
     ]);
 }
 // To be used for selecting different panes when/if we add that UI functionality.
