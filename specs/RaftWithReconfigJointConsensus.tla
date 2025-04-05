@@ -188,15 +188,15 @@ UpdateTerm(i, j) ==
 \* that writes a config with both (cold, cnew) configs.
 ReconfigToJoint(i, newConfig) ==
     /\ state[i] = Leader
-    /\ newConfig # ServerViewOn(i)
+    \* /\ newConfig # ServerViewOn(i)
     /\ i \in newConfig
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \notin DOMAIN LatestConfigEntry(i)
     \* The config entry must be committed.
-    /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
-       IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
+    \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
+    \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
-    /\ \E entry \in committedEntries : entry.term = currentTerm[i]
+    \* /\ \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
     /\ LET entry == [
             term  |-> currentTerm[i], 
@@ -212,17 +212,17 @@ ReconfigToJoint(i, newConfig) ==
 \* Reconfiguration that finishes an in-progress, "joint consensus" reconfig by moving us to Cnew offically.
 ReconfigToNew(i, newConfig) ==
     /\ state[i] = Leader
-    /\ newConfig # ServerViewOn(i)
+    \* /\ newConfig # ServerViewOn(i)
     /\ i \in newConfig
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \in DOMAIN LatestConfigEntry(i)
     \* TODO: Require that joint consensus entry is committed.
     /\ \E entry \in committedEntries : entry.index >= Len(log[i])
     \* The config entry must be committed.
-    /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
-       IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
+    \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
+    \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
-    /\ \E entry \in committedEntries : entry.term = currentTerm[i]
+    \* /\ \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
     /\ LET entry == [
             term  |-> currentTerm[i], 
