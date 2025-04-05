@@ -38,10 +38,6 @@ logVars == <<log, committedEntries>>
 \* All variables; used for stuttering (asserting state hasn't changed).
 vars == <<serverVars, logVars, configs>>
 
-
-
-EnableSingleNodeBug == TRUE
-
 \* Server states.
 Leader == "Leader"
 Candidate == "Candidate"
@@ -103,6 +99,7 @@ MyQuorums(me) ==
 Init == 
     \E c \in SUBSET Server : 
         /\ c # {}
+        /\ c = Server
         /\ currentTerm = [i \in Server |-> 0]
         /\ state = [i \in Server |-> Follower]
         /\ log = [i \in Server |-> << [term |-> 0, v |-> 1, c |-> c] >>]
@@ -188,13 +185,8 @@ AdvanceCommitPoint(leader) ==
         \E ackSet \in SUBSET c : 
             /\ ackSet \subseteq AgreeInNodes(leader, Len(log[leader]), c)
             /\ ackSet \in Quorums(c)
-            \* /\ \A j \in ackSet : currentTerm[j] <= currentTerm[leader]
             /\ \A j \in ackSet : currentTerm[j] = currentTerm[leader]
-    \* /\ ack \subseteq Agree(leader, Len(log[leader]))
-    \* /\ ack \in Quorum(leader)
     /\ LogTerm(leader, Len(log[leader])) = currentTerm[leader]
-    \* If an acknowledger has a higher term, the leader would step down.
-    \* /\ \A j \in ack : currentTerm[j] <= currentTerm[leader]
     \* Has new entries to commit.
     /\ [term |-> LastTerm(log[leader]), index |-> Len(log[leader])] \notin committedEntries
     /\ committedEntries' = committedEntries \union {[term |-> log[leader][i].term, index |-> i] : i \in DOMAIN log[leader]}
@@ -215,9 +207,6 @@ ReconfigToJoint(i, newConfig) ==
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \notin DOMAIN LatestConfigEntry(i)
     /\ newConfig # LatestConfigEntry(i).c
-    \* The config entry must be committed.
-    \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
-    \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
     \* /\ \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
@@ -235,16 +224,11 @@ ReconfigToJoint(i, newConfig) ==
 \* Reconfiguration that finishes an in-progress, "joint consensus" reconfig by moving us to Cnew offically.
 ReconfigToNew(i, newConfig) ==
     /\ state[i] = Leader
-    \* /\ newConfig # ServerViewOn(i)
-    \* /\ i \in newConfig
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \in DOMAIN LatestConfigEntry(i)
     /\ newConfig = LatestConfigEntry(i).cnew
     \* Require that joint consensus entry is committed.
     /\ \E entry \in committedEntries : entry.index >= Len(log[i]) /\ entry.term = currentTerm[i]
-    \* The config entry must be committed.
-    \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
-    \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
     \* The primary must have committed an entry in its current term.
     \* /\ \E entry \in committedEntries : entry.term = currentTerm[i]
     /\ configs' = Append(configs, newConfig)
@@ -260,12 +244,10 @@ ReconfigToNew(i, newConfig) ==
 
 \* Defines how the variables may transition.
 Next ==
-    \* --- Replication protocol
     \/ \E i,j \in Server : AppendOplog(i, j)
     \/ \E i,j \in Server : RollbackOplog(i, j)
     \/ \E i \in Server : \E ayeVoters \in (SUBSET(Server) \ {Server}) : BecomePrimary(i, ayeVoters)
     \/ \E i \in Server : ClientWrite(i)
-    \* \/ \E leader \in Server : \E ack \in SUBSET Server : AdvanceCommitPoint(leader, ack)
     \/ \E leader \in Server : AdvanceCommitPoint(leader)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : ReconfigToJoint(i, newConfig)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : ReconfigToNew(i, newConfig)
