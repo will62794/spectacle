@@ -177,7 +177,7 @@ AdvanceCommitPoint(leader, ack) ==
     /\ committedEntries' = committedEntries \union {[term |-> log[leader][i].term, index |-> i] : i \in DOMAIN log[leader]}
     /\ UNCHANGED <<serverVars, log, configs>>
        
-UpdateTermThroughHeartbeat(i, j) ==
+UpdateTerm(i, j) ==
     /\ j \in ServerViewOn(i)  \* j is in the config of i.
     /\ currentTerm[j] > currentTerm[i]
     /\ currentTerm' = [currentTerm EXCEPT ![i] = currentTerm[j]]
@@ -246,7 +246,7 @@ Next ==
     \/ \E leader \in Server : \E ack \in SUBSET Server : AdvanceCommitPoint(leader, ack)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : ReconfigToJoint(i, newConfig)
     \/ \E i \in Server : \E newConfig \in SUBSET(Server) : ReconfigToNew(i, newConfig)
-    \/ \E i,j \in Server : UpdateTermThroughHeartbeat(i, j)
+    \/ \E i,j \in Server : UpdateTerm(i, j)
 
 \* Liveness ==
     \* /\ SF_vars(AppendOplogAction)
