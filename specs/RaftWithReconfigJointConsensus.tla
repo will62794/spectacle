@@ -77,6 +77,14 @@ LatestConfigEntry(i) ==
 \* The servers that are in the same config as i.
 ServerViewOn(i) == configs[GetConfigVersion(i)]
 
+\* Return a set of configs that you have to talk to. May be
+\* more than one, for example, if you are in middle of joint
+\* consensus reconfig.
+MyConfigs(i) == 
+    IF "joint" \in DOMAIN LatestConfigEntry(i) 
+        THEN {LatestConfigEntry(i).cold, LatestConfigEntry(i).cnew}
+    ELSE {LatestConfigEntry(i).c}
+
 Quorums(s) == {sub \in SUBSET(s) : Cardinality(sub) * 2 > Cardinality(s)}
 
 \* The set of all quorums. This just calculates simple majorities, but the only
@@ -137,6 +145,12 @@ Agree(me, logIndex) ==
         /\ Len(log[node]) >= logIndex
         /\ LogTerm(me, logIndex) = LogTerm(node, logIndex) }
 
+AgreeInNodes(me, logIndex, nodes) ==
+    { node \in nodes :
+        /\ Len(log[node]) >= logIndex
+        /\ LogTerm(me, logIndex) = LogTerm(node, logIndex) }
+
+
 NotBehind(me, j) == \/ LastTerm(log[me]) > LastTerm(log[j])
                     \/ /\ LastTerm(log[me]) = LastTerm(log[j])
                        /\ Len(log[me]) >= Len(log[j])
@@ -145,7 +159,7 @@ NotBehind(me, j) == \/ LastTerm(log[me]) > LastTerm(log[j])
 \* i = the new primary node.
 BecomePrimary(i, ayeVoters) ==
     /\ i \in ayeVoters
-    /\ \A j \in ayeVoters : /\ i \in ServerViewOn(j)
+    /\ \A j \in ayeVoters : /\ \A c \in MyConfigs(i) : i \in c
                             /\ NotBehind(i, j)
                             /\ currentTerm[j] <= currentTerm[i]
     /\ \A Q \in MyQuorums(i) : ayeVoters \in Q
@@ -170,8 +184,11 @@ ClientWrite(i) ==
 \* Commit the latest log entry on a primary.
 AdvanceCommitPoint(leader, ack) ==
     /\ state[leader] = Leader
-    /\ ack \subseteq Agree(leader, Len(log[leader]))
-    /\ ack \in Quorum(leader)
+    /\ \A c \in MyConfigs(leader) :
+        /\ ack \subseteq AgreeInNodes(leader, Len(log[leader]), c)
+        /\ ack \in Quorums(c)
+    \* /\ ack \subseteq Agree(leader, Len(log[leader]))
+    \* /\ ack \in Quorum(leader)
     /\ LogTerm(leader, Len(log[leader])) = currentTerm[leader]
     \* If an acknowledger has a higher term, the leader would step down.
     /\ \A j \in ack : currentTerm[j] <= currentTerm[leader]
@@ -191,10 +208,10 @@ UpdateTerm(i, j) ==
 \* that writes a config with both (cold, cnew) configs.
 ReconfigToJoint(i, newConfig) ==
     /\ state[i] = Leader
-    \* /\ newConfig # ServerViewOn(i)
     /\ i \in newConfig
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \notin DOMAIN LatestConfigEntry(i)
+    /\ newConfig # LatestConfigEntry(i).c
     \* The config entry must be committed.
     \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
     \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
@@ -204,7 +221,7 @@ ReconfigToJoint(i, newConfig) ==
     /\ LET entry == [
             term  |-> currentTerm[i], 
             v |-> Len(configs) + 1,
-            cold |-> ServerViewOn(i),
+            cold |-> LatestConfigEntry(i).c,
             cnew |-> newConfig,
             joint |-> TRUE
         ]
@@ -219,8 +236,8 @@ ReconfigToNew(i, newConfig) ==
     /\ i \in newConfig
     \* We are not in the middle of a joint reconfiguration phase already.
     /\ "joint" \in DOMAIN LatestConfigEntry(i)
-    \* TODO: Require that joint consensus entry is committed.
-    /\ \E entry \in committedEntries : entry.index >= Len(log[i])
+    \* Require that joint consensus entry is committed.
+    /\ \E entry \in committedEntries : entry.index >= Len(log[i]) /\ entry.term = currentTerm[i]
     \* The config entry must be committed.
     \* /\ LET configEntry == GetConfigEntry(i, GetConfigVersion(i))
     \*    IN [term |-> log[i][configEntry].term, index |-> configEntry] \in committedEntries
@@ -230,9 +247,7 @@ ReconfigToNew(i, newConfig) ==
     /\ LET entry == [
             term  |-> currentTerm[i], 
             v |-> Len(configs) + 1,
-            cold |-> ServerViewOn(i),
-            cnew |-> newConfig,
-            joint |-> TRUE
+            c |-> LatestConfigEntry(i).cnew
         ]
            newLog == Append(log[i], entry)
        IN  log' = [log EXCEPT ![i] = newLog]
