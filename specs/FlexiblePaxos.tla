@@ -1,4 +1,4 @@
----- MODULE FPaxos ----
+---- MODULE FlexiblePaxos ----
 
 \* 
 \* Source: https://github.com/fpaxos/fpaxos-tlaplus/blob/main/FPaxos.tla
@@ -65,20 +65,20 @@ Phase1a(b) ==
     /\ 1aMsgs' = 1aMsgs \union {[bal |-> b]}
     /\ UNCHANGED <<maxBal, maxVBal, maxVal, 1bMsgs, 2aMsgs, 2bMsgs>>
 
-Phase1b(a) ==
+Phase1b(a, b) ==
     /\ \E m \in 1aMsgs :
+        /\ m.bal = b
         /\ m.bal > maxBal[a]
         /\ maxBal' = [maxBal EXCEPT ![a] = m.bal]
         /\ 1bMsgs' = 1bMsgs \union {[acc |-> a, bal |-> m.bal, mbal |-> maxVBal[a], mval |-> maxVal[a]]}
     /\ UNCHANGED <<maxVBal, maxVal, 1aMsgs, 2aMsgs, 2bMsgs>>
 
-Phase2a(b, v) ==
+Phase2a(b, v, Q) ==
   /\ ~ \E m \in 2aMsgs : m.bal = b
-  /\ \E Q \in Quorum1 :
-        LET Q1b == {m \in 1bMsgs : /\ m.acc \in Q
+  /\ LET Q1b == {m \in 1bMsgs : /\ m.acc \in Q
                                    /\ m.bal = b}
-            Q1bv == {m \in Q1b : m.mbal \geq 0}
-        IN  /\ \A a \in Q : \E m \in Q1b : m.acc = a
+         Q1bv == {m \in Q1b : m.mbal \geq 0} IN
+            /\ \A a \in Q : \E m \in Q1b : m.acc = a
             /\ \/ Q1bv = {}
                \/ \E m \in Q1bv :
                     /\ m.mval = v
@@ -86,8 +86,9 @@ Phase2a(b, v) ==
   /\ 2aMsgs' = 2aMsgs \union {[bal |-> b, val |-> v]}
   /\ UNCHANGED <<maxBal, maxVBal, maxVal, 1aMsgs, 1bMsgs, 2bMsgs>>
 
-Phase2b(a) ==
+Phase2b(a, b) ==
     /\ \E m \in 2aMsgs :
+        /\ m.bal = b
         /\ m.bal \geq maxBal[a]
         /\ maxBal' = [maxBal EXCEPT ![a] = m.bal]
         /\ maxVBal' = [maxVBal EXCEPT ![a] = m.bal]
@@ -96,11 +97,18 @@ Phase2b(a) ==
     /\ UNCHANGED <<1aMsgs, 1bMsgs, 2aMsgs>>
 
 Next ==
-    \/ \E b \in Ballot : \/ Phase1a(b)
-                         \/ \E v \in Value : Phase2a(b, v)
-    \/ \E a \in Acceptor : Phase1b(a) \/ Phase2b(a)
+    \/ \E b \in Ballot : Phase1a(b)
+    \/ \E b \in Ballot : \E v \in Value : \E Q \in Quorum1 : Phase2a(b, v, Q)
+    \/ \E a \in Acceptor : \E b \in Ballot : Phase1b(a, b)
+    \/ \E a \in Acceptor, b \in Ballot : Phase2b(a, b)
 
 Spec == Init /\ [][Next]_vars
+
+\* MCAcceptor == {"a1", "a2", "a3"}
+\* MCValue    == 0..2
+\* MCQuorum1 == {{"a1", "a2"}, {"a1", "a3"}, {"a2", "a3"}}
+\* MCQuorum2 == {{"a1", "a2"}, {"a1", "a3"}, {"a2", "a3"}}
+\* MCBallot == 0..2
 
 Sent2b(a,v,b) ==
     \E m \in 2bMsgs:
