@@ -82,16 +82,16 @@ ServerViewOn(i) == configs[GetConfigVersion(i)]
 \* important property is that every quorum overlaps with every other.
 Quorum(me) == {sub \in SUBSET(ServerViewOn(me)) : Cardinality(sub) * 2 > Cardinality(ServerViewOn(me))}
 
-----
+
 \* Define initial values for all variables
-InitServerVars == /\ currentTerm = [i \in Server |-> 0]
-                  /\ state       = [i \in Server |-> Follower]
-InitLogVars == /\ log              = [i \in Server |-> << [term |-> 0, v |-> 1] >>]
-               /\ committedEntries = {[term |-> 0, index |-> 1]}
-InitConfigs == configs = << Server >>
-Init == /\ InitServerVars
-        /\ InitLogVars
-        /\ InitConfigs
+Init == 
+    \E c \in SUBSET Server : 
+        /\ c # {}
+        /\ currentTerm = [i \in Server |-> 0]
+        /\ state = [i \in Server |-> Follower]
+        /\ log = [i \in Server |-> << [term |-> 0, v |-> 1] >>]
+        /\ committedEntries = {[term |-> 0, index |-> 1]}
+        /\ configs = << c >>
 
 ----
 \* Message handlers
