@@ -111,6 +111,7 @@ AppendOplog(i, j) ==
     /\ UNCHANGED <<serverVars, committedEntries, configs>>
 
 CanRollbackOplog(i, j) ==
+    /\ state[i] # Leader
     /\ j \in ServerViewOn(i)  \* j is in the config of i.
     /\ Len(log[i]) > 0
     /\ \* The log with later term is more up-to-date
