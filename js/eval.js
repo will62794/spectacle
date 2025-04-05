@@ -5123,7 +5123,7 @@ class TlaInterpreter {
 
         // Compute initial states and keep only the valid ones.
         // let initStates = getInitStates(initDef["node"], vars, defns, constvals);
-        console.log("[INIT] Computing initial states");
+        // console.log("[INIT] Computing initial states");
         let initStates = this.computeInitStates(treeObjs, constvals, undefined, spec);
 
         let initStatesOrig = _.cloneDeep(initStates);
@@ -5133,15 +5133,15 @@ class TlaInterpreter {
         let edges = [];
         let statePredecessorMap = {};
         while (stateQueue.length > 0) {
-            console.log("initStatesOrig:", initStatesOrig);
+            // console.log("initStatesOrig:", initStatesOrig);
             let currState = stateQueue.pop();
             // console.log(currState);
             let currStateHash = currState.fingerprint();
-            console.log("curr state hash:", currStateHash);
+            // console.log("curr state hash:", currStateHash);
 
             // If we've already seen this state, we don't need to explore it.
             if (seenStatesHashSet.has(currStateHash)) {
-                console.log("already seen state " + currStateHash);
+                // console.log("already seen state " + currStateHash);
                 continue;
             }
 
@@ -5154,7 +5154,7 @@ class TlaInterpreter {
             let currStateArg = _.cloneDeep(currState);
             let nextStateCtxs = this.computeNextStates(treeObjs, constvals, [currStateArg], undefined, spec)
             let nextStates = nextStateCtxs.map(c => c["state"].deprimeVars());
-            console.log("nextStates:", nextStates);
+            // console.log("nextStates:", nextStates);
             // console.log("reachableStates:", reachableStates);
             stateQueue = stateQueue.concat(nextStates);
             for (const nextSt of nextStates) {

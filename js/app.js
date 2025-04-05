@@ -23,6 +23,7 @@ let TraceTab = {
     Trace: 1,
     REPL: 2,
     Animation: 3,
+    Check: 4 // Added Check tab
 }
 
 let model = {
@@ -1590,7 +1591,7 @@ function startWebWorker(){
         specPath: model.specPath,
         constValInputs: model.specConstInputVals
     });
-    console.log("Message posted to worker");
+    console.log("Posted message to invariant checking worker.");
 
     myWorker.onmessage = function(e) {
         console.log("Message received from worker");
@@ -2149,7 +2150,10 @@ function tracePane() {
             class: "nav-item",
             onclick: () => model.selectedTraceTab = TraceTab.REPL,
         }, m("a", {class: model.selectedTraceTab === TraceTab.REPL ? "nav-link active" : "nav-link"}, "REPL")),
-       
+        // m("li", {
+        //     class: "nav-item",
+        //     onclick: () => model.selectedTraceTab = TraceTab.Check,
+        // }, m("a", {class: model.selectedTraceTab === TraceTab.Check ? "nav-link active" : "nav-link"}, "Check"))
     ]
 
     if (model.animationExists) {
@@ -2183,6 +2187,7 @@ function tracePane() {
     let otherTabs = [
         componentTraceViewer(model.selectedTraceTab !== TraceTab.Trace),
         replPane(model.selectedTraceTab !== TraceTab.REPL),
+        checkPane(model.selectedTraceTab !== TraceTab.Check)
     ]
 
     if(model.animationExists){
@@ -2281,6 +2286,18 @@ function replPane(hidden) {
     ]);
 }
 
+function checkPane(hidden) {
+    return m("div", {hidden: hidden, style: {margin: "20px"}}, [
+        m("button", {
+            class: "btn btn-primary",
+            onclick: () => {
+                // TODO: Add check invariant functionality
+                console.log("Starting web worker for checking invariant.")
+                startWebWorker();
+            }
+        }, "Check Invariant")
+    ]);
+}
 // To be used for selecting different panes when/if we add that UI functionality.
 function componentPaneSelector() {
     return m("div", { id: "pane-selector" }, [
