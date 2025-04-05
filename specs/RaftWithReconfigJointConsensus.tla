@@ -93,11 +93,13 @@ MyQuorums(me) ==
 
 \* Define initial values for all variables
 Init == 
-    /\ currentTerm = [i \in Server |-> 0]
-    /\ state = [i \in Server |-> Follower]
-    /\ log = [i \in Server |-> << [term |-> 0, v |-> 1, c |-> Server] >>]
-    /\ committedEntries = {[term |-> 0, index |-> 1]}
-    /\ configs = << Server >>
+    \E c \in SUBSET Server : 
+        /\ c # {}
+        /\ currentTerm = [i \in Server |-> 0]
+        /\ state = [i \in Server |-> Follower]
+        /\ log = [i \in Server |-> << [term |-> 0, v |-> 1, c |-> c] >>]
+        /\ committedEntries = {[term |-> 0, index |-> 1]}
+        /\ configs = << c >>
 
 \* Message handlers
 \* i = recipient, j = sender, m = message
