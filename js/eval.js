@@ -1624,7 +1624,7 @@ class TLASpec {
         let extends_modules = [];
         let instance_modules = {};
 
-        console.log(`>>> Processing MODULE after extracting definitions: '${root_mod_name}'`);
+        // console.log(`>>> Processing MODULE after extracting definitions: '${root_mod_name}'`);
 
         // Look for all variables and definitions defined in the module.
         let more = cursor.gotoFirstChild();
@@ -5148,6 +5148,11 @@ class TlaInterpreter {
             // Mark the state as seen and record it as reachable.
             seenStatesHashSet.add(currStateHash);
             reachableStates.push(currState);
+
+            // For online reporting of metrics.
+            // if(seenStatesHashSet.size % 100 === 0){
+            //     console.log(`${seenStatesHashSet.size} reachable states computed.`);
+            // }
 
             // Compute next states reachable from the current state, and add
             // them to the state queue.

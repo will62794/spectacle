@@ -59,7 +59,7 @@ onmessage = async (e) => {
             if (constValText === undefined) {
                 throw "no constant value given for " + constDecl;
             }
-            console.log("constDecl:", constDecl, constValText);
+            // console.log("constDecl:", constDecl, constValText);
             constVals[constDecl] = constValText;
 
             let model = {};
@@ -69,11 +69,11 @@ onmessage = async (e) => {
             // Flag so that we treat unknown identifiers as model values during evaluation.
             ctx.evalModelVals = true;
             let cVal = evalExprStrInContext(ctx, constValText);
-            console.log("cval:", cVal);
+            // console.log("cval:", cVal);
             constTlaVals[constDecl] = cVal;
         }
     
-        console.log("constTlaVals:", constTlaVals);
+        // console.log("constTlaVals:", constTlaVals);
 
 
         // Generate initial states.
@@ -91,15 +91,13 @@ onmessage = async (e) => {
         }
 
         // Seems it is fine to serialize TLAState objects back through the web worker.
-        postMessage(reachableStates[0]);
+        postMessage(reachableStates);
+        return;
 
 
     }).catch(function(e){
         console.log("Error parsing and loading spec.", e);
         // model.errorObj = {parseError: true, obj: e, message: "Error parsing spec."};
     });
-
-
-
 
 };

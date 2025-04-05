@@ -77,7 +77,8 @@ let model = {
     copyLinkPressCooldown: false,
     invariantExprToCheck: "",
     invariantViolated: false,
-    invariantViolationDuration: 0
+    invariantCheckerRunning: false,
+    invariantCheckingDuration: 0
 }
 
 const exampleSpecs = {
@@ -1590,6 +1591,7 @@ function componentTraceViewer(hidden) {
 function startCheckInvariantWebWorker(invariantExpr){
     const myWorker = new Worker("js/worker.js");
     model.invariantCheckerStart = performance.now()
+    model.invariantCheckerRunning = true;
     myWorker.postMessage({
         newText: model.specText,
         specPath: model.specPath,
@@ -1605,6 +1607,8 @@ function startCheckInvariantWebWorker(invariantExpr){
         model.generatingInitStates = false;
         m.redraw();
 
+        model.invariantCheckerRunning = false;
+
         if(response.invHolds !== undefined && !response.invHolds){
             // TODO: Display invariant violation.
             console.log("Invariant violation detected.");
@@ -1615,9 +1619,13 @@ function startCheckInvariantWebWorker(invariantExpr){
                 chooseNextState(stateHash)
             }
             model.invariantViolated = true;
-            model.invariantViolationDuration = performance.now() - model.invariantCheckerStart;
+            model.invariantCheckingDuration = performance.now() - model.invariantCheckerStart;
             // Switch to trace tab after finding invariant violation
             // model.currPane = Pane.Trace;
+        }
+
+        if(response.invHolds !== undefined && response.invHolds){
+            model.invariantCheckingDuration = performance.now() - model.invariantCheckerStart;
         }
         m.redraw();
     };
@@ -1757,7 +1765,7 @@ function resetTrace() {
     model.forwardHistory = [];
     model.forwardHistoryActions = [];
     model.invariantViolated = false;
-    model.invariantViolationDuration = 0;
+    model.invariantCheckingDuration = 0;
     reloadSpec();
     updateTraceRouteParams();
 }
@@ -2340,7 +2348,7 @@ function checkPane(hidden) {
             }),
             m("button", {
                 class: "btn btn-primary",
-                disabled: model.invariantExprToCheck === "",
+                disabled: model.invariantExprToCheck === "" || model.invariantCheckerRunning,
                 onclick: () => {
                     console.log(`Starting web worker for checking invariant expression: '${model.invariantExprToCheck}'.`)
                     model.invariantViolated = false;
@@ -2352,12 +2360,15 @@ function checkPane(hidden) {
             ]),
         ]),
         m("div", {hidden: !model.invariantViolated, style: {color: "red"}}, [
-            `Invariant violated in ${model.invariantViolationDuration.toFixed(0)}ms (`,
+            `Invariant violated in ${model.invariantCheckingDuration.toFixed(0)}ms (`,
             m("a", {
                 style: {cursor: "pointer", textDecoration: "underline"},
                 onclick: () => model.selectedTraceTab = TraceTab.Trace
             }, "View Trace"),
-            ")."
+            ")"
+        ]),
+        m("div", {hidden: !(!model.invariantViolated && model.invariantCheckingDuration > 0 && !model.invariantCheckerRunning), style: {color: "green"}}, [
+            `Invariant passed in ${model.invariantCheckingDuration.toFixed(0)}ms`,
         ])
     ]);
 }
@@ -2539,6 +2550,9 @@ function loadSpecText(text, specPath) {
     model.specPath = specPath;
     model.traceExprs = [];
     model.loadSpecFailed = false;
+    model.invariantViolated = false;
+    model.invariantCheckingDuration = 0;
+    model.invariantCheckerRunning = false;
 
     let parsedChanges = m.route.param("changes");
 
