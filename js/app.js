@@ -161,6 +161,8 @@ const urlParams = Object.fromEntries(urlSearchParams.entries());
 let enableEvalTracing = false;
 let evalNodeGraphsPerAction = {};
 
+let invCheckerWebWorker = null;
+
 function displayStateGraph() {
     // TODO: Will need to flesh out this functionality further.
 
@@ -1589,10 +1591,10 @@ function componentTraceViewer(hidden) {
 
 // TODO: Think about more fully fledged worker execution framework.
 function startCheckInvariantWebWorker(invariantExpr){
-    const myWorker = new Worker("js/worker.js");
+    invCheckerWebWorker = new Worker("js/worker.js");
     model.invariantCheckerStart = performance.now()
     model.invariantCheckerRunning = true;
-    myWorker.postMessage({
+    invCheckerWebWorker.postMessage({
         newText: model.specText,
         specPath: model.specPath,
         constValInputs: model.specConstInputVals,
@@ -1600,7 +1602,7 @@ function startCheckInvariantWebWorker(invariantExpr){
     });
     console.log("Posted message to invariant checking worker.");
 
-    myWorker.onmessage = function(e) {
+    invCheckerWebWorker.onmessage = function(e) {
         console.log("Message received from worker");
         let response = e.data;
         console.log("Response from worker:", response);
@@ -1620,12 +1622,14 @@ function startCheckInvariantWebWorker(invariantExpr){
             }
             model.invariantViolated = true;
             model.invariantCheckingDuration = performance.now() - model.invariantCheckerStart;
+            model.invariantCheckingResponse = response;
             // Switch to trace tab after finding invariant violation
             // model.currPane = Pane.Trace;
         }
 
         if(response.invHolds !== undefined && response.invHolds){
             model.invariantCheckingDuration = performance.now() - model.invariantCheckerStart;
+            model.invariantCheckingResponse = response;
         }
         m.redraw();
     };
@@ -2199,11 +2203,7 @@ function tracePane() {
         m("li", {
             class: "nav-item",
             onclick: () => model.selectedTraceTab = TraceTab.REPL,
-        }, m("a", {class: model.selectedTraceTab === TraceTab.REPL ? "nav-link active" : "nav-link"}, "REPL")),
-        // m("li", {
-        //     class: "nav-item",
-        //     onclick: () => model.selectedTraceTab = TraceTab.Check,
-        // }, m("a", {class: model.selectedTraceTab === TraceTab.Check ? "nav-link active" : "nav-link"}, "Check"))
+        }, m("a", {class: model.selectedTraceTab === TraceTab.REPL ? "nav-link active" : "nav-link"}, "REPL"))
     ]
 
     if (model.animationExists) {
@@ -2216,6 +2216,25 @@ function tracePane() {
         }, m("a", { class: model.selectedTraceTab === TraceTab.Animation ? "nav-link active" : "nav-link" }, "Animation"));
         tabs.push(animTab);
     }
+
+    // Add invariant checking tab.
+    tabs.push(
+        m("li", {
+            class: "nav-item",
+            onclick: () => model.selectedTraceTab = TraceTab.Check,
+        }, [
+            m("a", {class: model.selectedTraceTab === TraceTab.Check ? "nav-link active" : "nav-link"}, [
+                "Check",
+                m("img", {
+                    style: {"width": "17px", "height": "17px", "margin-left": "5px", "margin-bottom": "3px"},
+                    // class: "hide-var-icon",
+                    hidden: !model.invariantCheckerRunning,
+                    src: "assets/gear-spinner.svg",
+                })
+            ])
+        ])
+    )
+
 
     // tabs = tabs.concat(specName);
     
@@ -2337,6 +2356,10 @@ function replPane(hidden) {
 }
 
 function checkPane(hidden) {
+    let invCheckStatesExplored = 0;
+    if(model.invariantCheckingResponse !== undefined){
+        invCheckStatesExplored = model.invariantCheckingResponse.numStatesExplored; 
+    }
     return m("div", {hidden: hidden, style: {margin: "20px"}}, [
         m("div", {style: {display: "flex", gap: "10px"}}, [
             m("input", {
@@ -2358,9 +2381,22 @@ function checkPane(hidden) {
                 gearIcon(),
                 " Check Invariant"
             ]),
+            m("button", {
+                class: "btn btn-primary btn-danger",
+                disabled: !model.invariantCheckerRunning,
+                onclick: () => {
+                    console.log(`Stopping web worker for checking invariant expression: '${model.invariantExprToCheck}'.`)
+                    model.invariantViolated = false;
+                    model.invariantCheckerRunning = false;
+                    invCheckerWebWorker.terminate();
+                    m.redraw();
+                }
+            }, [
+                "Stop"
+            ]),
         ]),
         m("div", {hidden: !model.invariantViolated, style: {color: "red"}}, [
-            `Invariant violated in ${model.invariantCheckingDuration.toFixed(0)}ms (`,
+            `Invariant violated in ${model.invariantCheckingDuration.toFixed(0)}ms, ${invCheckStatesExplored} distinct states explored (`,
             m("a", {
                 style: {cursor: "pointer", textDecoration: "underline"},
                 onclick: () => model.selectedTraceTab = TraceTab.Trace
@@ -2368,7 +2404,7 @@ function checkPane(hidden) {
             ")"
         ]),
         m("div", {hidden: !(!model.invariantViolated && model.invariantCheckingDuration > 0 && !model.invariantCheckerRunning), style: {color: "green"}}, [
-            `Invariant passed in ${model.invariantCheckingDuration.toFixed(0)}ms`,
+            `Invariant passed in ${model.invariantCheckingDuration.toFixed(0)}ms, ${invCheckStatesExplored} distinct states explored.`,
         ])
     ]);
 }

@@ -5112,7 +5112,7 @@ class TlaInterpreter {
      * constant values. If 'checkInvExpr' is given, check if this invariant
      * holds in each state, and terminate upon encountering the first violation.
      */
-    computeReachableStates(treeObjs, constvals, checkInvExpr, spec) {
+    computeReachableStates(treeObjs, constvals, checkInvExpr, spec, logMetricsInterval=null) {
         // console.log("TREEOBJS:", treeObjs);
         // console.log("TREEOBJS:", spec.globalDefTable);
         let vars = treeObjs["var_decls"];
@@ -5127,6 +5127,8 @@ class TlaInterpreter {
         let initStates = this.computeInitStates(treeObjs, constvals, undefined, spec);
 
         let initStatesOrig = _.cloneDeep(initStates);
+        let initStatesOrigFingerprints = initStatesOrig.map(s => s.fingerprint());
+        // console.log("initStatesOrig:", initStatesOrig.map(s => s.fingerprint()));
         let stateQueue = initStates;
         let seenStatesHashSet = new Set();
         let reachableStates = [];
@@ -5134,7 +5136,7 @@ class TlaInterpreter {
         let statePredecessorMap = {};
         while (stateQueue.length > 0) {
             // console.log("initStatesOrig:", initStatesOrig);
-            let currState = stateQueue.pop();
+            let currState = stateQueue.shift();
             // console.log(currState);
             let currStateHash = currState.fingerprint();
             // console.log("curr state hash:", currStateHash);
@@ -5150,9 +5152,9 @@ class TlaInterpreter {
             reachableStates.push(currState);
 
             // For online reporting of metrics.
-            // if(seenStatesHashSet.size % 100 === 0){
-            //     console.log(`${seenStatesHashSet.size} reachable states computed.`);
-            // }
+            if(logMetricsInterval !== null && seenStatesHashSet.size % logMetricsInterval === 0){
+                console.log(`${seenStatesHashSet.size} reachable states computed.`);
+            }
 
             // Compute next states reachable from the current state, and add
             // them to the state queue.
@@ -5164,7 +5166,11 @@ class TlaInterpreter {
             stateQueue = stateQueue.concat(nextStates);
             for (const nextSt of nextStates) {
                 edges.push([currStateArg, nextSt]);
-                statePredecessorMap[nextSt.fingerprint()] = currStateHash;
+
+                // If we have already visited this state, we don't need to record path to it.
+                if(!statePredecessorMap.hasOwnProperty(nextSt.fingerprint())){
+                    statePredecessorMap[nextSt.fingerprint()] = currStateHash;
+                }
             }
 
             // Check invariant in next states.
@@ -5185,13 +5191,17 @@ class TlaInterpreter {
                     // console.log("invariant check: ", res);
                     // Invariant failed to hold in this state.
                     if (!res.getVal()) {
-                        console.log("invariant violated: ", res, nextState);
-                        console.log("PRED MAP:", statePredecessorMap);
+                        console.log("Invariant violated: ", res, nextState);
+
                         // Reconstruct trace.
+                        console.log("Reconstructing trace from predecessor map:", statePredecessorMap);
                         let currTraceState = nextState;
                         let currTraceStateHash = currTraceState.fingerprint();
                         let trace = [currTraceStateHash];
-                        while (statePredecessorMap.hasOwnProperty(currTraceStateHash)) {
+                        console.log("invariant violated in state:", currTraceStateHash);
+
+                        while (statePredecessorMap.hasOwnProperty(currTraceStateHash) && !initStatesOrigFingerprints.includes(currTraceStateHash)) {
+                            // console.log("currTraceStateHash:", currTraceStateHash);
                             let nextTraceStateHash = statePredecessorMap[currTraceStateHash];
                             trace.push(nextTraceStateHash);
                             currTraceStateHash = nextTraceStateHash;
@@ -5205,7 +5215,8 @@ class TlaInterpreter {
                             "edges": [],
                             "invHolds": false,
                             "invFirstViolatingState": nextState,
-                            "hashTrace": trace
+                            "hashTrace": trace,
+                            "numStatesExplored": seenStatesHashSet.size
                         }
                     }
                 }
@@ -5215,6 +5226,7 @@ class TlaInterpreter {
         return {
             "initStates": initStatesOrig,
             "states": reachableStates,
+            "numStatesExplored": seenStatesHashSet.size,
             "edges": edges,
             "invHolds": true
         }

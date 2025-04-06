@@ -80,7 +80,7 @@ onmessage = async (e) => {
         let interp = new TlaInterpreter();
 
         let start = performance.now();
-        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, invariantExpr, spec);
+        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, invariantExpr, spec, logMetricsInterval=200);
         const duration = (performance.now() - start).toFixed(1);
         console.log("Reachable states from WebWorker.", reachableStates, `duration: ${duration}ms`);
         console.log(`Computed ${reachableStates.states.length} reachable states in ${duration}ms.`);
