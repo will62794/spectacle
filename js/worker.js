@@ -29,7 +29,7 @@ onmessage = async (e) => {
     // Load the tree-sitter TLA+ parser.
     let language;
     LANGUAGE_BASE_URL = "js";
-    const url = `/${LANGUAGE_BASE_URL}/tree-sitter-${languageName}.wasm`;
+    const url = `tree-sitter-${languageName}.wasm`;
     try {
         console.log("Loading language from", url);
         language = await TreeSitter.Language.load(url);
