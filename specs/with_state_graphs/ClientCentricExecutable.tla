@@ -1,6 +1,6 @@
 --------------------------- MODULE ClientCentric ---------------------------
 EXTENDS Naturals, Sequences, FiniteSets, Util
-VARIABLES Keys, Values
+CONSTANTS Keys, Values, TxId
 
 \* TLA+ specifications of Client Centric Isolation Specification by Crooks et al: https://dl.acm.org/doi/10.1145/3087801.3087802
 \* TLA+ specifications by Tim Soethout (tim.soethout@ing.com)
@@ -181,5 +181,23 @@ TypeOK(transactions, execution) ==
   /\ TypeOKT(transactions)
 \*  /\ PrintT(State)
   /\ execution \in Execution
+
+VARIABLE history
+Init == history = [t \in TxId |-> <<>>]
+
+EmptyState == [k \in Keys |-> "NoValue"]
+
+Read(tid, k,v) == 
+    /\ history' = [history EXCEPT ![tid] = Append(history[tid], r(k,v))]
+    /\ ReadCommitted(EmptyState, Range(history))
+
+Write(tid, k,v) == 
+    /\ history' = [history EXCEPT ![tid] = Append(history[tid], w(k,v))]
+    \* /\ ReadUncommitted(EmptyState, Range(history))
+
+Next == 
+    \/ \E tid \in TxId, k \in Keys, v \in Values: Read(tid, k,v)
+    \/ \E tid \in TxId, k \in Keys, v \in Values: Write(tid, k,v)
+    
 
 =============================================================================
