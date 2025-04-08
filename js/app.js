@@ -382,7 +382,7 @@ function componentChooseConstants(hidden) {
                         class: "form-control form-control-sm",
                         id: `const-val-input-${constDecl}`,
                         style: {
-                            "width": "260px"
+                            "width": "220px"
                         },
                         oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
                         value: model.specConstInputVals[constDecl],
