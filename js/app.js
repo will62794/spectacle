@@ -355,6 +355,10 @@ function setConstantAsString(constDecl){
     model.specConstInputVals[constDecl] = '"' + constDecl + '"';
 }
 
+function setConstantAsModelValue(constDecl){
+    model.specConstInputVals[constDecl] = constDecl;
+}
+
 function toggleHiddenConstants(){
     model.constantsPaneHidden = !model.constantsPaneHidden;
 }
@@ -372,13 +376,29 @@ function componentChooseConstants(hidden) {
         let newRow = m("tr", {}, [
             m("td", { style: { "vertical-align": "middle" } }, constDecl),
             m("td", { style: { "vertical-align": "middle" } }, "←"),
-            m("td", {}, m("input", {
-                class: "const-input form-control form-control-sm",
-                id: `const-val-input-${constDecl}`,
-                oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
-                value: model.specConstInputVals[constDecl],
-                placeholder: "Enter TLA+ value."
-            }))
+            m("td", {}, [
+                m("div", { class: "input-group" }, [
+                    m("input", {
+                        class: "form-control form-control-sm",
+                        id: `const-val-input-${constDecl}`,
+                        style: {
+                            "width": "260px"
+                        },
+                        oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
+                        value: model.specConstInputVals[constDecl],
+                        placeholder: "Enter TLA+ value."
+                    }),
+                    m("div", { class: "input-group-append" }, [ 
+                    m("button", {
+                        class: "btn btn-outline-secondary btn-sm",
+                        style: {
+                            "font-size": "14px"
+                        },
+                            onclick: () => setConstantAsModelValue(constDecl)
+                        }, "Model Value")
+                    ])
+                ])
+            ])
         ])
         chooseConstsElems.push(newRow);
     }
