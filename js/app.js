@@ -1327,10 +1327,14 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                 varDiff = model.currTrace[ind]["state"].varDiff(model.currTrace[ind - 1]["state"]);
 
                 // For case of state being exploded on a parameter.
+                // console.log("param:", param)
+                // console.log("varname:", varname)
+                // console.log("state:", state)
                 if(param !== undefined){
                     function projectStateToParam(state, param){
                         return new TLAState(_.mapValues(state.stateVars, v => {
-                            if(v instanceof FcnRcdValue){
+                            // console.log("v:", v)
+                            if(v instanceof FcnRcdValue && v.argInDomain(param)){
                                 return v.applyArg(param);
                             }
                             return v;

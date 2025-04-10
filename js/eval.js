@@ -448,6 +448,13 @@ class FcnRcdValue extends TLAValue {
     }
 
     /**
+     * Checks whether the given argument is in the domain of the function.
+     */
+    argInDomain(arg){
+        return this.domain.map(val => val.fingerprint()).includes(arg.fingerprint())
+    }
+
+    /**
      * Apply the function to the path argument 'arg', given as array of args e.g. ["x", "y"].
      */
     applyPathArg(pathArg) {
