@@ -1115,7 +1115,7 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             let val = p[1];
             // If checking for diff, do it now.
             let diff = false;
-            if (prevTlaVal !== null && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
+            if (prevTlaVal !== null && prevTlaVal.argInDomain(key) && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
                 diff = true;
             }
             return m("tr", borderStyle, [
