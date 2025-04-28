@@ -413,6 +413,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         { "spec": "simple_unchanged_nested_tuple_def", "constvals": undefined },
         { "spec": "simple_unchanged_nested_tuple", "constvals": undefined },
         { "spec": "simple_unchanged", "constvals": undefined },
+        { "spec": "simple_unchanged_with_quant", "constvals": undefined },
         { "spec": "lockserver_nodefs_unchanged", "constvals": undefined },
     ],
     "Module instantiation": [

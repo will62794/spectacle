@@ -3779,7 +3779,13 @@ function evalBoundedQuantification(node, ctx) {
         let allVals = retCtxs.map(c => c["val"].getVal());
         evalLog("allVals:", allVals);
         let res = _.every(retCtxs.map(c => c["val"].getVal()));
-        return [ctx.withVal(new BoolValue(res))];
+
+        // For universal quantifiers, it is also valid for them to modify the
+        // value of state variables inside their quantified expressions e.g. \A
+        // s \in {3,4} : x' = 2. To address this, we return the latest context
+        // produced as a result of evaluating the quantified expression (i.e. as
+        // if it were the last conjunct in a conjunction).
+        return [_.last(retCtxs).withVal(new BoolValue(res))];
     }
 
     assert(quantifier.type === "exists");

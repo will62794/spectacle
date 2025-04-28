@@ -1,0 +1,25 @@
+strict digraph DiskGraph {
+nodesep=0.35;
+subgraph cluster_graph {
+color="white";
+-3810599722284383802 [label="/\\ x = 0\n/\\ y = 1",style = filled]
+-3810599722284383802 -> 1031559040308002236 [label="",color="black",fontcolor="black"];
+1031559040308002236 [label="/\\ x = 5\n/\\ y = 1"];
+-3810599722284383802 -> -2330573378511816567 [label="",color="black",fontcolor="black"];
+-2330573378511816567 [label="/\\ x = 16\n/\\ y = 17"];
+-3810599722284383802 -> -3810599722284383802 [label="",color="black",fontcolor="black"];
+1031559040308002236 -> 1031559040308002236 [label="",color="black",fontcolor="black"];
+1031559040308002236 -> -2330573378511816567 [label="",color="black",fontcolor="black"];
+1031559040308002236 -> 1031559040308002236 [label="",color="black",fontcolor="black"];
+-2330573378511816567 -> 3581377086636584689 [label="",color="black",fontcolor="black"];
+3581377086636584689 [label="/\\ x = 5\n/\\ y = 17"];
+-2330573378511816567 -> -2330573378511816567 [label="",color="black",fontcolor="black"];
+-2330573378511816567 -> -2330573378511816567 [label="",color="black",fontcolor="black"];
+3581377086636584689 -> 3581377086636584689 [label="",color="black",fontcolor="black"];
+3581377086636584689 -> -2330573378511816567 [label="",color="black",fontcolor="black"];
+3581377086636584689 -> 3581377086636584689 [label="",color="black",fontcolor="black"];
+{rank = same; -3810599722284383802;}
+{rank = same; 1031559040308002236;-2330573378511816567;}
+{rank = same; 3581377086636584689;}
+}
+}
