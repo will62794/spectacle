@@ -628,7 +628,8 @@ function errorMsgStr(errorObj) {
 
 function componentErrorInfo() {
     let errorInfo = m("div", {
-        class: "error-info",
+        class: "error-info alert alert-danger",
+        role: "alert",
         hidden: model.errorObj === null
     }, errorMsgStr(model.errorObj));
     return errorInfo;
@@ -955,7 +956,7 @@ function setConstantValues(reload = true) {
     for (var constDecl in model.specConsts) {
         let constValText = model.specConstInputVals[constDecl];
         if (constValText === undefined) {
-            throw "no constant value given for " + constDecl;
+            throw "no value given for '" + constDecl + "' CONSTANT";
         }
         // console.log("constDecl:", constDecl, constValText);
         constVals[constDecl] = constValText;
@@ -1705,10 +1706,16 @@ function onSpecParse(newText, parsedSpecTree, spec){
      // Load constants if given.
      let constantParams = m.route.param("constants");
      if (constantParams) {
-         console.log("CONSTNS:", constantParams);
+         console.log("CONSTANT params:", constantParams);
          model.specConstInputVals = constantParams;
          let reload = false;
-         setConstantValues(reload);
+         try {
+             setConstantValues(reload);
+         } catch (e) {
+             console.error("Error setting constant values:", e);
+             model.errorObj = {parseError: true, obj: e, message: e};
+             return;
+         }
      }
 
     // console.log("constinputvals:", model.specConstInputVals);
