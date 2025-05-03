@@ -531,6 +531,10 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 )
             }        
         },
+        { "spec": "Microwave", "constvals": {
+            "ImplementStartSafety": new BoolValue(false),
+            "ImplementOpenDoorSafety": new BoolValue(false),
+        } },
         // { "spec": "Consistency", "constvals": undefined },
     ]
     }
