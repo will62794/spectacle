@@ -9,6 +9,7 @@ Spectacle is an interactive, web-based tool for exploring, visualizing, and shar
  A live version of the tool is currently hosted [here](https://will62794.github.io/spectacle/#!/home), and below are some example specifications to try out:
 
 - [Lock server](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2Flockserver.tla&constants%5BServer%5D=%7B%22s1%22%2C%20%22s2%22%7D&constants%5BClient%5D=%7B%22c1%22%2C%20%22c2%22%7D)
+- [Microwave](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2Fwith_state_graphs%2FMicrowave.tla&constants%5BImplementStartSafety%5D=FALSE&constants%5BImplementOpenDoorSafety%5D=FALSE)
 - [Cabbage Goat Wolf Puzzle](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FCabbageGoatWolf.tla) (animated)
 - [Distributed termination detection (EWD998)](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FEWD998.tla&constants%5BN%5D=3) (animated)
 - [Two phase commit](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FTwoPhase_anim.tla&constants%5BRM%5D=%7Brm1%2Crm2%7D) (animated)
