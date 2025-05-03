@@ -511,11 +511,15 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
     if(actionDisabled){
         classList.push("action-choice-disabled");
     }
+    if(actionLabelObj.params.length === 0 && !actionDisabled){
+        classList.push("blue-hover");
+    }
     let actionNameDiv = [m("div", {
         class: classList.join(" "),
         onclick: function () {
             if (!actionDisabled && actionLabelObj.params.length == 0) {
                 let hash = nextStatesForAction[0]["state"].fingerprint();
+                console.log("choose next hash:", hash);
                 chooseNextState(hash);
             }
         }
@@ -543,8 +547,9 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
         style: `opacity: ${opac}%`,
         onclick: function () {
             if (actionLabelObj.params.length == 0) {
-                let hash = nextStatesForAction[0]["state"].fingerprint();
-                chooseNextState(hash);
+                // let hash = nextStatesForAction[0]["state"].fingerprint();
+                // console.log("choose nhhhhhhhhhext hash:", hash);
+                // chooseNextState(hash);
             }
         }        // onmouseover: () => {
         //     model.nextStatePreview = state;

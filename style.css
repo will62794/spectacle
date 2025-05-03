@@ -570,6 +570,10 @@ body {
     font-size:12px;
   }
 
+  .blue-hover:hover{
+    color:steelblue;
+  }
+
   .action-choice-param {
     color:black;
     font-size: 12px;
