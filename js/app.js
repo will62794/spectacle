@@ -706,6 +706,17 @@ function componentNextStateChoices(nextStates) {
     return m("table", { width: "98%" }, outRows);
 }
 
+
+function recomputeInitStates(){
+    let interp = new TlaInterpreter();
+    let includeFullCtx = true;
+    initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec);
+    initStates = initStates.map(c => ({"state": c["state"], "quant_bound": c["quant_bound"]}))
+    model.allInitStates = _.cloneDeep(initStates);
+    console.log("Set initial states: ", model.allInitStates);
+    return initStates;
+}
+
 function recomputeNextStates(fromState) {
     let interp = new TlaInterpreter();
     let nextStates;
@@ -774,7 +785,9 @@ function traceStepBack() {
     // Back to initial states.
     if (model.currTrace.length === 0) {
         console.log("Back to initial states.")
-        reloadSpec();
+        console.log("stepping back");
+        let nextStates = recomputeInitStates();
+        model.currNextStates = _.cloneDeep(nextStates);
         return;
     } else {
         console.log("stepping back");
@@ -1077,11 +1090,7 @@ function reloadSpec() {
     // let allInitStates;
     let initStates;
     try {
-        let includeFullCtx = true;
-        initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec);
-        initStates = initStates.map(c => ({"state": c["state"], "quant_bound": c["quant_bound"]}))
-        model.allInitStates = _.cloneDeep(initStates);
-        console.log("Set initial states: ", model.allInitStates);
+        initStates = recomputeInitStates();
     } catch (e) {
         console.error(e);
         console.error("Error computing initial states.");
@@ -1806,7 +1815,17 @@ function resetTrace() {
     model.forwardHistoryActions = [];
     model.invariantViolated = false;
     model.invariantCheckingDuration = 0;
-    reloadSpec();
+
+    // Clear the current trace but don't reset all parameters or reload the entire spec.
+    model.currTrace = []
+    model.currTraceActions = []
+    model.currTraceAliasVals = []
+    model.lassoTo = null;
+    model.errorObj = null;
+
+    let nextStates = recomputeInitStates();
+    model.currNextStates = _.cloneDeep(nextStates);
+
     updateTraceRouteParams();
 }
 
