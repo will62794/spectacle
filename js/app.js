@@ -148,6 +148,9 @@ const exampleSpecs = {
             "Consumers": "{c}",
             "BufCapacity": 1
         }
+    },
+    "Battery Relay (animated)": {
+        specpath: "./specs/BatteryRelay.tla"
     }
 
 };
