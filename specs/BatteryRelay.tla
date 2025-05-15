@@ -79,9 +79,8 @@ RightToLeft(group) ==
 
 (* Next-state relation *)
 Next ==
-    \E group \in SUBSET Vehicles:
-        \/ LeftToRight(group)
-        \/ RightToLeft(group)
+    \/ \E group \in SUBSET Vehicles : LeftToRight(group)
+    \/ \E group \in SUBSET Vehicles : RightToLeft(group)
 
 (* Safety: Vehicles cannot be on both sides and don't disappear or duplicate *)
 Safety ==
