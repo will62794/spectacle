@@ -48,7 +48,7 @@ Init ==
     /\ batteryLevel = MaxLevel
 
 (* Action: from one or two vehicles left to right *)
-LeftToRight(group) ==
+LeftToRight(group, cost) ==
     (* Before the move: *)
     (* The group must be non-empty and contain at most two vehicles *)
     /\ Cardinality(group) \in 1..2
@@ -65,22 +65,26 @@ LeftToRight(group) ==
     /\ right' = right \union group
     (* The battery will be decreased by the cost of moving the 
        biggest vehicle of the group *)
-    /\ batteryLevel' = batteryLevel - Max({ Cost[g] : g \in group })
+    /\ batteryLevel' = batteryLevel - cost
 
 (* Action: from right to left *)
-RightToLeft(group) ==
+RightToLeft(group, cost) ==
     /\ Cardinality(group) \in 1..2
     /\ group \in SUBSET right
     /\ batteryLeft = FALSE
     /\ batteryLeft' = ~batteryLeft
     /\ right' = right \ group
     /\ left' = left \union group
-    /\ batteryLevel' = batteryLevel - Max({ Cost[g] : g \in group })
+    /\ batteryLevel' = batteryLevel - cost
 
 (* Next-state relation *)
 Next ==
-    \/ \E group \in SUBSET Vehicles : LeftToRight(group)
-    \/ \E group \in SUBSET Vehicles : RightToLeft(group)
+    \/ \E group \in (SUBSET Vehicles) \ {{}} :
+        \E c \in {Max({ Cost[g] : g \in group })} :
+            LeftToRight(group, c)
+    \/ \E group \in (SUBSET Vehicles) \ {{}} :
+        \E c \in {Max({ Cost[g] : g \in group })} :
+            RightToLeft(group, c)
 
 (* Safety: Vehicles cannot be on both sides and don't disappear or duplicate *)
 Safety ==
