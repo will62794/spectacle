@@ -2613,6 +2613,13 @@ function loadRouteParamsState() {
         // assert(model.specConstVals.hasOwnProperty(model.explodedConstantExpr));
     }
 
+    // Check for animation parameter and switch to animation tab if available
+    let animParam = m.route.param("anim");
+    if (animParam === true && model.animationExists) {
+        model.selectedTraceTab = TraceTab.Animation;
+        model.enableAnimationView = true;
+    }
+
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
