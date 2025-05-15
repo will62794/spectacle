@@ -152,21 +152,21 @@ SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
 
 iconSize == 25
 
-VehicleIcon == [
-    Truck   |-> "https://www.svgrepo.com/download/59774/loaded-truck.svg",
-    Car     |-> "https://www.svgrepo.com/download/455224/fast-car.svg",
-    Bike    |-> "https://www.svgrepo.com/download/11226/motorbike.svg",
-    Scooter |-> "https://www.svgrepo.com/download/62546/scooter.svg"
-]
+VehicleIcon(v) == 
+    IF v = "Truck" THEN "https://www.svgrepo.com/download/59774/loaded-truck.svg"
+    ELSE IF v = "Car" THEN "https://www.svgrepo.com/download/455224/fast-car.svg"
+    ELSE IF v = "Bike" THEN "https://www.svgrepo.com/download/11226/motorbike.svg"
+    ELSE IF v = "Scooter" THEN "https://www.svgrepo.com/download/62546/scooter.svg"
+    ELSE "https://www.svgrepo.com/download/438355/car.svg"
 
 Left ==
     LET order == CHOOSE f \in [left -> 1..Cardinality(left)] : Injective(f)
-        image(actor, o) == Image(10, o*35,iconSize,iconSize, VehicleIcon[actor], <<>>) IN
+        image(actor, o) == Image(10, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
     Group(SetToSeq({image(p, order[p]) : p \in left}), [i \in {} |-> {}])
 
 Right ==
     LET order == CHOOSE f \in [right -> 1..Cardinality(right)] : Injective(f)
-        image(actor, o) == Image(130, o*35,iconSize,iconSize, VehicleIcon[actor], <<>>) IN
+        image(actor, o) == Image(130, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
     Group(SetToSeq({image(p, order[p]) : p \in right}), [i \in {} |-> {}])
 
 BatteryIcon ==
@@ -187,7 +187,7 @@ Chargers ==
    	Image(160, i, 30, 30, IF right = Vehicles 
                           THEN "https://www.svgrepo.com/download/325164/ev-plug-charging.svg"
                           ELSE "https://www.svgrepo.com/download/325166/ev-plug-error.svg", <<>>)
-                            : i \in {40, 75, 105, 140}
+                            : i \in {40 + (i*35) : i \in 0..Cardinality(Vehicles)-1}
    }), [i \in {} |-> {}])
 
 Empty ==
