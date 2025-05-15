@@ -7,7 +7,8 @@ at 5pm.
 
 Thankfully, the valets have a spare battery—just enough to jump-start one vehicle and drive it
 to another garage, where a fleet charger can instantly recharge all four vehicles at once.
-The catch? It's all or nothing: the charger only works if all four vehicles arrive together.
+The catch? It's all or nothing: the charger only works if all four vehicles are plugged in at
+the same time.
 
 There's not enough time to shuttle each vehicle one by one. However, the valets can tow a
 second vehicle behind a running one—but only if the towing vehicle is large enough. A smaller
