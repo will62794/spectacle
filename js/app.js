@@ -1935,7 +1935,7 @@ function componentButtonsContainer() {
             m("button", { 
                 class: "btn btn-sm btn-outline-primary button-bagse", 
                 id: "trace-back-button", 
-                disabled: model.currTrace.length === 0,
+                disabled: model.currTrace.length <= 1,
                 onclick: traceStepBack 
             }, "Back"),
             m("button", { 
