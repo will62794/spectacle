@@ -20,9 +20,15 @@ in a single trip?
 -------------------------------- MODULE BatteryRelay --------------------------------
 EXTENDS Naturals, FiniteSets, TLC, Sequences
 
-MaxLevel == 17
+CONSTANT MaxLevel
+ASSUME MaxLevel \in Nat
 
-Cost == [
+CONSTANT Cost
+ASSUME 
+    /\ DOMAIN Cost \in SUBSET STRING
+    /\ \A n \in DOMAIN Cost: Cost[n] \in Nat
+
+MyCost == [
     Truck |-> 10,
     Car   |-> 5,
     Bike  |-> 2,
