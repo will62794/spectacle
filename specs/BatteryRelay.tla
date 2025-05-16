@@ -18,7 +18,7 @@ Can you figure out the best way for the valets to move all four vehicles to the 
 in a single trip?
 
 -------------------------------- MODULE BatteryRelay --------------------------------
-EXTENDS Naturals, FiniteSets, TLC
+EXTENDS Naturals, FiniteSets, TLC, Sequences
 
 MaxLevel == 17
 
@@ -148,9 +148,19 @@ Image(x, y, width, height, href, attrs) ==
 \* Group element. 'children' is as a sequence of elements that will be contained in this group.
 Group(children, attrs) == SVGElem("g", attrs, children, "")
 
-Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
+RECURSIVE SetToSeqRec(_)
+SetToSeqRec(S) ==
+  IF S = {} THEN << >>
+  ELSE LET x == CHOOSE e \in S : TRUE
+       IN  <<x>> \o SetToSeqRec(S \ {x})
+SetToSeq(S) == SetToSeqRec(S)
 
-SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
+RECURSIVE OrderRec(_)
+OrderRec(S) ==
+  IF S = {} THEN << >>
+  ELSE LET x == CHOOSE e \in S : TRUE
+       IN  x :> Cardinality(S) @@ OrderRec(S \ {x})
+Order(S) == OrderRec(S)
 
 -------
 
@@ -164,14 +174,12 @@ VehicleIcon(v) ==
     ELSE "https://www.svgrepo.com/download/438355/car.svg"
 
 Left ==
-    LET order == CHOOSE f \in [left -> 1..Cardinality(left)] : Injective(f)
-        image(actor, o) == Image(10, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
-    Group(SetToSeq({image(p, order[p]) : p \in left}), [i \in {} |-> {}])
+    LET image(actor, o) == Image(10, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
+    Group(SetToSeq({image(p, Order(left)[p]) : p \in left}), [i \in {} |-> {}])
 
 Right ==
-    LET order == CHOOSE f \in [right -> 1..Cardinality(right)] : Injective(f)
-        image(actor, o) == Image(130, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
-    Group(SetToSeq({image(p, order[p]) : p \in right}), [i \in {} |-> {}])
+    LET image(actor, o) == Image(130, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
+    Group(SetToSeq({image(p, Order(right)[p]) : p \in right}), [i \in {} |-> {}])
 
 BatteryIcon ==
     IF batteryLevel > 12 THEN "https://www.svgrepo.com/download/532833/battery-full.svg"
