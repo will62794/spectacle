@@ -1635,12 +1635,27 @@ function componentTraceViewer(hidden) {
     // ]);
 }
 
+// Re-execute a trace based on a given list of state hashes.
+function loadTraceWebWorker(stateHashList){
+    loadTraceWebWorker = new Worker("js/worker.js");
+    model.invariantCheckerStart = performance.now()
+    model.invariantCheckerRunning = true;
+    loadTraceWebWorker.postMessage({
+        action: "loadTrace",
+        stateHashList: stateHashList,
+        newText: model.specText,
+        specPath: model.specPath,
+        constValInputs: model.specConstInputVals
+    });
+}
+
 // TODO: Think about more fully fledged worker execution framework.
 function startCheckInvariantWebWorker(invariantExpr){
     invCheckerWebWorker = new Worker("js/worker.js");
     model.invariantCheckerStart = performance.now()
     model.invariantCheckerRunning = true;
     invCheckerWebWorker.postMessage({
+        action: "checkInvariant",
         newText: model.specText,
         specPath: model.specPath,
         constValInputs: model.specConstInputVals,
@@ -2628,6 +2643,11 @@ function loadRouteParamsState() {
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
         traceParams = traceParamStr.split(",");
+
+
+        // TODO: Fully enable web worker based trace loading.
+        // loadTraceWebWorker(traceParams);
+
         for (const stateHash of traceParams) {
             // Check each state for possible quant bounds hash,
             // if it has one.
