@@ -14,6 +14,7 @@ let enableEvalTracing = false;
 onmessage = async (e) => {
 
 
+    let action = e.data.action;
     let newText = e.data.newText;
     let specPath = e.data.specPath;
     let constValInputs = e.data.constValInputs;
@@ -52,7 +53,14 @@ onmessage = async (e) => {
 
         let constVals = {};
         let constTlaVals = {};
-    
+        let model = {};
+
+        model.spec = spec;
+        model.specText = newText;
+        model.specTreeObjs = spec.spec_obj;
+        model.errorObj = null;
+        model.actions = spec.spec_obj.actions;
+
         // Evaluate each CONSTANT value expression.
         for (var constDecl in constValInputs) {
             let constValText = constValInputs[constDecl];
@@ -62,7 +70,6 @@ onmessage = async (e) => {
             // console.log("constDecl:", constDecl, constValText);
             constVals[constDecl] = constValText;
 
-            let model = {};
             model.specDefs = spec.spec_obj["op_defs"]
     
             let ctx = new Context(null, new TLAState({}), model.specDefs, {}, constTlaVals);
@@ -74,6 +81,35 @@ onmessage = async (e) => {
         }
     
         // console.log("constTlaVals:", constTlaVals);
+
+        //
+        // TODO: Fully implement this.
+        //
+        if(action === "loadTrace"){
+            let hashTrace = e.data.stateHashList;
+
+            // Generate initial states.
+            let interp = new TlaInterpreter();
+
+            let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec);
+            console.log("initStates:", initStates);
+            currNextStates = initStates;
+
+            for (const stateHash of hashTrace) {
+                console.log("stateHash:", stateHash);
+                // Check each state for possible quant bounds hash,
+                // if it has one.
+                let stateAndQuantBounds = stateHash.split("_");
+                let rethrow = true;
+                if (stateAndQuantBounds.length > 1) {
+                    let justStateHash = stateAndQuantBounds[0];
+                    let quantBoundHash = stateAndQuantBounds[1];
+                    chooseNextState(justStateHash, quantBoundHash, rethrow);
+                } else {
+                    chooseNextState(model, stateHash, undefined, rethrow);
+                }
+            }
+        }
 
 
         // Generate initial states.
