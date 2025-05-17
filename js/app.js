@@ -161,6 +161,12 @@ const exampleSpecs = {
             "Cost": "[ Truck |-> 10, Car |-> 5, Bike |-> 2, Scooter |-> 1 ]",
             "MaxLevel": 17
         }
+    },
+    "Dining Philosophers (animated)": {
+        specpath: "./specs/DiningPhilosophers.tla",
+        constant_vals: {
+            "N": 5
+        }
     }
 
 };
