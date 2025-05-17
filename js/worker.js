@@ -11,6 +11,133 @@ let parser;
 let languageName = "tlaplus";
 let enableEvalTracing = false;
 
+let currNextStates = []
+
+function actionIdForNextState(nextStateHash) {
+    // Find the action id that corresponds to the selected next state.
+    console.log("currNextStates:", currNextStates);
+    let actionId = _.findKey(currNextStates, (states) => _.find(states, (s) => s["state"].fingerprint() === nextStateHash));
+    return actionId;
+}
+
+function recomputeNextStates(model,fromState) {
+    let interp = new TlaInterpreter();
+    let nextStates;
+
+    evalNodeGraphsPerAction = {};
+
+    // Compute next states broken down by action.
+    // TODO: Consider if this functionality more appropriately lives inside the interpreter logic.
+    if (model.actions.length > 1) {
+        let nextStatesByAction = {}
+        for (const action of model.actions) {
+            assert(action instanceof TLAAction);
+            // console.log("FROM:", fromState)
+            const start = performance.now();
+            cloneTime = 0;
+            numClones = 0;
+
+
+            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
+            // console.log("nextStatesForAction", nextStatesForAction); 
+            nextStatesForAction = nextStatesForAction.map(c => {
+                let deprimed = c["state"].deprimeVars();
+                return { "state": deprimed, "quant_bound": c["quant_bound"] };
+            });
+            // nextStatesForActionQuantBound = nextStatesForActionQuantBound.map(c => c["quant_bound"]);
+            nextStatesByAction[action.id] = nextStatesForAction;
+
+            evalNodeGraphsPerAction[action.id] = evalNodeGraph;
+
+            const duration = (performance.now() - start).toFixed(1);
+
+            console.log(`Generating next states for action '${action.name}' took ${duration}ms, (${nextStatesForAction.length} distinct states generated, clone time: ${cloneTime.toFixed(2)}ms, ${numClones} clones)`)
+            cloneTime = 0;
+            numClones = 0;
+        }
+        nextStates = nextStatesByAction;
+    } else {
+        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec)
+            .map(c => {
+                let deprimed = c["state"].deprimeVars();
+                return { "state": deprimed, "quant_bound": c["quant_bound"] };
+            });
+    }
+
+    return nextStates;
+}
+
+
+function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = false) {
+    // Clear forward history since we're taking a new path
+    // model.forwardHistory = [];
+    // model.forwardHistoryActions = [];
+    
+    // console.log("currNextStates:", JSON.stringify(currNextStates));
+    // console.log("chooseNextState: ", statehash_short);
+
+    let currNextStatesSet = _.flatten(_.values(currNextStates));
+    console.log("currNextStatesSet:", currNextStatesSet);
+    let nextStateChoices = currNextStatesSet.filter(s => {
+        if (quantBoundsHash === undefined || _.isEmpty(quantBoundsHash)) {
+            return s["state"].fingerprint() === statehash_short;
+        } else {
+            // If quant bounds are given, then choose next state that both
+            // matches state hash and also matches the quant bounds hash. This
+            // can matter when, for example, two distinct actions (e.g. those
+            // with different parameters) lead to the same state.
+            let sameQuantParams = _.isEqual(hashQuantBounds(s["quant_bound"]), quantBoundsHash);
+            return s["state"].fingerprint() === statehash_short && sameQuantParams;
+        }
+    });
+
+    let nextStateActionId = null;
+    if (model.actions.length > 1
+        //  && model.currTrace.length >= 1
+        ) {
+        nextStateActionId = actionIdForNextState(statehash_short)
+        // console.log("actionid:", nextStateActionId);
+    }
+
+    if (nextStateChoices.length === 0) {
+        throw Error("Given state hash " + statehash_short + " does not exist among possible next states.")
+    }
+    let nextState = nextStateChoices[0];
+
+    // Append next state to the trace and update current route.
+    // model.currTrace.push(nextState);
+
+    // Recrod the quant bounds used in the action as well in case we need to tell between two different actions
+    // with the same type but different params that lead to the same state.
+    
+    // model.currTraceActions.push([nextStateActionId, quantBoundsHash]);
+    // updateTraceRouteParams();
+
+    const start = performance.now();
+
+    try {
+        let nextStates = recomputeNextStates(model, nextState["state"]);
+        const duration = (performance.now() - start).toFixed(1);
+
+        const start2 = performance.now();
+        currNextStates = _.cloneDeep(nextStates);
+        const duration2 = (performance.now() - start2).toFixed(1);
+
+        console.log(`Generating next states took ${duration}ms (cloning took ${duration2}ms )`)
+    } catch (e) {
+        console.error("Error computing next states.", e);
+        if (currEvalNode !== null) {
+            // Display line where evaluation error occurred.
+            // showEvalError(currEvalNode, e);
+        }
+        if(rethrow){
+            throw e;
+        }
+        return;
+    }
+}
+
+
 onmessage = async (e) => {
 
 
