@@ -147,3 +147,7 @@ Also need to deal with function definitions, which I feel like could ultimately 
 ## 2025-03-26
 
 Should it be the case that we really only need to clone at most as many times as there are branching choice calls in the expression? Have to think on that one.
+
+## 2025-05-17
+
+Don't think object class instances (e.g. `TLAState`) can be directly serialized and passed to/from a WebWorker. Ran into this when trying to improve trace loading computation that is delegated to web worker thread. Probably not that hard to work around, but just need to be clear on an approach to move these state objects between UI thread and web worker.
