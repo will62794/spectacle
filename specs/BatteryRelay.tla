@@ -18,11 +18,17 @@ Can you figure out the best way for the valets to move all four vehicles to the 
 in a single trip?
 
 -------------------------------- MODULE BatteryRelay --------------------------------
-EXTENDS Naturals, FiniteSets, FiniteSetsExt, TLC
+EXTENDS Naturals, FiniteSets, TLC, Sequences
 
-MaxLevel == 17
+CONSTANT MaxLevel
+ASSUME MaxLevel \in Nat
 
-Cost == [
+CONSTANT Cost
+ASSUME 
+    /\ DOMAIN Cost \in SUBSET STRING
+    /\ \A n \in DOMAIN Cost: Cost[n] \in Nat
+
+MyCost == [
     Truck |-> 10,
     Car   |-> 5,
     Bike  |-> 2,
@@ -77,6 +83,9 @@ RightToLeft(group, cost) ==
     /\ right' = right \ group
     /\ left' = left \union group
     /\ batteryLevel' = batteryLevel - cost
+
+Max(S) ==
+    CHOOSE e \in S: \A x \in S: e >= x
 
 (* Next-state relation *)
 Next ==

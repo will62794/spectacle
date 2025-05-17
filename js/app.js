@@ -150,7 +150,11 @@ const exampleSpecs = {
         }
     },
     "Battery Relay (animated)": {
-        specpath: "./specs/BatteryRelay.tla"
+        specpath: "./specs/BatteryRelay.tla",
+        constant_vals: {
+            "Cost": "[ Truck |-> 10, Car |-> 5, Bike |-> 2, Scooter |-> 1 ]",
+            "MaxLevel": 17
+        }
     }
 
 };
