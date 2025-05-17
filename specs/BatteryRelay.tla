@@ -147,8 +147,6 @@ Group(children, attrs) == SVGElem("g", attrs, children, "")
 
 Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
 
-SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
-
 -------
 
 iconSize == 25
@@ -161,14 +159,14 @@ VehicleIcon(v) ==
     ELSE "https://www.svgrepo.com/download/438355/car.svg"
 
 Left ==
-    LET order == CHOOSE f \in [left -> 1..Cardinality(left)] : Injective(f)
+    LET order == SetToSeq(left)
         image(actor, o) == Image(10, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
-    Group(SetToSeq({image(p, order[p]) : p \in left}), [i \in {} |-> {}])
+    Group(SetToSeq({image(p, (CHOOSE i \in DOMAIN order : order[i] = p)) : p \in left}), [i \in {} |-> {}])
 
 Right ==
-    LET order == CHOOSE f \in [right -> 1..Cardinality(right)] : Injective(f)
+    LET order == SetToSeq(right)
         image(actor, o) == Image(130, o*35,iconSize,iconSize, VehicleIcon(actor), <<>>) IN
-    Group(SetToSeq({image(p, order[p]) : p \in right}), [i \in {} |-> {}])
+    Group(SetToSeq({image(p, (CHOOSE i \in DOMAIN order : order[i] = p)) : p \in right}), [i \in {} |-> {}])
 
 BatteryIcon ==
     IF batteryLevel > 12 THEN "https://www.svgrepo.com/download/532833/battery-full.svg"
