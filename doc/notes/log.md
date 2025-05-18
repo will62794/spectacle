@@ -151,3 +151,5 @@ Should it be the case that we really only need to clone at most as many times as
 ## 2025-05-17
 
 Don't think object class instances (e.g. `TLAState`) can be directly serialized and passed to/from a WebWorker. Ran into this when trying to improve trace loading computation that is delegated to web worker thread. Probably not that hard to work around, but just need to be clear on an approach to move these state objects between UI thread and web worker.
+
+Basically we can tune our serialization method to just be compatible with what Javascript does to a class instance object when calling `structuredClone` on it. It will apparently keep fields and stuff, but prototype chains, class instance info will not be preserved.
