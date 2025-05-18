@@ -1,5 +1,7 @@
 <!-- # TLA<sup>+</sup> Web Explorer -->
-# Spectacle <img src="assets/glassestall3.png" height=31 alt="Spectacle logo" style="vertical-align: middle">
+# Spectacle 
+
+<!-- <img src="assets/glassestall3.png" height=31 alt="Spectacle logo" style="vertical-align: middle"> -->
 
 <!-- <img src="assets/glasses-svgrepo-com.svg" width="50" height="20" alt="Spectacle logo" style="vertical-align: middle"> -->
 
