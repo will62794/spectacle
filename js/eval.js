@@ -126,6 +126,39 @@ class TLAValue {
     constructor() {
     }
 
+    toJSON() {
+        return "'toJSON' unimplemented";
+    }
+
+    // This is notably useful for deserializing values from JSON objects that
+    // are produced as a result of `structuredClone` calls on class instances
+    // (e.g. when passing objects back from a WebWorker).
+    static fromJSON(jsonval) {
+        if (jsonval.type === "IntValue") {
+            return IntValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "StringValue") {
+            return StringValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "BoolValue") {
+            return BoolValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "FcnRcdValue") {
+            return FcnRcdValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "SetValue") {
+            return SetValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "TupleValue") {
+            return TupleValue.fromJSON(jsonval);
+        }
+        else if (jsonval.type === "ModelValue") {
+            return ModelValue.fromJSON(jsonval);
+        } else{
+            throw new Error("Unknown value type: " + jsonval.type);
+        }
+    }
+
     toJSONITF() {
         return "'toJSONITF' unimplemented";
     }
@@ -168,12 +201,16 @@ class IntValue extends TLAValue {
     constructor(n) {
         super(n);
         this.val = n;
+        this.type = "IntValue";
     }
     toString() {
         return this.val.toString();
     }
     toJSON() {
         return this.val;
+    }
+    static fromJSON(jsonval){
+        return new IntValue(jsonval.val);
     }
     toJSONITF() {
         return { "#type": "int", "#value": this.val };
@@ -205,6 +242,7 @@ class BoolValue extends TLAValue {
     constructor(n) {
         super(n);
         this.val = n;
+        this.type = "BoolValue";
     }
     toString() {
         return this.val ? "TRUE" : "FALSE";
@@ -212,6 +250,11 @@ class BoolValue extends TLAValue {
     toJSON() {
         return this.val;
     }
+
+    static fromJSON(jsonval){
+        return new BoolValue(jsonval.val);
+    }
+
     toJSONITF() {
         return { "#type": "bool", "#value": this.val };
     }
@@ -232,6 +275,7 @@ class ModelValue extends TLAValue {
     constructor(s) {
         super(s);
         this.val = s;
+        this.type = "ModelValue";
     }
     getVal() {
         return this.val;
@@ -242,6 +286,11 @@ class ModelValue extends TLAValue {
     toJSON() {
         return this.val;
     }
+
+    static fromJSON(jsonval){
+        return new ModelValue(jsonval.val);
+    }
+
     toJSONITF() {
         return { "#type": "modelVal", "#value": this.val };
     }
@@ -254,6 +303,7 @@ class StringValue extends TLAValue {
     constructor(s) {
         super(s);
         this.val = s;
+        this.type = "StringValue";
     }
     getVal() {
         return this.val;
@@ -263,6 +313,9 @@ class StringValue extends TLAValue {
     }
     toJSON() {
         return this.val;
+    }
+    static fromJSON(jsonval){
+        return new StringValue(jsonval.val);
     }
     toJSONITF() {
         return { "#type": "string", "#value": this.val };
@@ -277,6 +330,7 @@ class SetValue extends TLAValue {
         super(elems);
         // Remove duplicates at construction.
         this.elems = _.uniqBy(elems, (e) => e.fingerprint());
+        this.type = "SetValue";
     }
     toString() {
         return "{" + this.elems.map(x => x.toString()).join(",") + "}";
@@ -284,6 +338,10 @@ class SetValue extends TLAValue {
 
     toJSON() {
         return this.elems;
+    }
+    
+    static fromJSON(jsonval){
+        return new SetValue(jsonval.elems.map(e => TLAValue.fromJSON(e)));
     }
 
     toJSONITF() {
@@ -333,6 +391,7 @@ class TupleValue extends TLAValue {
     constructor(elems) {
         super(elems);
         this.elems = elems;
+        this.type = "TupleValue";
     }
     toString() {
         return "<<" + this.elems.map(x => x.toString()).join(",") + ">>";
@@ -350,6 +409,10 @@ class TupleValue extends TLAValue {
 
     toJSON() {
         return this.elems;
+    }
+
+    static fromJSON(jsonval){
+        return new TupleValue(jsonval.elems.map(e => TLAValue.fromJSON(e)));
     }
 
     append(el) {
@@ -410,6 +473,7 @@ class FcnRcdValue extends TLAValue {
         this.values = values
         // Trace 'record' types explicitly.
         this.isRecord = isRecord || false;
+        this.type = "FcnRcdValue";
     }
     toString() {
         if (this.isRecord) {
@@ -421,6 +485,13 @@ class FcnRcdValue extends TLAValue {
 
     toJSON() {
         return _.fromPairs(_.zip(this.domain, this.values))
+    }
+
+    static fromJSON(jsonval){
+        return new FcnRcdValue(
+                    jsonval.domain.map(e => TLAValue.fromJSON(e)), 
+                    jsonval.values.map(e => TLAValue.fromJSON(e)), 
+                    jsonval.isRecord);
     }
 
     getDomain() {
