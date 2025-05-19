@@ -162,12 +162,12 @@ Init ==
 
 
 Next == 
-    \/ \E s \in Server : ClientRequest(s)
-    \/ \E s, t \in Server : GetEntries(s, t)
-    \/ \E s, t \in Server : RollbackEntries(s, t)
-    \/ \E s \in Server : \E Q \in Quorums(Server) : BecomeLeader(s, Q)
-    \/ \E s \in Server :  \E Q \in Quorums(Server) : CommitEntry(s, Q)
-    \/ \E s,t \in Server : UpdateTerms(s, t)
+    \/ \E i \in Server : ClientRequest(i)
+    \/ \E i, j \in Server : GetEntries(i, j)
+    \/ \E i, j \in Server : RollbackEntries(i, j)
+    \/ \E i \in Server : \E Q \in Quorums(Server) : BecomeLeader(i, Q)
+    \/ \E i \in Server :  \E Q \in Quorums(Server) : CommitEntry(i, Q)
+    \/ \E i, j \in Server : UpdateTerms(i, j)
 
 Spec == Init /\ [][Next]_vars
 
