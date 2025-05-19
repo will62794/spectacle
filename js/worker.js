@@ -11,12 +11,20 @@ let parser;
 let languageName = "tlaplus";
 let enableEvalTracing = false;
 
-let currNextStates = []
+// Compute a hash of a quantifier bounds objects, which should be simply a
+// mapping from identifier strings to TLA values.
+function hashQuantBounds(quantBounds){
+    let keysSorted = _.keys(quantBounds).sort();
+    let kvPairs = keysSorted.map(k => [k, quantBounds[k].fingerprint()]);
+    return hashSum(kvPairs);
+}
 
-function actionIdForNextState(nextStateHash) {
+function actionIdForNextState(currNextStates, nextStateHash) {
     // Find the action id that corresponds to the selected next state.
     console.log("currNextStates:", currNextStates);
+    console.log("nextStateHash:", _.find(currNextStates, (s) => s["state"].fingerprint() === nextStateHash));
     let actionId = _.findKey(currNextStates, (states) => _.find(states, (s) => s["state"].fingerprint() === nextStateHash));
+    console.log("actionId:", actionId);
     return actionId;
 }
 
@@ -37,9 +45,12 @@ function recomputeNextStates(model,fromState) {
             cloneTime = 0;
             numClones = 0;
 
-
+            console.log("fromState:", fromState);
+            console.log("actions:", model.actions);
+            console.log("actions:", model.specTreeObjs);
             let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
-            // console.log("nextStatesForAction", nextStatesForAction); 
+            console.log("nextStatesForAction", nextStatesForAction); 
+
             nextStatesForAction = nextStatesForAction.map(c => {
                 let deprimed = c["state"].deprimeVars();
                 return { "state": deprimed, "quant_bound": c["quant_bound"] };
@@ -76,10 +87,11 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
     // console.log("currNextStates:", JSON.stringify(currNextStates));
     // console.log("chooseNextState: ", statehash_short);
 
-    let currNextStatesSet = _.flatten(_.values(currNextStates));
+    let currNextStatesSet = _.flatten(_.values(model.currNextStates));
     console.log("currNextStatesSet:", currNextStatesSet);
     let nextStateChoices = currNextStatesSet.filter(s => {
         if (quantBoundsHash === undefined || _.isEmpty(quantBoundsHash)) {
+            console.log("s:", s["state"]);
             return s["state"].fingerprint() === statehash_short;
         } else {
             // If quant bounds are given, then choose next state that both
@@ -95,7 +107,7 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
     if (model.actions.length > 1
         //  && model.currTrace.length >= 1
         ) {
-        nextStateActionId = actionIdForNextState(statehash_short)
+        nextStateActionId = 0;//actionIdForNextState(statehash_short)
         // console.log("actionid:", nextStateActionId);
     }
 
@@ -105,22 +117,23 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
     let nextState = nextStateChoices[0];
 
     // Append next state to the trace and update current route.
-    // model.currTrace.push(nextState);
+    model.currTrace.push(nextState.state);
 
     // Recrod the quant bounds used in the action as well in case we need to tell between two different actions
     // with the same type but different params that lead to the same state.
     
-    // model.currTraceActions.push([nextStateActionId, quantBoundsHash]);
+    model.currTraceActions.push([nextStateActionId, quantBoundsHash]);
     // updateTraceRouteParams();
 
     const start = performance.now();
 
     try {
+        console.log("recomputing next states for", nextState["state"]);
         let nextStates = recomputeNextStates(model, nextState["state"]);
         const duration = (performance.now() - start).toFixed(1);
 
         const start2 = performance.now();
-        currNextStates = _.cloneDeep(nextStates);
+        model.currNextStates = _.cloneDeep(nextStates);
         const duration2 = (performance.now() - start2).toFixed(1);
 
         console.log(`Generating next states took ${duration}ms (cloning took ${duration2}ms )`)
@@ -135,6 +148,8 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
         }
         return;
     }
+
+    return nextState;
 }
 
 
@@ -208,34 +223,92 @@ onmessage = async (e) => {
         }
     
         // console.log("constTlaVals:", constTlaVals);
+        model.specConstVals = constTlaVals;
+        model.currTrace = [];
+        model.currTraceActions = [];
+        model.currNextStates = [];
 
-        //
-        // TODO: Fully implement this.
-        //
+        // Re-execute a trace from a list of given state hashes.
         if(action === "loadTrace"){
             let hashTrace = e.data.stateHashList;
 
-            // Generate initial states.
-            let interp = new TlaInterpreter();
+            try {
+                // Generate initial states.
+                let interp = new TlaInterpreter();
 
-            let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec);
-            console.log("initStates:", initStates);
-            currNextStates = initStates;
+                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec);
+                console.log("initStates:", initStates);
+                model.currNextStates = initStates;
 
-            for (const stateHash of hashTrace) {
-                console.log("stateHash:", stateHash);
-                // Check each state for possible quant bounds hash,
-                // if it has one.
-                let stateAndQuantBounds = stateHash.split("_");
-                let rethrow = true;
-                if (stateAndQuantBounds.length > 1) {
-                    let justStateHash = stateAndQuantBounds[0];
-                    let quantBoundHash = stateAndQuantBounds[1];
-                    chooseNextState(justStateHash, quantBoundHash, rethrow);
-                } else {
-                    chooseNextState(model, stateHash, undefined, rethrow);
+                let trace = [];
+                let totalSteps = hashTrace.length;
+
+                for (let i = 0; i < hashTrace.length; i++) {
+                    let stateHash = hashTrace[i];
+                    console.log("stateHash:", stateHash);
+                    
+                    // Check each state for possible quant bounds hash
+                    let stateAndQuantBounds = stateHash.split("_");
+                    let rethrow = true;
+                    let stateInfo = {
+                        hash: stateHash
+                    };
+
+                    let nextState = null;
+
+                    try {
+                        if (stateAndQuantBounds.length > 1) {
+                            let justStateHash = stateAndQuantBounds[0];
+                            let quantBoundHash = stateAndQuantBounds[1];
+                            nextState = chooseNextState(model, justStateHash, quantBoundHash, rethrow);
+                            stateInfo.hash = justStateHash;
+                            stateInfo.quantBoundsHash = quantBoundHash;
+                        } else {
+                            nextState = chooseNextState(model, stateHash, undefined, rethrow);
+                        }
+                        stateInfo.state = nextState.state;
+                        stateInfo.actionId = nextState["actionId"];
+                        trace.push(stateInfo);
+                    } catch (err) {
+                        postMessage({
+                            type: "error",
+                            error: `Error loading state ${i + 1}/${totalSteps}: ${err.message}`
+                        });
+                        return;
+                    }
+
+                    // Send progress update
+                    postMessage({
+                        type: "progress",
+                        currentState: i + 1,
+                        totalStates: totalSteps
+                    });
                 }
+
+                console.log("model.currTrace:", model.currTrace);
+                // console.log("model.currTrace:", model.currTrace.map(t => t.toJSON()));
+
+                let mappedTrace  = model.currTrace.map(s => {
+                    return _.mapValues(s.stateVars, (v, k) => (v));
+                })
+                console.log("mappedTrace:", mappedTrace);
+                
+                // Send completion message with trace info
+                postMessage({
+                    type: "complete",
+                    trace: mappedTrace,
+                    currTraceActions: model.currTraceActions
+                });
+
+            } catch (err) {
+                console.error("Error initializing trace loading:", err);
+                postMessage({
+                    type: "error", 
+                    error: `Error initializing trace loading: ${err.message}`
+                });
             }
+
+            return;
         }
 
 
