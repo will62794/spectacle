@@ -716,6 +716,10 @@ class TLAState {
         return this.stateVars.hasOwnProperty(varname);
     }
 
+    static fromJSON(jsonval) {
+        return new TLAState(_.mapValues(jsonval.stateVars, (v, k) => TLAValue.fromJSON(v)));
+    }
+
     /**
      * Return the assigned value for the given variable name in this state.
      */
