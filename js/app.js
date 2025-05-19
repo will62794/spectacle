@@ -2729,31 +2729,37 @@ function loadRouteParamsState() {
         model.enableAnimationView = true;
     }
 
+    // Feature flag to use web worker for trace loading.
+    const useWebWorkerLoad = false;
+
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
         let traceParams = traceParamStr.split(",");
-        loadTraceWebWorker(traceParams);
-        return;
+
+        if(useWebWorkerLoad){
+            loadTraceWebWorker(traceParams);
+            return;
+        }
 
         // 
-        // Old way of simply re-computing full trace directly in this thread.
+        // Older way of simply re-computing full trace directly in this thread.
         // Keeping around in case we want to revert at any point.
         // 
 
-        // for (const stateHash of traceParams) {
-        //     // Check each state for possible quant bounds hash,
-        //     // if it has one.
-        //     let stateAndQuantBounds = stateHash.split("_");
-        //     let rethrow = true;
-        //     if (stateAndQuantBounds.length > 1) {
-        //         let justStateHash = stateAndQuantBounds[0];
-        //         let quantBoundHash = stateAndQuantBounds[1];
-        //         chooseNextState(justStateHash, quantBoundHash, rethrow);
-        //     } else {
-        //         chooseNextState(stateHash, undefined, rethrow);
-        //     }
-        // }
+        for (const stateHash of traceParams) {
+            // Check each state for possible quant bounds hash,
+            // if it has one.
+            let stateAndQuantBounds = stateHash.split("_");
+            let rethrow = true;
+            if (stateAndQuantBounds.length > 1) {
+                let justStateHash = stateAndQuantBounds[0];
+                let quantBoundHash = stateAndQuantBounds[1];
+                chooseNextState(justStateHash, quantBoundHash, rethrow);
+            } else {
+                chooseNextState(stateHash, undefined, rethrow);
+            }
+        }
     }
 }
 
