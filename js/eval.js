@@ -1615,7 +1615,6 @@ class TLASpec {
      * Extract set of actions from a syntax node.
      */
     parseActionsFromNode(node, ind){
-        console.log("parseActionsFromNode:", node);
         if(ind === undefined){
             ind = 0;
         }
