@@ -78,7 +78,13 @@ let model = {
     invariantExprToCheck: "",
     invariantViolated: false,
     invariantCheckerRunning: false,
-    invariantCheckingDuration: 0
+    invariantCheckingDuration: 0,
+    // Trace loading state
+    traceLoadingWorker: null,
+    traceLoadingInProgress: false,
+    traceLoadingProgress: { currentState: 0, totalStates: 0 }, // 0-100
+    traceLoadingError: null,
+    traceLoadingStart: null
 }
 
 const exampleSpecs = {
@@ -1584,6 +1590,37 @@ function traceStateView(state) {
 }
 
 function componentTraceViewer(hidden) {
+    // Show loading state if trace is being loaded
+    if (model.traceLoadingInProgress) {
+        return m("div", { hidden: hidden }, [
+            m("div", { class: "pane-heading", id: "", style: "margin-top: 10px;" }, [
+                m("div", { class: "alert alert-info" }, [
+                    m("div", { class: "d-flex align-items-center" }, [
+                        m("div", { class: "spinner-border spinner-border-sm me-2" }),
+                        m("div", [
+                            "Loading trace... ",
+                            m("span", { class: "badge bg-secondary" }, 
+                                `State ${model.traceLoadingProgress.currentState} of ${model.traceLoadingProgress.totalStates}`
+                            )
+                        ])
+                    ])
+                ])
+            ])
+        ]);
+    }
+
+    // Show error state if trace loading failed
+    if (model.traceLoadingError) {
+        return m("div", { hidden: hidden }, [
+            m("div", { class: "pane-heading", id: "", style: "margin-top: 10px;"  }, [
+                m("div", { class: "alert alert-danger" }, [
+                    m("strong", "Error loading trace: "),
+                    model.traceLoadingError
+                ])
+            ])
+        ]);
+    }
+
     // let stateInd = 0;
     let traceElems = [];
     for (var ind = 0; ind < model.currTrace.length; ind++) {
@@ -1610,7 +1647,6 @@ function componentTraceViewer(hidden) {
                 role: "switch",
                 id: "animateSwitchCheck",
                 onclick: function (event) {
-                    // console.log("Toggle status: ", checked);
                     model.enableAnimationView = this.checked;
                 }
             }),
@@ -1620,27 +1656,83 @@ function componentTraceViewer(hidden) {
                 role: "switch"
             }, "Show animation")
         ]);
-        // children.push(animSwitch);
     }
 
     return m("div", { hidden: hidden }, [
         m("div", { class: "pane-heading", id: "trace-state-heading" }, children),
         m("div", { id: "trace", hidden: model.tracePaneHidden }, traceElems)
     ])
-
-
-    // return m("div", { id: "trace", hidden: model.tracePaneHidden || hidden }, [
-
-    //     traceElems
-    // ]);
 }
 
 // Re-execute a trace based on a given list of state hashes.
 function loadTraceWebWorker(stateHashList){
-    loadTraceWebWorker = new Worker("js/worker.js");
-    model.invariantCheckerStart = performance.now()
-    model.invariantCheckerRunning = true;
-    loadTraceWebWorker.postMessage({
+    // Clear any existing worker
+    if (model.traceLoadingWorker) {
+        model.traceLoadingWorker.terminate();
+    }
+
+    // Initialize trace loading state
+    model.traceLoadingWorker = new Worker("js/worker.js");
+    model.traceLoadingInProgress = true;
+    model.traceLoadingProgress = { currentState: 0, totalStates: stateHashList.length };
+    model.traceLoadingError = null;
+    model.traceLoadingStart = performance.now();
+
+    // Set up message handler
+    model.traceLoadingWorker.onmessage = function(e) {
+        let response = e.data;
+        console.log("Message received from trace loading worker:", response);
+
+        if (response.type === "progress") {
+            model.traceLoadingProgress = {
+                currentState: response.currentState,
+                totalStates: response.totalStates
+            };
+            m.redraw();
+        }
+        else if (response.type === "error") {
+            model.traceLoadingError = response.error;
+            model.traceLoadingInProgress = false;
+            m.redraw();
+        }
+        else if (response.type === "complete") {
+
+            // Reset trace and load in the computed trace states.
+            resetTrace();
+
+            // Add each computed state into the current trace here.
+            for (let stateInfo of response.trace) {
+                console.log("stateInfo:", stateInfo);
+                let stateObj = stateInfo[0];
+
+                let stateDeserialized = TLAState.fromJSON(stateObj);
+                let quantBoundsDeserialized = _.mapValues(stateInfo[3], (v, k) => {
+                    return TLAValue.fromJSON(v);
+                });
+                console.log("quantBoundsDeserialized:", quantBoundsDeserialized);
+
+                model.currTrace.push({"state": stateDeserialized, "quant_bound": quantBoundsDeserialized});
+                model.currTraceActions.push([stateInfo[1], stateInfo[2], quantBoundsDeserialized]);
+            }
+
+            // console.log("model.currTrace:", model.currTrace);
+            // console.log("model.CURR TRACE ACTIONS:", model.currTraceActions);
+
+            // Re-compute the current set of next states.
+            let nextStates = recomputeNextStates(model.currTrace[model.currTrace.length - 1]["state"]);
+            model.currNextStates = _.cloneDeep(nextStates);
+    
+            updateTraceRouteParams();
+            
+            model.traceLoadingInProgress = false;
+            const duration = performance.now() - model.traceLoadingStart;
+            console.log(`Trace loading completed in ${duration.toFixed(1)}ms`);
+            m.redraw();
+        }
+    };
+
+    // Send initial message to worker
+    model.traceLoadingWorker.postMessage({
         action: "loadTrace",
         stateHashList: stateHashList,
         newText: model.specText,
@@ -2628,8 +2720,6 @@ function loadRouteParamsState() {
     let explodedConstantExprStr = m.route.param("explodedConstantExpr");
     if (explodedConstantExprStr) {
         model.explodedConstantExpr = explodedConstantExprStr;
-        // TODO: Should check if the loaded constant actual exists in current model.
-        // assert(model.specConstVals.hasOwnProperty(model.explodedConstantExpr));
     }
 
     // Check for animation parameter and switch to animation tab if available
@@ -2642,25 +2732,28 @@ function loadRouteParamsState() {
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
-        traceParams = traceParamStr.split(",");
+        let traceParams = traceParamStr.split(",");
+        loadTraceWebWorker(traceParams);
+        return;
 
+        // 
+        // Old way of simply re-computing full trace directly in this thread.
+        // Keeping around in case we want to revert at any point.
+        // 
 
-        // TODO: Fully enable web worker based trace loading.
-        // loadTraceWebWorker(traceParams);
-
-        for (const stateHash of traceParams) {
-            // Check each state for possible quant bounds hash,
-            // if it has one.
-            let stateAndQuantBounds = stateHash.split("_");
-            let rethrow = true;
-            if (stateAndQuantBounds.length > 1) {
-                let justStateHash = stateAndQuantBounds[0];
-                let quantBoundHash = stateAndQuantBounds[1];
-                chooseNextState(justStateHash, quantBoundHash, rethrow);
-            } else {
-                chooseNextState(stateHash, undefined, rethrow);
-            }
-        }
+        // for (const stateHash of traceParams) {
+        //     // Check each state for possible quant bounds hash,
+        //     // if it has one.
+        //     let stateAndQuantBounds = stateHash.split("_");
+        //     let rethrow = true;
+        //     if (stateAndQuantBounds.length > 1) {
+        //         let justStateHash = stateAndQuantBounds[0];
+        //         let quantBoundHash = stateAndQuantBounds[1];
+        //         chooseNextState(justStateHash, quantBoundHash, rethrow);
+        //     } else {
+        //         chooseNextState(stateHash, undefined, rethrow);
+        //     }
+        // }
     }
 }
 

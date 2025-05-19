@@ -22,7 +22,7 @@ function hashQuantBounds(quantBounds){
 function actionIdForNextState(currNextStates, nextStateHash) {
     // Find the action id that corresponds to the selected next state.
     console.log("currNextStates:", currNextStates);
-    console.log("nextStateHash:", _.find(currNextStates, (s) => s["state"].fingerprint() === nextStateHash));
+    // console.log("nextStateHash:", _.find(currNextStates, (s) => s["state"].fingerprint() === nextStateHash));
     let actionId = _.findKey(currNextStates, (states) => _.find(states, (s) => s["state"].fingerprint() === nextStateHash));
     console.log("actionId:", actionId);
     return actionId;
@@ -104,10 +104,8 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
     });
 
     let nextStateActionId = null;
-    if (model.actions.length > 1
-        //  && model.currTrace.length >= 1
-        ) {
-        nextStateActionId = 0;//actionIdForNextState(statehash_short)
+    if (model.actions.length > 1 && model.currTrace.length >= 1) {
+        nextStateActionId = actionIdForNextState(model.currNextStates, statehash_short)
         // console.log("actionid:", nextStateActionId);
     }
 
@@ -117,7 +115,7 @@ function chooseNextState(model, statehash_short, quantBoundsHash, rethrow = fals
     let nextState = nextStateChoices[0];
 
     // Append next state to the trace and update current route.
-    model.currTrace.push(nextState.state);
+    model.currTrace.push([nextState.state, nextStateActionId, quantBoundsHash, nextState["quant_bound"]] );
 
     // Recrod the quant bounds used in the action as well in case we need to tell between two different actions
     // with the same type but different params that lead to the same state.
@@ -286,17 +284,11 @@ onmessage = async (e) => {
                 }
 
                 console.log("model.currTrace:", model.currTrace);
-                // console.log("model.currTrace:", model.currTrace.map(t => t.toJSON()));
 
-                let mappedTrace  = model.currTrace.map(s => {
-                    return _.mapValues(s.stateVars, (v, k) => (v));
-                })
-                console.log("mappedTrace:", mappedTrace);
-                
                 // Send completion message with trace info
                 postMessage({
                     type: "complete",
-                    trace: mappedTrace,
+                    trace: model.currTrace,
                     currTraceActions: model.currTraceActions
                 });
 
