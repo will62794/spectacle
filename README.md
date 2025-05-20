@@ -8,7 +8,7 @@
 
 Spectacle is an interactive, web-based tool for exploring, visualizing, and sharing formal specifications written in the [TLA<sup>+</sup> specification language](https://lamport.azurewebsites.net/tla/tla.html).  The motivation is to have a better way to quickly interact with a formal specification and easily share results. For example, it provides a way to share protocol behaviors and counterexample traces in a convenient, portable, and repeatable manner. 
 
- A live version of the tool is currently hosted [here](https://will62794.github.io/spectacle/#!/home), and below are some example specifications to try out:
+The tool implements a [full TLA+ interpreter in Javascript](https://github.com/will62794/spectacle/blob/master/js/eval.js), building on top of the [TLA+ tree-sitter grammar](https://github.com/tlaplus-community/tree-sitter-tlaplus) for parsing specifications. This allows for interactive exploration of specs natively in the browser, without reliance on an external language server. A live version is hosted [here](https://will62794.github.io/spectacle/#!/home), and below are some example specifications to try out:
 
 - [Lock server](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2Flockserver.tla&constants%5BServer%5D=%7B%22s1%22%2C%20%22s2%22%7D&constants%5BClient%5D=%7B%22c1%22%2C%20%22c2%22%7D)
 - [Microwave](https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2Fwith_state_graphs%2FMicrowave.tla&constants%5BImplementStartSafety%5D=FALSE&constants%5BImplementOpenDoorSafety%5D=FALSE)
@@ -28,8 +28,6 @@ You can also explore some interesting (and infamous) traces of different protoco
 - [Read-only anomaly under snapshot isolation](https://will62794.github.io/spectacle/#!/home?specpath=https%3A%2F%2Fraw.githubusercontent.com%2Fwill62794%2Fsnapshot-isolation-spec%2Frefs%2Fheads%2Fmaster%2FSnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D=%22Empty%22&trace=4d9d875e%2C27dfd06a%2C639eed1f%2C4cb5a71b%2C4708fef8%2C429a81d3%2Ce9311886%2C7478057a%2C2ea8cbe7%2C6a3128ec%2Cd2bef298%2C071ae0d9) (Snapshot Isolation)
 
 
-
-The tool implements a [full TLA+ interpreter in Javascript](https://github.com/will62794/spectacle/blob/master/js/eval.js), building on top of the [TLA+ tree-sitter grammar](https://github.com/tlaplus-community/tree-sitter-tlaplus) for parsing specifications. This allows for interactive exploration of specs natively in the browser, without reliance on an external language server. 
 
 <!-- The Javascript interpreter is likely slower than TLC, but highly efficient model checking isn't currently a goal of the tool.  -->
 
