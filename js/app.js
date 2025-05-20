@@ -2736,7 +2736,7 @@ function loadRouteParamsState() {
     }
 
     // Feature flag to use web worker for trace loading.
-    const useWebWorkerLoad = false;
+    const useWebWorkerLoad = true;
 
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
