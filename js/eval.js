@@ -3928,6 +3928,8 @@ function evalUserBoundOp(node, opDefObj, ctx){
         evalLog("opEvalContext with var_decls_context:", opEvalContext);
     }
 
+    let origQuantBounds = _.clone(opEvalContext["quant_bound"]);
+
     evalLog("opDefNode", opDefNode);
     for (var i = 0; i < opArgs.length; i++) {
         // The parameter name in the operator definition.
@@ -3993,7 +3995,6 @@ function evalUserBoundOp(node, opDefObj, ctx){
         opEvalContext["defns_curr_context"] = opEvalContext["defns_curr_context"].concat(opDefObj["defns_curr_context"]);
     }
 
-    evalLog("opEvalContext:", opEvalContext);
     ret = evalExpr(opDefNode, opEvalContext);
 
     // Don't retain these var decl context values in the context upon return. We
@@ -4002,6 +4003,9 @@ function evalUserBoundOp(node, opDefObj, ctx){
     // propagate through to other evaluation contexts upon return.
     ret.map(c => c.var_decls_context = undefined);
     ret.map(c => c.defns_curr_context = origCurrDefns);
+    ret.map(c => c.quant_bound = origQuantBounds);
+
+    // console.log("orig quant bounds:", origQuantBounds, opEvalContext["quant_bound"]);
     
     return ret;
 }

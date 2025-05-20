@@ -333,6 +333,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             { "spec": "simple_domain", "constvals": undefined },
             { "spec": "simple_implies", "constvals": undefined },
             { "spec": "simple_definition", "constvals": undefined },
+            { "spec": "simple_definition2", "constvals": undefined },
             { "spec": "simple6", "constvals": undefined },
             { "spec": "simple7", "constvals": undefined },
             { "spec": "simple8", "constvals": undefined },
@@ -495,6 +496,16 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 "Leader": new StringValue("Leader"),
                 "Candidate": new StringValue("Candidate"),
                 "Nil": new StringValue("Nil"),
+            }
+        },
+        {
+            "spec": "AbstractRaft_BecomeLeader",
+            "constvals": {
+                "Server": new SetValue([new StringValue("n1"), new StringValue("n2"), new StringValue("n3")]),
+                "Secondary": new StringValue("Secondary"),
+                "Primary": new StringValue("Primary"),
+                "Nil": new StringValue("Nil"),
+                "InitTerm": new IntValue(0),
             }
         },
         {
