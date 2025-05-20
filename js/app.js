@@ -1143,7 +1143,7 @@ function reloadSpec() {
 function tlaValView(tlaVal, prevTlaVal = null) {
     if (tlaVal instanceof FcnRcdValue) {
         let valPairs = _.zip(tlaVal.getDomain(), tlaVal.getValues());
-        let borderStyle = { style: "border:solid 0.5px gray" };
+        let borderStyle = { style: "border:solid 0.5px gray;vertical-align:middle" };
         return m("table", valPairs.map(p => {
             let key = p[0];
             let val = p[1];
@@ -1155,7 +1155,7 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             return m("tr", borderStyle, [
                 m("td", borderStyle, key.toString()),
                 // TOOD: Uniform diff styling.
-                m("td", {style: {"background-color": diff? "lightyellow" : "none"}},tlaValView(val)), // TODO: do we want to recursively apply?
+                m("td", {style: {"background-color": diff? "lightyellow" : "none", "vertical-align": "middle"}},tlaValView(val)), // TODO: do we want to recursively apply?
             ]);
         }));
     }
@@ -1409,7 +1409,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             
             let cols = [
                 m("td", {
-                    class: "th-state-varname",
+                    class: "th-state-varname trace-state-table-td",
                     // style: {"background-color": varnameCol},
                     onclick: (e) => {
                         // model.hiddenStateVars.push(varname);
@@ -1420,8 +1420,15 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                     m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px 0px 0px 0px"}}, varname),
                     // m("span", {class: "state-varname-text",style: {"background-color": varnameCol, "padding":"0px"}}, "  x")
                 ]),
-                m("td", {style: {}}, [tlaValView(varVal, prevVarVal)]),
-                m("td", { style: "width:15px", hidden: false }, 
+                m("td", {style: {
+                }, class: "trace-state-table-td"}, [tlaValView(varVal, prevVarVal)]),
+                m("td", { 
+                    style: {
+                        "border-right": "1px solid gray",
+                        "width": "20px",
+                    },
+                    hidden: false, class: "" 
+                }, 
                     m("img", {
                         style: {"width": "11px", "height": "11px"},
                         class: "hide-var-icon",
@@ -1434,7 +1441,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
                     })), // placeholder row.
             ]
 
-            return m("tr", { }, cols);
+            return m("tr", {class: "trace-state-table-row"}, cols);
         });
     }
 
@@ -1547,7 +1554,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         });
 
         // console.log("Explode vars:", explodedVars);
-        varRows = m("tr", [
+        varRows = m("tr", {class: "trace-state-table-row"}, [
             // Unexploded vars.
             makeVarRows(varNamesToShow.filter(n => !explodedVars.includes(n))),
             // Exploded vars.

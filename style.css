@@ -405,9 +405,10 @@ body {
   }
 
   .trace-state-table{
-    border:solid 1px gray;
+    /* border-collapse: collapse; */
     font-size:12px;
     width:100%;
+    border: 1px solid gray;
   }
 
   .trace-state-table-div{
