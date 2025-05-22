@@ -157,3 +157,7 @@ Basically we can tune our serialization method to just be compatible with what J
 ## 2025-05-19
 
 Subtle bug in UI when generating action names based on quant bound values. Need to investigate to ensure action UI params shown are correctly mapped to underlying next state choice.
+
+## 2025-05-22
+
+Also see https://shopify.engineering/understanding-programs-using-graphs
