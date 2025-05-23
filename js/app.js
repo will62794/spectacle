@@ -264,51 +264,41 @@ function displayEvalGraph(nodeGraph) {
         style: [
             {
                 selector: 'node',
-                // shape: "barrel",
-                size: "auto",
                 style: {
                     'label': function (el) {
-                        // return el.data()["expr_text"].replaceAll("\n", "");
-                        // if(el.data().expr_text.includes("' = ")) {
-                            // let cleanStr = el.data()["expr_text"].replaceAll("\n", "");
-                            // cleanStr.indexOf("' = ");
-                            // let ret = cleanStr.substring(0,cleanStr.indexOf("' = ") + 1);
-                            // if (ret.length < 100){
-                            if(el.data().expr_type === "bound_infix_op"){
-                                return "(" + el.data().expr_type + ") " + el.data().expr_text
-                            }
-                            if(el.data().expr_type === "function_evaluation"){
-                                return "(" + el.data().expr_type + ") " + el.data().expr_text
-                            }
-                            return el.data().expr_type;
-                            // }
-                            // return el.data()["expr_text"].replaceAll("\n", "");
-                        // }
-                        // return "";
+                        // Only show expression type in the main label
+                        return el.data().expr_type;
                     },
-                    // "width": function(el){
-                    //     console.log(el);
-                    //     return el.data().expr_text.length * 10 + 20;
-                    // },
-                    "width": 15,
-                    "height": 15,
+                    // Make nodes wider to accommodate text
+                    "width": function(el) {
+                        // Calculate width based on text length, with minimum size
+                        let textLength = el.data().expr_type.length;
+                        return Math.max(15, textLength * 8);
+                    },
+                    "height": 20,
                     "background-color": function(el){
                         if(el.data().expr_type === "conj_list"){
-                            return "orange";
+                            return "#FFD699"; // Light orange
                         }
                         if(el.data().expr_text.includes("' = ")) {
-                            return "red";
+                            return "#FFB3B3"; // Light red
                         }
-                        return "blue";
+                        return "#B3D9FF"; // Light blue
                     },
                     "text-valign": "center",
-                    // "text-halign": "center",
+                    "text-halign": "center",
+                    "text-wrap": "wrap",
+                    "text-max-width": function(el) {
+                        // Allow text to wrap within node width
+                        return el.width() - 4;
+                    },
                     "border-style": "solid",
                     "border-width": "1",
                     "border-color": "gray",
                     "font-family": "monospace",
                     "font-size": "8px",
-                    "shape": "rectangle"
+                    "shape": "rectangle",
+                    "padding": "2px"
                 }
             },
         ]
@@ -338,7 +328,6 @@ function displayEvalGraph(nodeGraph) {
                 id: 'e' + eind,
                 source: hashSum(edge[0].textId),
                 target: hashSum(edge[1].textId),
-                // label: retVal[0]["val"].toString() + " " + edgeOrder + "(" + retVal.length + ") [" + evalDur + "ms]"
                 label: edgeOrder + "(" + retVal.length + ") [" + evalDur + "ms]"
             }
         });
@@ -355,10 +344,46 @@ function displayEvalGraph(nodeGraph) {
             return el.data().label;
         }
     })
-    // let layout = cy.layout({name:"cose"});
-    // let layout = cy.layout({ name: "breadthfirst" });
+
+    // Add tooltips for nodes
+    cy.on('mouseover', 'node', function(evt) {
+        let node = evt.target;
+        let tooltip = document.createElement('div');
+        tooltip.className = 'cytoscape-tooltip';
+        tooltip.style.position = 'absolute';
+        tooltip.style.backgroundColor = 'white';
+        tooltip.style.border = '1px solid #ccc';
+        tooltip.style.padding = '5px';
+        tooltip.style.borderRadius = '3px';
+        tooltip.style.fontFamily = 'monospace';
+        tooltip.style.fontSize = '12px';
+        tooltip.style.zIndex = '1000';
+        tooltip.style.maxWidth = '300px';
+        tooltip.style.wordWrap = 'break-word';
+        tooltip.innerHTML = node.data('expr_text');
+        
+        document.body.appendChild(tooltip);
+        
+        function updateTooltipPosition() {
+            let pos = node.renderedPosition();
+            let containerPos = stategraphDiv.getBoundingClientRect();
+            tooltip.style.left = (containerPos.left + pos.x + 10) + 'px';
+            tooltip.style.top = (containerPos.top + pos.y - 10) + 'px';
+        }
+        
+        updateTooltipPosition();
+        node.on('position', updateTooltipPosition);
+    });
+
+    cy.on('mouseout', 'node', function(evt) {
+        let tooltip = document.querySelector('.cytoscape-tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+        evt.target.removeListener('position');
+    });
+
     let layout = cy.layout({ name: "dagre", nodeDimensionsIncludeLabels: true });
-    // let layout = cy.layout({ name: "elk" });
     cy.resize();
     layout.run();
 }
