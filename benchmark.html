@@ -3,7 +3,7 @@
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
     </head>
     <body>
-        <h1>TLA+ Web Benchmarks</h1>
+        <h1><a href="/test.html">TLA+ Web Interpreter Benchmarks</a></h1>
         <div id="tests"></div>
         <div id="test-duration"></div>
     </body>
@@ -14,8 +14,16 @@
 </script>
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 
+<!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js" integrity="sha512-2iwCHjuj+PmdCyvb88rMOch0UcKQxVHi/gsAml1fN3eg82IDaO/cdzzeXX4iF2VzIIes7pODE1/G0ts3QBwslA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clusterize.js/0.18.0/clusterize.min.js"></script>
+<script src="js/lib/immutable.min.js"></script>
+
+
+<!-- CytoscapeJS (for graph visualizations) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.20.0/cytoscape.min.js" integrity="sha512-cjmYAonfXK+azDmWqvnqq8xmygHRHqVI7S0zuRxQnvcYVeoakwthRX6pPKoXfG1oIjDvMUtteRV9PhQjJwKWxQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/dagre@0.7.4/dist/dagre.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
 
 <script src="js/object_hash.js" crossorigin="anonymous"></script>
 <script src="js/hash-sum/hash-sum.js" crossorigin="anonymous"></script>
@@ -28,6 +36,31 @@
 <style>
     body{
         font-family: monospace;
+    }
+    a:visited{
+        color:blue;
+    }
+
+    table th{
+        border-bottom: 1px solid black;
+    }
+
+    table td{
+        padding-right:15px;
+        padding-left:15px;
+    }
+
+    #init-eval-graph-pane{
+        width:85%;
+        height:90%;
+        border: 1px solid black;
+        margin:10px;
+    }
+    #next-eval-graph-pane{
+        width:85%;
+        height:90%;
+        border: 1px solid black;
+        margin:10px;
     }
 </style>
 
