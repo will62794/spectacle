@@ -3154,6 +3154,22 @@ async function init() {
     });
 
     await loadApp()
+
+    // Add keyboard event listener for navigation
+    document.addEventListener('keydown', handleKeyboardNavigation);
+}
+
+function handleKeyboardNavigation(event) {
+    // Only handle if we're not in an input field or textarea
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+        return;
+    }
+
+    if (event.key === 'ArrowLeft' && model.currTrace.length > 1) {
+        traceStepBack();
+    } else if (event.key === 'ArrowRight') {
+        traceStepForward();
+    }
 }
 
 //
