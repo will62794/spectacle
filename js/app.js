@@ -1271,7 +1271,7 @@ function makeSvgAnimObj(tlaAnimElem) {
 
         let nodes = attrs.applyArg(new StringValue("V"));
         let edges = attrs.applyArg(new StringValue("E"));
-        let labelFn = attrs.applyArg(new StringValue("labelFn"));
+        let nodeAttrsFn = attrs.applyArg(new StringValue("nodeAttrsFn"));
 
         // console.log("nodes:", nodes);
         // console.log("edges:", edges);
@@ -1281,7 +1281,17 @@ function makeSvgAnimObj(tlaAnimElem) {
         for (let i = 0; i < nodes.getElems().length; i++) {
             let node = nodes.getElems()[i];
             let nodeStr = node.toString();
-            graphvizStr += `  ${nodeStr} [label="${nodeStr}"];\n`;
+
+            console.log(nodeAttrsFn.getDomain())
+
+            let nodeAttrsObj = {};
+            nodeAttrsFn.applyArg(node).getDomain().forEach(v => {
+                let val = nodeAttrsFn.applyArg(node).applyArg(v);
+                nodeAttrsObj[v.getVal()] = val.getVal();
+            });
+
+            let nodeAttrsStr = Object.entries(nodeAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
+            graphvizStr += `  ${nodeStr} [${nodeAttrsStr}];\n`;
         }
         for (let i = 0; i < edges.getElems().length; i++) {
             let edge = edges.getElems()[i];
