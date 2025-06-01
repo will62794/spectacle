@@ -6,6 +6,8 @@ let tree;
 let parser;
 let languageName = "tlaplus";
 
+let vizInstance = null;
+
 let Pane = {
     Constants: 1,
     Trace: 2
@@ -1254,13 +1256,48 @@ function tlaValView(tlaVal, prevTlaVal = null) {
 
 
 //
-// Animation view logic (experimental).
+// Animation view logic.
 //
 function makeSvgAnimObj(tlaAnimElem) {
     let name = tlaAnimElem.applyArg(new StringValue("name")).getVal();
     let attrs = tlaAnimElem.applyArg(new StringValue("attrs"));
     let innerText = tlaAnimElem.applyArg(new StringValue("innerText"));
     let children = tlaAnimElem.applyArg(new StringValue("children"));
+
+
+    // Experimental Graphviz visualization elemen support.
+    if (name === "digraph") {
+        // console.log("tlaAnimElem:", tlaAnimElem);
+
+        let nodes = attrs.applyArg(new StringValue("V"));
+        let edges = attrs.applyArg(new StringValue("E"));
+        let labelFn = attrs.applyArg(new StringValue("labelFn"));
+
+        // console.log("nodes:", nodes);
+        // console.log("edges:", edges);
+        // console.log("labelFn:", labelFn);
+
+        let graphvizStr = `digraph {\n`;
+        for (let i = 0; i < nodes.getElems().length; i++) {
+            let node = nodes.getElems()[i];
+            let nodeStr = node.toString();
+            graphvizStr += `  ${nodeStr} [label="${nodeStr}"];\n`;
+        }
+        for (let i = 0; i < edges.getElems().length; i++) {
+            let edge = edges.getElems()[i];
+            let from = edge.getValues()[0].getVal();
+            let to = edge.getValues()[1].getVal();
+            let edgeStr = `  ${from} -> ${to};`;
+            graphvizStr += `${edgeStr}\n`;
+        }
+        graphvizStr += `}`;
+
+        // console.log("graphvizStr:", graphvizStr);
+
+        let ret = vizInstance.renderSVGElement(graphvizStr);
+        return m("g", [m.trust(ret.children[0].outerHTML)]);
+    }
+
     // console.log("name:", name);
     // console.log("attrs:", attrs);
     // console.log("children:", children);
@@ -3100,6 +3137,11 @@ async function init() {
 
     tree = null;
     parser.setLanguage(language);
+
+    // Load Graphviz library for visualizations.
+    Viz.instance().then(viz => {
+        vizInstance = viz;
+    });
 
     await loadApp()
 }
