@@ -207,7 +207,7 @@ RollbackEntries(i, j) ==
     /\ UNCHANGED <<immediatelyCommitted, currentTerm, state, config, configVersion, configTerm>>
 
 \* Node 'i' gets elected as a primary.
-BecomeLeader(i, voteQuorum) == 
+BecomePrimary(i, voteQuorum) == 
     \* Primaries make decisions based on their current configuration.
     LET newTerm == currentTerm[i] + 1 IN
     /\ i \in config[i]
@@ -288,7 +288,7 @@ Next ==
     \/ \E s \in Server : ClientRequest(s)
     \/ \E s, t \in Server : GetEntries(s, t)
     \/ \E s, t \in Server : RollbackEntries(s, t)
-    \/ \E s \in Server : \E Q \in Quorums(config[s]) :  BecomeLeader(s, Q)
+    \/ \E s \in Server : \E Q \in Quorums(config[s]) :  BecomePrimary(s, Q)
     \/ \E s \in Server :  \E Q \in Quorums(config[s]) : CommitEntry(s, Q)
     \/ \E s,t \in Server : UpdateTerms(s, t)
     \/ \E s \in Server, newConfig \in AllConfigs : Reconfig(s, newConfig)
@@ -306,7 +306,7 @@ OnePrimaryPerTerm ==
          /\ state[t] = Primary
          /\ currentTerm[s] = currentTerm[t]) => (s = t)
 
-LeaderAppendOnly == 
+PrimaryAppendOnly == 
     [][\A s \in Server : state[s] = Primary => Len(log'[s]) >= Len(log[s])]_vars
 
 \* <<index, term>> pairs uniquely identify log prefixes.
@@ -317,7 +317,7 @@ LogMatching ==
         (SubSeq(log[s],1,i) = SubSeq(log[t],1,i)) \* prefixes must be the same.
 
 \* When a node gets elected as primary it contains all entries immediatelyCommitted in previous terms.
-LeaderCompleteness == 
+PrimaryCompleteness == 
     \A s \in Server : (state[s] = Primary) => 
         \A c \in immediatelyCommitted : (c[2] < currentTerm[s] => InLog(<<c[1],c[2]>>, s))
 
@@ -368,6 +368,21 @@ Rect(x, y, w, h, attrs) ==
                      height |-> h] IN
     SVGElem("rect", Merge(svgAttrs, attrs), <<>>, "")
 
+Image(x, y, width, height, href, attrs) == 
+    LET svgAttrs == ("xlink:href" :> href @@
+                     "x"         :> x @@
+                     "y"         :> y @@
+                     "width"     :> width @@
+                     "height"    :> height) IN
+    SVGElem("image", Merge(svgAttrs, attrs), <<>>, "")
+
+Spacing == 40
+
+CrownIcon == "assets/crown.svg"
+BugIcon == "assets/bug.svg"
+
+CrownElem(xbase, rmid, i) == Image(xbase, i * Spacing - 6, 13, 13, CrownIcon, IF state[rmid] # Primary THEN [hidden |-> "true"] ELSE <<>>)
+
 \* Establish a fixed mapping to assign an ordering to elements in these sets.
 \* ServerId == CHOOSE f \in [Server -> 1..Cardinality(Person)] : Injective(f)
 SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
@@ -378,27 +393,77 @@ c1 == Circle(10, 10, 5, [fill |-> "red"])
 c2 == Circle(20, 10, 5, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(Server)
-Spacing == 40
-XBase == -50
-logEntryStroke(i,ind) == IF \E c \in immediatelyCommitted : c[1] = ind /\ c[2] = log[i][ind] THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(20 * ind + 160, ybase, 16, 16, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
-                                   Text(20 * ind + 165, ybase + 14, ToString(log[i][ind]), ("text-anchor" :>  "start" @@ "font-size" :> "12px"))>>, [h \in {} |-> {}])
+XBase == -15
+
+\* 
+\* Define log elements visuals.
+\* 
+logEntryStyle(i,ind) == 
+    IF \E c \in immediatelyCommitted : c[1] = ind /\ c[2] = log[i][ind] 
+        THEN ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px")
+        ELSE ("fill" :> "lightgray" @@ "stroke" :> "black" @@ "stroke-width" :> "1px")
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)), 
+                                   Text(18 * ind + 115, ybase + 12, ToString(log[i][ind]), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
-logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 10)]
-cs == [i \in RMIdDomain |-> Circle(XBase + 20, i * Spacing, 10, 
+logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
+
+\* 
+\* Define server elements visuals.
+\* 
+cs == [i \in RMIdDomain |-> 
+        Group(<<Circle(XBase + 20, i * Spacing, 10, 
         [stroke |-> "black", fill |-> 
             IF state[RMId[i]] = Primary 
-                THEN "green" 
+                THEN "gold" 
             ELSE IF state[RMId[i]] = Secondary THEN "gray" 
-            ELSE IF state[RMId[i]] = Secondary THEN "red" ELSE "gray"])]
-configStr(i) ==  " (" \o ToString(configVersion[RMId[i]]) \o "," \o ToString(configTerm[RMId[i]]) \o ") " \o ToString(config[RMId[i]])
-labels == [i \in RMIdDomain |-> Text(XBase + 40, i * Spacing + 5, 
-        ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
+            ELSE IF state[RMId[i]] = Secondary THEN "red" ELSE "gray"]),
+            CrownElem(XBase-10, RMId[i],i)>>, [h \in {} |-> {}])
+        ]
+
+configStr(i) == ToString(config[RMId[i]])
+labels == [i \in RMIdDomain |-> Text(XBase + 38, i * Spacing + 5, 
+        \* ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
+        ToString(RMId[i]) \o "     " \o configStr(i), 
         [fill |-> 
             IF state[RMId[i]] = Primary 
                 THEN "black" 
             ELSE IF state[RMId[i]] = Secondary THEN "black" 
-            ELSE IF state[RMId[i]] = Secondary THEN "red" ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "11px"))] 
-AnimView == Group(cs \o labels \o logElems, [i \in {} |-> {}])
+            ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))] 
+
+termLabels == 
+    [i \in RMIdDomain |-> 
+        Group(<<Text(XBase + 38 + currentTerm[RMId[i]] * 11, i * Spacing + 20, 
+        "" \o ToString(currentTerm[RMId[i]]), 
+            [fill |-> 
+                IF state[RMId[i]] = Primary 
+                    THEN "black" 
+                ELSE IF state[RMId[i]] = Secondary THEN "black" 
+                ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px")),
+        Text(XBase + 10, i * Spacing + 20, 
+        "term:", 
+            [fill |-> 
+                IF state[RMId[i]] = Primary 
+                    THEN "black" 
+                ELSE IF state[RMId[i]] = Secondary THEN "black" 
+                ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "7px")),
+        Rect(XBase + 35, i * Spacing + 20, 100, 1, [fill |-> "white"])
+        >>, <<>>)]
+
+\* 
+\* Visualize committed safety violation at appropriate index.
+\* 
+
+\* Exists a different server with a conflicting committed entry at the same index.
+existsConflictingEntry(ind) == \E x,y \in immediatelyCommitted : x[1] = ind /\ (x[1] = y[1]) /\ x[2] # y[2]
+violationEntry(ybase, ind) == Image(16 * ind + 115, ybase + 9, 13, 13, BugIcon, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
+violationElem(ybase) == Group([ind \in 1..5 |-> violationEntry(ybase, ind)], <<>>)
+safetyViolationElems ==  <<violationElem(5)>>
+
+
+\* 
+\* Animation view.
+\* 
+AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems, [i \in {} |-> {}])
+
 
 =============================================================================
