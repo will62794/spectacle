@@ -2862,6 +2862,7 @@ function loadSpecText(text, specPath) {
     model.invariantViolated = false;
     model.invariantCheckingDuration = 0;
     model.invariantCheckerRunning = false;
+    model.traceLoadingError = null;
 
     let parsedChanges = m.route.param("changes");
 
