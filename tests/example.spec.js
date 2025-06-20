@@ -19,7 +19,7 @@ import { test, expect } from '@playwright/test';
 // });
 
 test('two-phase-basic', async ({ page }) => {
-    await page.goto('http://127.0.0.1:8000/#!/home?specpath=./specs/TwoPhase.tla');
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla');
   
     // Expect a title "to contain" a substring.
     // await expect(page).toHaveTitle(/Playwright/);

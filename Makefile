@@ -1,6 +1,9 @@
 serve:
 	python3 -m http.server
 
+serve-test:
+	python3 -m http.server 3000
+
 open:
 	open http://localhost:8000
 
