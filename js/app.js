@@ -535,6 +535,7 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
         return m("div", 
         { 
             class: classList.join(" "), 
+            "data-testid": "action-choice-param",
             // colspan: 2,
             onclick: () => chooseNextState(hash, hashQuantBounds(quantBounds)),
             // onmouseover: () => {
@@ -658,6 +659,7 @@ function componentNextStateChoiceElement(stateObj, ind, actionLabel, diffOnly) {
     let nextStateElem = m("div", {
         class: "init-state next-state-choice-full",
         style: `opacity: ${opac}%`,
+        "data-testid": "next-state-choice",
         onclick: () => chooseNextState(hash),
         // onmouseover: () => {
         //     model.nextStatePreview = state;
@@ -1699,7 +1701,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
     if (model.animationExists && model.enableAnimationView) {
         // traceStateElemChildren.push(vizSvg);
     }
-    let traceStateElem = m("div", { "class": "trace-state tlc-state" }, traceStateElemChildren);
+    let traceStateElem = m("div", { "class": "trace-state tlc-state", "data-testid": "trace-state-elem" }, traceStateElemChildren);
     return traceStateElem;
 }
 
