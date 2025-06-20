@@ -1170,19 +1170,53 @@ function reloadSpec() {
 function tlaValView(tlaVal, prevTlaVal = null) {
     if (tlaVal instanceof FcnRcdValue) {
         let valPairs = _.zip(tlaVal.getDomain(), tlaVal.getValues());
+
+        // If domains of old and new val are the same, then show the diff of their sub-values.
+        let domainsMatch = false;
+        if (prevTlaVal !== null && prevTlaVal.getDomain().length === tlaVal.getDomain().length && 
+                        _.isEqual(prevTlaVal.getDomain().map(v => v.fingerprint()), tlaVal.getDomain().map(v => v.fingerprint()))) {
+            // valPairs = _.zip(prevTlaVal.getValues(), tlaVal.getValues());
+            domainsMatch = true;
+        }
+
         let borderStyle = { style: "border:solid 0.5px gray;vertical-align:middle" };
         return m("table", valPairs.map(p => {
             let key = p[0];
             let val = p[1];
             // If checking for diff, do it now.
             let diff = false;
+            let prevKeyVal = null;
             if (prevTlaVal !== null && prevTlaVal.argInDomain(key) && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
                 diff = true;
+                prevKeyVal = prevTlaVal.applyArg(key);
+                console.log("prevKeyVal:", prevKeyVal);
             }
+            let addedKey = false;
+            if(prevTlaVal !== null && !prevTlaVal.argInDomain(key)){
+                addedKey = true;
+            }
+
+            let bgColor = diff && !domainsMatch ? "lightyellow" : "none";
+
+            // TODO: Improve handling of highlighting for newly added keys.
+            if(addedKey){
+                bgColor = "#eaffde";
+            }
+
+            // If key value is not a function/record itself, then let's highlight the cell.
+            let keyVal = val;
+            if(!(keyVal instanceof FcnRcdValue) && diff){
+                // keyVal = val;
+                bgColor = "lightyellow";
+            }
+
             return m("tr", borderStyle, [
                 m("td", borderStyle, key.toString()),
                 // TOOD: Uniform diff styling.
-                m("td", {style: {"background-color": diff? "lightyellow" : "none", "vertical-align": "middle"}},tlaValView(val)), // TODO: do we want to recursively apply?
+                m("td", {style: {
+                    "background-color": bgColor, 
+                    "vertical-align": "middle"
+                }}, tlaValView(val, prevKeyVal)), // TODO: do we want to recursively apply?
             ]);
         }));
     }
@@ -1199,7 +1233,9 @@ function tlaValView(tlaVal, prevTlaVal = null) {
         let maxLength = _.max(elemLengths);
         let SHORT_SET_ELEM_DISPLAY_LEN = 4;
         if (maxLength <= SHORT_SET_ELEM_DISPLAY_LEN) {
-            return m("span", tlaVal.toString());
+            let diff = prevTlaVal !== null && prevTlaVal.fingerprint() !== tlaVal.fingerprint();
+            let style = {"background-color": diff ? "lightyellow" : "none"};
+            return m("span", {style: style}, tlaVal.toString());
         }
 
         let setElems = tlaVal.getElems().map((v, idx) => {
@@ -1222,7 +1258,9 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             ]);
         });
 
-        return m("table", setElems);
+        return m("table", {style: {
+            "background-color": "lightyellow"
+        }}, setElems);
     }
 
     // Display tuples as lists of their items.
@@ -1251,7 +1289,14 @@ function tlaValView(tlaVal, prevTlaVal = null) {
         return m("table", [m("tr", m("td", tlaVal.toString()))]);
     }
 
-    return m("span", tlaVal.toString());
+    let style = {};
+    if (prevTlaVal !== null && prevTlaVal.fingerprint() !== tlaVal.fingerprint()) {
+        style = {
+            "background-color": "lightyellow"
+        };
+    }
+
+    return m("span", {style: style}, tlaVal.toString());
 }
 
 
