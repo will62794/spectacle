@@ -1173,6 +1173,12 @@ function tlaValView(tlaVal, prevTlaVal = null) {
     if (tlaVal instanceof FcnRcdValue) {
         let valPairs = _.zip(tlaVal.getDomain(), tlaVal.getValues());
 
+        // If the previous value was not a function/record, then just diff the whole thing.
+        let wholeDiff = false;
+        if(prevTlaVal !== null && !(prevTlaVal instanceof FcnRcdValue)){
+            wholeDiff = true;
+        }
+
         // If domains of old and new val are the same, then show the diff of their sub-values.
         let domainsMatch = false;
         if (prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue) && prevTlaVal.getDomain().length === tlaVal.getDomain().length && 
@@ -1182,7 +1188,7 @@ function tlaValView(tlaVal, prevTlaVal = null) {
         }
 
         let borderStyle = { style: "border:solid 0.5px gray;vertical-align:middle" };
-        return m("table", valPairs.map(p => {
+        return m("table", {style: {"background-color": wholeDiff ? "lightyellow" : "none"}}, valPairs.map(p => {
             let key = p[0];
             let val = p[1];
             // If checking for diff, do it now.
@@ -1269,8 +1275,15 @@ function tlaValView(tlaVal, prevTlaVal = null) {
     if (tlaVal instanceof TupleValue) {
         const SHORT_TUPLE_ELEM_DISPLAY_LEN = 30;
 
+        let diff = false;
+        if(prevTlaVal !== null && (prevTlaVal instanceof TupleValue) && prevTlaVal.fingerprint() !== tlaVal.fingerprint()){
+            diff = true;
+        }
+
+        let style = {style: {"background-color": diff ? "lightyellow" : "none"}};
+
         if (tlaVal.getElems().length === 0) {
-            return m("span", "<<>>"); // empty set.
+            return m("span", style, "<<>>"); // empty set.
         }
         let borderStyle = { style: "border:solid 0.5px gray" };
 
@@ -1285,10 +1298,10 @@ function tlaValView(tlaVal, prevTlaVal = null) {
 
         // If tuple is short enough, we will just display it as a string.
         if(tlaVal.toString().length > SHORT_TUPLE_ELEM_DISPLAY_LEN){
-            return m("table", tupleElems);
+            return m("table", style, tupleElems);
         }
 
-        return m("table", [m("tr", m("td", tlaVal.toString()))]);
+        return m("table", style, [m("tr", m("td", tlaVal.toString()))]);
     }
 
     let style = {};
