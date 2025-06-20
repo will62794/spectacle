@@ -1231,9 +1231,10 @@ function tlaValView(tlaVal, prevTlaVal = null) {
         // If all elements are short, just display the set as a string.
         let elemLengths = tlaVal.getElems().map((v, idx) => v.toString().length)
         let maxLength = _.max(elemLengths);
+        let diff = prevTlaVal !== null && prevTlaVal.fingerprint() !== tlaVal.fingerprint();
+
         let SHORT_SET_ELEM_DISPLAY_LEN = 4;
         if (maxLength <= SHORT_SET_ELEM_DISPLAY_LEN) {
-            let diff = prevTlaVal !== null && prevTlaVal.fingerprint() !== tlaVal.fingerprint();
             let style = {"background-color": diff ? "lightyellow" : "none"};
             return m("span", {style: style}, tlaVal.toString());
         }
@@ -1258,9 +1259,8 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             ]);
         });
 
-        return m("table", {style: {
-            "background-color": "lightyellow"
-        }}, setElems);
+        let style = {"background-color": diff ? "lightyellow" : "none"};
+        return m("table", {style: style}, setElems);
     }
 
     // Display tuples as lists of their items.
