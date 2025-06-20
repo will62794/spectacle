@@ -1175,7 +1175,7 @@ function tlaValView(tlaVal, prevTlaVal = null) {
 
         // If domains of old and new val are the same, then show the diff of their sub-values.
         let domainsMatch = false;
-        if (prevTlaVal !== null && prevTlaVal.getDomain().length === tlaVal.getDomain().length && 
+        if (prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue) && prevTlaVal.getDomain().length === tlaVal.getDomain().length && 
                         _.isEqual(prevTlaVal.getDomain().map(v => v.fingerprint()), tlaVal.getDomain().map(v => v.fingerprint()))) {
             // valPairs = _.zip(prevTlaVal.getValues(), tlaVal.getValues());
             domainsMatch = true;
@@ -1188,13 +1188,13 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             // If checking for diff, do it now.
             let diff = false;
             let prevKeyVal = null;
-            if (prevTlaVal !== null && prevTlaVal.argInDomain(key) && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
+            if (prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue) && prevTlaVal.argInDomain(key) && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
                 diff = true;
                 prevKeyVal = prevTlaVal.applyArg(key);
                 console.log("prevKeyVal:", prevKeyVal);
             }
             let addedKey = false;
-            if(prevTlaVal !== null && !prevTlaVal.argInDomain(key)){
+            if(prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue)&& !prevTlaVal.argInDomain(key)){
                 addedKey = true;
             }
 
