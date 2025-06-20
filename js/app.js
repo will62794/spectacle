@@ -427,6 +427,7 @@ function componentChooseConstants(hidden) {
                     m("input", {
                         class: "form-control form-control-sm",
                         id: `const-val-input-${constDecl}`,
+                        "data-testid": `const-val-input-${constDecl}`,
                         style: {
                             "width": "220px"
                         },
@@ -461,6 +462,7 @@ function componentChooseConstants(hidden) {
     function constantButtons(){
         let setButtonDiv = m("button", { 
             id: "set-constants-button", 
+            "data-testid": "set-constant-config-button",
             class: "btn btn-sm btn-primary", 
             onclick: () => {
                 setConstantValues();
@@ -2377,6 +2379,7 @@ function loadSpecBox(hidden){
             m("button", {
                 id:"load-spec-urfl-button", 
                 class: "btn btn-sm btn-secondary",
+                "data-testid": "load-spec-button",
                 onclick: () => {
                     model.rootModName = "";
                     model.specPath = model.specUrlInputText;
@@ -2392,6 +2395,7 @@ function loadSpecBox(hidden){
                 text:"file upload", 
                 class:"form-control form-control-sm" + (model.loadSpecFailed ? " is-invalid" : ""),
                 placeholder: "URL to .tla file.",
+                "data-testid": "load-spec-url-input",
                 oninput: e => { model.specUrlInputText = e.target.value }
             }, "From URL upload:"),
         ]),
