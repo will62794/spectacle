@@ -2202,7 +2202,12 @@ function componentButtonsContainer() {
                 disabled: model.forwardHistory.length === 0,
                 onclick: traceStepForward 
             }, "Forward"),
-            m("button", { class: "btn btn-sm btn-outline-primary button-bagse", id: "trace-reset-button", onclick: resetTrace }, "Reset"),
+            m("button", { 
+                class: "btn btn-sm btn-outline-primary button-bagse", 
+                id: "trace-reset-button", 
+                "data-testid": "trace-reset-button",
+                onclick: resetTrace 
+            }, "Reset"),
             // Explode dropdown.
             explodeButtonDropdown(),
             m("button", { 
