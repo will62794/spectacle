@@ -1199,7 +1199,7 @@ function tlaValView(tlaVal, prevTlaVal = null) {
             if (prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue) && prevTlaVal.argInDomain(key) && prevTlaVal.applyArg(key).fingerprint() !== val.fingerprint()) {
                 diff = true;
                 prevKeyVal = prevTlaVal.applyArg(key);
-                console.log("prevKeyVal:", prevKeyVal);
+                // console.log("prevKeyVal:", prevKeyVal);
             }
             let addedKey = false;
             if(prevTlaVal !== null && (prevTlaVal instanceof FcnRcdValue)&& !prevTlaVal.argInDomain(key)){
@@ -1625,7 +1625,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
             ctx.setGlobalDefTable(model.spec.globalDefTable);
             ctx.setSpecObj(model.spec);
             exprVal = evalExprStrInContext(ctx, model.traceExprInputText);
-            console.log("exprVal:", exprVal);
+            // console.log("exprVal:", exprVal);
         }
         catch (e) {
             // Ignore and suppress errors here since we assume bogus inputs may appear transiently.
