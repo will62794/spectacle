@@ -303,6 +303,10 @@ labels == [i \in RMIdDomain |->
                 THEN "black" 
             ELSE IF state[RMId[i]] = Secondary THEN "black" 
             ELSE IF state[RMId[i]] = Secondary THEN "red" ELSE "gray"])]
+
+\* 
+\* The overall animation view as one big SVG element.
+\* 
 AnimView == Group(cs \o labels \o logElems, [i \in {} |-> {}])
 
 
