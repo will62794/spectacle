@@ -1644,7 +1644,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         traceExprRows = traceExprRows.concat([currTraceExprRow]);
     }
 
-    let stateColorBg = "#eee";
+    let stateColorBg = "transparent";
     let lassoToInd = (model.lassoTo !== null) ? _.findIndex(model.currTrace, s => s.fingerprint() === model.lassoTo) + 1 : ""
     let lassoNote = ((model.lassoTo !== null) && isLastState) ? " (Back to State " + lassoToInd + ")" : "";
     // let lastStateNote = isLastState ? "  (Current) " : "";
@@ -1665,9 +1665,9 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         headerColSpanCount += explodedConstantVal.getElems().length;
     }
 
-    let headerRow = [m("tr", { style: `background-color: ${stateColorBg};border-bottom:solid 2px gray;`, class: "trace-state-header" }, [
-        m("th", { colspan: headerColSpanCount, }, [
-            m("span", { style: "color:black;padding-right:16px;border-right:solid 0px gray;font-size:14px;" }, stateIndLabel),
+    let headerRow = [m("tr", { style: `background-color: ${stateColorBg};border-bottom:solid 1px gray;`, class: "trace-state-header" }, [
+        m("th", { colspan: headerColSpanCount, style: "padding-top: 4px; padding-bottom: 8px;" }, [
+            m("span", { style: "color:black;padding-right:16px;border-right:solid 0px gray;font-size:14px;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;font-weight: 600;" }, stateIndLabel),
             // m("span", { style: "color:black;padding-right:8px;border-right:solid 0px gray;font-size:14px;" }, stateIndLabel),
             m("span", { style: "color:black;padding-bottom:2px;font-family:monospace;font-size:12px;" }, stateHeaderText)
         ]),
