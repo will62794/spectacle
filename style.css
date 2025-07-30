@@ -924,7 +924,8 @@ body {
     /* background-color: yellowgreen; */
     display: inline-block;
     grid-column-start: 1;
-    border: 1px solid #e0e0e0;
+    /* border: 1px solid #e0e0e0; */
+    border: 1px solid gray;
     border-radius: 6px;
     padding: 4px;
     background-color: #fafafa;
