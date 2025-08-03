@@ -189,24 +189,29 @@ c2 == Circle(20, 10, 3, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(RM)
 
-TMElem == Circle(50, 85, 10, [fill |-> IF tmState = "committed" THEN CommitColor ELSE IF tmState = "init" THEN "gray" ELSE AbortColor])
-RMTextElems == 
-    [i \in RMIdDomain |->
-        Text(40 * i, 20, RMId[i], ("fill" :> "black" @@ "text-anchor" :> "middle"))
-    ]
-    \* <<Text(10, 10, "RM1", [fill |-> "black"]), Text(20, 10, "RM2", [fill |-> "black"]), Text(40, 50, "TM", [fill |-> "black"])>>
-TMTextElems == <<
-    Text(50, 70, "TM", ("fill" :> "black" @@ "text-anchor" :> "middle")),
-    Text(50, 110, ToString(tmPrepared), ("fill" :> "black" @@ "text-anchor" :> "middle"))
->>
-TextElems == RMTextElems \o TMTextElems
 \* RM elements node circles with corresponding colors.
-RMElems == [i \in RMIdDomain |-> Circle(40 * i, 35, 10, 
-        [fill |-> 
+RMSpacing == 40
+RMElems == [i \in RMIdDomain |-> Circle(RMSpacing * i, 45, 10, 
+        [stroke |-> "black", fill |-> 
             IF rmState[RMId[i]] = "prepared" 
                 THEN "steelblue" 
             ELSE IF rmState[RMId[i]] = "committed" THEN CommitColor 
             ELSE IF rmState[RMId[i]] = "aborted" THEN AbortColor ELSE "gray"])]
+
+TMXpos == RMSpacing * (Cardinality(RM) + 1) \div 2
+TMElem == Circle(TMXpos, 95, 10, [stroke |-> "black", fill |-> IF tmState = "committed" THEN CommitColor ELSE IF tmState = "init" THEN "gray" ELSE AbortColor])
+RMTextElems == 
+    [i \in RMIdDomain |->
+        Text(40 * i, 30, RMId[i], ("fill" :> "black" @@ "text-anchor" :> "middle" @@ "font-size" :> "12"))
+    ]
+    \* <<Text(10, 10, "RM1", [fill |-> "black"]), Text(20, 10, "RM2", [fill |-> "black"]), Text(40, 50, "TM", [fill |-> "black"])>>
+ 
+TMTextElems == <<
+    Text(TMXpos, 80, "TM", ("fill" :> "black" @@ "text-anchor" :> "middle" @@ "font-size" :> "12")),
+    Text(TMXpos, 120, ToString(tmPrepared), ("fill" :> "black" @@ "text-anchor" :> "middle" @@ "font-size" :> "10"))
+>>
+TextElems == RMTextElems \o TMTextElems
+
 
 AnimView == Group(RMElems \o <<TMElem>> \o TextElems, [i \in {} |-> {}])
 
