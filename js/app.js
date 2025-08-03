@@ -1809,9 +1809,9 @@ function componentTraceViewer(hidden) {
         ]);
     }
 
-    return m("div", { hidden: hidden }, [
+    return m("div", { id: "trace-and-buttons-container",hidden: hidden }, [
         m("div", { class: "pane-heading", id: "trace-state-heading" }, children),
-        m("div", { id: "trace", hidden: model.tracePaneHidden }, traceElems)
+        m("div", { id: "trace", class:"trace-view-box", hidden: model.tracePaneHidden }, traceElems)
     ])
 }
 
@@ -2654,7 +2654,7 @@ function animationPane(hidden) {
             ]);
         }
 
-        return m("div", { hidden: hidden }, [
+        return m("div", { id: "trace-and-buttons-container", hidden: hidden }, [
             componentButtonsContainer(),
             traceStateCounter(),
             m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 0 200 240" }, [viewSvgObj]))

@@ -54,6 +54,11 @@ body {
           display: none;
           /* Chrome, Safari and Opera */
       }
+
+
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh;
   }
   .const-input{
       margin:3px;
@@ -358,18 +363,21 @@ body {
 
   #trace{
     padding-left:15px;
-    height:85%;
-    position:relative;
-    overflow-y: scroll;
+    /* height:75%; */
+    /* position:relative; */
+    /* overflow-y: scroll; */
     /* border-bottom:solid 1px lightgray; */
 
     /* Hide scrollbar. */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
     &::-webkit-scrollbar {
       display: none; /* Chrome, Safari and Opera */
     }
+    flex:1;
+    overflow: auto;
+    padding-bottom:120px;
   }
 
   .tlc-state{
@@ -464,10 +472,10 @@ body {
 
   #state-choices-pane{
     /* color:red; */
-    height:92%;
+    /* height:10%; */
+    /* padding-bottom:100px; */
     /* border-bottom:solid 1px gray; */
     /* overflow-y: scroll; */
-    overflow-y: scroll;
     scrollbar-width: none;
       /* Firefox */
       -ms-overflow-style: none;
@@ -477,6 +485,10 @@ body {
           display: none;
           /* Chrome, Safari and Opera */
       }
+      flex:1;
+      overflow: auto;
+      padding-bottom:80px;
+
   }
 
   .hidden-state-var{
@@ -709,6 +721,17 @@ body {
     position: relative;
     min-width: 30%;
     /* border:solid 1px red; */
+
+    /* display: flex;  */
+    /* flex-direction: column;  */
+    /* height: 100vh; */
+  }
+
+  #trace-and-buttons-container{
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh;
+    /* flex:1; */
   }
 
   .resize-gutter {
@@ -934,12 +957,16 @@ body {
   #anim-div{
     border:solid 1px gray;
     width:85%;
-    height:80%;
+    /* height:80%; */
     display: inline-block;
     border-radius: 5px;
-    padding:15px;
+    /* padding:15px; */
     /* float:left; */
     /* grid-column-start: 3; */
+
+    flex:1;
+    overflow: auto;
+    margin-bottom:120px;
   }
 
   #load-spec-box{
