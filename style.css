@@ -583,6 +583,9 @@ body {
     padding-right:12px;
     margin-right:10px;
     font-size:12px;
+    /* height:300px; */
+    padding-top:5px;
+    padding-bottom:5px;
   }
 
   .blue-hover:hover{
