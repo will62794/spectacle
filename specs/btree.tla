@@ -1,7 +1,8 @@
 ---- MODULE btree ----
-
+\* 
+\* Original source: https://github.com/lorin/btree-tla/blob/main/btree.tla
 \* http://127.0.0.1:8000/#!/home?specpath=.%2Fspecs%2Fbtree.tla&constants%5BVals%5D=%7Ba%2Cb%2Cc%7D&constants%5BMaxKey%5D=4&constants%5BMaxNode%5D=8&constants%5BMaxOccupancy%5D=2&constants%5BREADY%5D=READY&constants%5BGET_VALUE%5D=GET_VALUE&constants%5BFIND_LEAF_TO_ADD%5D=FIND_LEAF_TO_ADD&constants%5BWHICH_TO_SPLIT%5D=WHICH_TO_SPLIT&constants%5BADD_TO_LEAF%5D=ADD_TO_LEAF&constants%5BSPLIT_LEAF%5D=SPLIT_LEAF&constants%5BSPLIT_INNER%5D=SPLIT_INNER&constants%5BSPLIT_ROOT_LEAF%5D=SPLIT_ROOT_LEAF&constants%5BSPLIT_ROOT_INNER%5D=SPLIT_ROOT_INNER&constants%5BUPDATE_LEAF%5D=UPDATE_LEAF
-
+\* 
 EXTENDS TLC,
         Naturals,
         FiniteSets,
