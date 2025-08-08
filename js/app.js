@@ -429,7 +429,7 @@ function componentChooseConstants(hidden) {
                         id: `const-val-input-${constDecl}`,
                         "data-testid": `const-val-input-${constDecl}`,
                         style: {
-                            "width": "190px",
+                            "width": "200px",
                             "font-size": "13px"
                         },
                         oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
