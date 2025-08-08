@@ -429,20 +429,21 @@ function componentChooseConstants(hidden) {
                         id: `const-val-input-${constDecl}`,
                         "data-testid": `const-val-input-${constDecl}`,
                         style: {
-                            "width": "220px"
+                            "width": "190px",
+                            "font-size": "13px"
                         },
                         oninput: (e) => model.specConstInputVals[constDecl] = e.target.value,
                         value: model.specConstInputVals[constDecl],
-                        placeholder: "Enter TLA+ value."
+                        placeholder: "Enter constant value."
                     }),
                     m("div", { class: "input-group-append" }, [ 
                     m("button", {
                         class: "btn btn-outline-secondary btn-sm",
                         style: {
-                            "font-size": "14px"
+                            "font-size": "13px"
                         },
                             onclick: () => setConstantAsModelValue(constDecl)
-                        }, "Model Value")
+                        }, "ModelValue")
                     ])
                 ])
             ])
