@@ -14,20 +14,20 @@
         1
       ],
       "nodes": [
-        2,3
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
       ],
       "edges": [
-        0,1
+        0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
       ]
     },
     {
-      "name": "%7",
+      "name": "%35",
       "color": "white",
       "nodesep": "0.35",
       "rank": "same",
       "_gvid": 1,
       "nodes": [
-        2,3
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
       ]
     },
     {
@@ -40,6 +40,96 @@
       "_gvid": 3,
       "name": "2853227016633077042",
       "label": "\/\\\\ x = (2 :> 3)\\n\/\\\\ y = (4 :> 5)",
+      "style": "filled"
+    },
+    {
+      "_gvid": 4,
+      "name": "4687599889241960456",
+      "label": "\/\\\\ x = (<<1, 3>> :> 55 @@ <<2, 3>> :> 55)\\n\/\\\\ y = 55",
+      "style": "filled"
+    },
+    {
+      "_gvid": 5,
+      "name": "6118552086644677244",
+      "label": "\/\\\\ x = (<<1, 3>> :> 55 @@ <<2, 3>> :> 66)\\n\/\\\\ y = 55",
+      "style": "filled"
+    },
+    {
+      "_gvid": 6,
+      "name": "7153683680287388597",
+      "label": "\/\\\\ x = (<<1, 3>> :> 55 @@ <<2, 3>> :> 77)\\n\/\\\\ y = 55",
+      "style": "filled"
+    },
+    {
+      "_gvid": 7,
+      "name": "-2229297308419513789",
+      "label": "\/\\\\ x = (<<1, 3>> :> 66 @@ <<2, 3>> :> 55)\\n\/\\\\ y = 66",
+      "style": "filled"
+    },
+    {
+      "_gvid": 8,
+      "name": "-798487200111491017",
+      "label": "\/\\\\ x = (<<1, 3>> :> 66 @@ <<2, 3>> :> 66)\\n\/\\\\ y = 66",
+      "style": "filled"
+    },
+    {
+      "_gvid": 9,
+      "name": "-4376162053248835074",
+      "label": "\/\\\\ x = (<<1, 3>> :> 66 @@ <<2, 3>> :> 77)\\n\/\\\\ y = 66",
+      "style": "filled"
+    },
+    {
+      "_gvid": 10,
+      "name": "3078236733070828023",
+      "label": "\/\\\\ x = (<<1, 3>> :> 77 @@ <<2, 3>> :> 55)\\n\/\\\\ y = 77",
+      "style": "filled"
+    },
+    {
+      "_gvid": 11,
+      "name": "4565755054425754499",
+      "label": "\/\\\\ x = (<<1, 3>> :> 77 @@ <<2, 3>> :> 66)\\n\/\\\\ y = 77",
+      "style": "filled"
+    },
+    {
+      "_gvid": 12,
+      "name": "644957969873265226",
+      "label": "\/\\\\ x = (<<1, 3>> :> 77 @@ <<2, 3>> :> 77)\\n\/\\\\ y = 77",
+      "style": "filled"
+    },
+    {
+      "_gvid": 13,
+      "name": "-2319587335655413756",
+      "label": "\/\\\\ x = (<<1, 3>> :> 55 @@ <<2, 3>> :> 66)\\n\/\\\\ y = 66",
+      "style": "filled"
+    },
+    {
+      "_gvid": 14,
+      "name": "-5335788068343357856",
+      "label": "\/\\\\ x = (<<1, 3>> :> 55 @@ <<2, 3>> :> 77)\\n\/\\\\ y = 77",
+      "style": "filled"
+    },
+    {
+      "_gvid": 15,
+      "name": "7649835416925130811",
+      "label": "\/\\\\ x = (<<1, 3>> :> 66 @@ <<2, 3>> :> 55)\\n\/\\\\ y = 55",
+      "style": "filled"
+    },
+    {
+      "_gvid": 16,
+      "name": "-7001014390500917677",
+      "label": "\/\\\\ x = (<<1, 3>> :> 66 @@ <<2, 3>> :> 77)\\n\/\\\\ y = 77",
+      "style": "filled"
+    },
+    {
+      "_gvid": 17,
+      "name": "-284408896727593950",
+      "label": "\/\\\\ x = (<<1, 3>> :> 77 @@ <<2, 3>> :> 55)\\n\/\\\\ y = 55",
+      "style": "filled"
+    },
+    {
+      "_gvid": 18,
+      "name": "7119921928021316654",
+      "label": "\/\\\\ x = (<<1, 3>> :> 77 @@ <<2, 3>> :> 66)\\n\/\\\\ y = 66",
       "style": "filled"
     }
   ],
@@ -56,6 +146,126 @@
       "_gvid": 1,
       "tail": 3,
       "head": 3,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 2,
+      "tail": 4,
+      "head": 4,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 3,
+      "tail": 5,
+      "head": 5,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 4,
+      "tail": 6,
+      "head": 6,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 5,
+      "tail": 7,
+      "head": 7,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 6,
+      "tail": 8,
+      "head": 8,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 7,
+      "tail": 9,
+      "head": 9,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 8,
+      "tail": 10,
+      "head": 10,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 9,
+      "tail": 11,
+      "head": 11,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 10,
+      "tail": 12,
+      "head": 12,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 11,
+      "tail": 13,
+      "head": 13,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 12,
+      "tail": 14,
+      "head": 14,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 13,
+      "tail": 15,
+      "head": 15,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 14,
+      "tail": 16,
+      "head": 16,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 15,
+      "tail": 17,
+      "head": 17,
+      "color": "black",
+      "fontcolor": "black",
+      "label": ""
+    },
+    {
+      "_gvid": 16,
+      "tail": 18,
+      "head": 18,
       "color": "black",
       "fontcolor": "black",
       "label": ""
