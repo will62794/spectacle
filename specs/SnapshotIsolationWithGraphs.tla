@@ -1217,8 +1217,9 @@ nodeAttrsFn(n) == [
 ]
 
 edgeAttrsFn(e) == [
-    label |-> "", \* ToString(e[3]),
-    color |-> "black"
+    label |-> e[3],
+    color |-> "black",
+    fontsize |-> "8"
 ]
 
 txnGraph == SerializationGraph(txnHistory)
@@ -1232,8 +1233,8 @@ txnGraphWithEdgeTypes ==
         /\ \/ (e[2] = "WW" /\ WWDependency(txnHistory, e[1][1], e[1][2]))
            \/ (e[2] = "WR" /\ WRDependency(txnHistory, e[1][1], e[1][2]))
            \/ (e[2] = "RW" /\ RWDependency(txnHistory, e[1][1], e[1][2]))}
-    
-AnimView == Group(<<DiGraph(txnIds,{<<e[1][1], e[1][2], e[2]>> : e \in txnGraphWithEdgeTypes},[n \in txnIds |-> nodeAttrsFn(n)], [e \in txnGraphWithEdgeTypes |-> edgeAttrsFn(e)])>>, [i \in {} |-> {}])
+txnGraphEdges == {<<e[1][1], e[1][2], e[2]>> : e \in txnGraphWithEdgeTypes}
+AnimView == Group(<<DiGraph(txnIds,txnGraphEdges,[n \in txnIds |-> nodeAttrsFn(n)], [e \in txnGraphEdges |-> edgeAttrsFn(e)])>>, [i \in {} |-> {}])
 
 =============================================================================
 \* Modification History
