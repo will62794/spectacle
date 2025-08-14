@@ -355,7 +355,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             { "spec": "simple_quant_multi", "constvals": undefined },
             { "spec": "simple_defined_var_assignment", "constvals": undefined },
             { "spec": "simple_defined_var_assignment_transitive", "constvals": undefined },
-            // { "spec": "simple_quant_tuple", "constvals": undefined },
+            { "spec": "simple_quant_tuple", "constvals": undefined },
             { "spec": "simple_multiline", "constvals": undefined },
             { "spec": "simple_letin", "constvals": undefined },
             { "spec": "simple_letin_fn_def", "constvals": undefined },

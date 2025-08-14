@@ -3784,8 +3784,15 @@ function evalBoundedQuantification(node, ctx) {
     let quantBoundNodes = node.namedChildren.filter(c => c.type === "quantifier_bound");
     // Only a single quantifier bound.
     assert(quantBoundNodes.length === 1);
-    // Only single identifier within this quantifier bound.
-    assert(quantBoundNodes[0].namedChildren.filter(c => c.type === "identifier").length === 1);
+
+    // First element can also be tuple_of_identifiers.
+    let tupOfIdents = null;
+    if (quantBoundNodes[0].namedChildren[0].type === "tuple_of_identifiers") {
+        tupOfIdents = quantBoundNodes[0].namedChildren[0];
+        evalLog("tupOfIdents:", tupOfIdents);
+    } else{
+        assert(quantBoundNodes[0].namedChildren.filter(c => c.type === "identifier").length === 1);
+    }
 
     let quantifier = node.namedChildren[0];
     assert(quantifier.type === "exists" || quantifier.type === "forall");
@@ -3811,9 +3818,15 @@ function evalBoundedQuantification(node, ctx) {
     let domainVal = evalExpr(quantBound.lastNamedChild, ctx)[0]["val"];
     assert(domainVal instanceof SetValue);
     let quantDomain = domainVal.getElems();
-
-    let quantIdent = quantBound.namedChildren.filter(c => c.type === "identifier")[0].text;
     evalLog("quantDomain: ", quantDomain);
+    // If we have a tuple of identifiers, then each element in the domain should be a tuple.
+
+    let quantIdent;
+    if(tupOfIdents == null){
+        quantIdent = quantBound.namedChildren.filter(c => c.type === "identifier")[0].text;
+    } else{
+        quantIdent = tupOfIdents.namedChildren.filter(c => c.type === "identifier").map(c => c.text);
+    }
     evalLog("quantIdent: ", quantIdent);
 
     // Iterate over the product of all quantified domains and evaluate
@@ -3836,7 +3849,16 @@ function evalBoundedQuantification(node, ctx) {
         if (!boundContext.hasOwnProperty("quant_bound")) {
             boundContext["quant_bound"] = {};
         }
-        boundContext["quant_bound"][quantIdent] = domVal;
+
+        if(tupOfIdents == null){
+            boundContext["quant_bound"][quantIdent] = domVal;
+        } else{
+            // Handle identifier tuple.
+            for(var ind = 0; ind < quantIdent.length; ind++){
+                boundContext["quant_bound"][quantIdent[ind]] = domVal.getValues()[ind];
+            }
+        }
+
         evalLog("quantDomain val:", domVal);
         evalLog("boundContext:", boundContext);
         let ret = evalExpr(quant_expr, boundContext.clone());
