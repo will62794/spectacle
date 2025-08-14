@@ -1335,12 +1335,15 @@ function makeSvgAnimObj(tlaAnimElem) {
         let nodes = attrs.applyArg(new StringValue("V"));
         let edges = attrs.applyArg(new StringValue("E"));
         let nodeAttrsFn = attrs.applyArg(new StringValue("nodeAttrsFn"));
+        console.log(attrs)
+        let edgeAttrsFn = attrs.applyArg(new StringValue("edgeAttrsFn"));
 
         // console.log("nodes:", nodes);
         // console.log("edges:", edges);
         // console.log("labelFn:", labelFn);
 
         let graphvizStr = `digraph {\n`;
+        // Add nodes and any attributes.
         for (let i = 0; i < nodes.getElems().length; i++) {
             let node = nodes.getElems()[i];
             let nodeStr = node.toString();
@@ -1356,11 +1359,19 @@ function makeSvgAnimObj(tlaAnimElem) {
             let nodeAttrsStr = Object.entries(nodeAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
             graphvizStr += `  ${nodeStr} [${nodeAttrsStr}];\n`;
         }
+
+        // Add edges and any attributes.
         for (let i = 0; i < edges.getElems().length; i++) {
             let edge = edges.getElems()[i];
+            let edgeAttrsObj = {};
+            edgeAttrsFn.applyArg(edge).getDomain().forEach(v => {
+                let val = edgeAttrsFn.applyArg(edge).applyArg(v);
+                edgeAttrsObj[v.getVal()] = val.getVal();
+            });
             let from = edge.getValues()[0].getVal();
             let to = edge.getValues()[1].getVal();
-            let edgeStr = `  ${from} -> ${to};`;
+            let edgeAttrsStr = Object.entries(edgeAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
+            let edgeStr = `  ${from} -> ${to} [${edgeAttrsStr}];`;
             graphvizStr += `${edgeStr}\n`;
         }
         graphvizStr += `}`;

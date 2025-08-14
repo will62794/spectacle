@@ -119,7 +119,7 @@ Image(x, y, width, height, href, attrs) ==
 \* Group element. 'children' is as a sequence of elements that will be contained in this group.
 Group(children, attrs) == SVGElem("g", attrs, children, "")
 
-DiGraph(V, E, nodeAttrsFn) == SVGElem("digraph", [V |-> V, E |-> E, nodeAttrsFn |-> nodeAttrsFn], <<>>, "")
+DiGraph(V, E, nodeAttrsFn, edgeAttrsFn) == SVGElem("digraph", [V |-> V, E |-> E, nodeAttrsFn |-> nodeAttrsFn, edgeAttrsFn |-> edgeAttrsFn], <<>>, "")
 
 Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
 
@@ -139,7 +139,11 @@ nodeAttrsFn(n) == [
         ELSE IF \E v \in frontier : v[1] = n THEN "lightgray"
         ELSE "white"
 ]
-AnimView == Group(<<DiGraph(nodes,edges,[n \in Node |-> nodeAttrsFn(n)])>>, [i \in {} |-> {}])
+edgeAttrsFn(e) == [
+    label |-> "",
+    color |-> "black"
+]
+AnimView == Group(<<DiGraph(nodes,edges,[n \in Node |-> nodeAttrsFn(n)], [e \in edges |-> edgeAttrsFn(e)])>>, [i \in {} |-> {}])
 
 
 
