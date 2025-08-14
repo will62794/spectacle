@@ -2238,8 +2238,8 @@ class TLASpec {
             //
 
             // TODO: Do recursively.    
-            console.log("NEXTNODE:", nextNode);
-            console.log("NEXT_CHILDR:", nextNode.namedChildren);
+            // console.log("NEXTNODE:", nextNode);
+            // console.log("NEXT_CHILDR:", nextNode.namedChildren);
 
             actions = self.parseActionsFromNode(nextNode);
             console.log("parsed actions:", actions);
