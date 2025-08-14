@@ -1642,11 +1642,10 @@ class TLASpec {
             let lhs = node.children[0];
             let symbol = node.children[1];
             let rhs = node.children[2];
-            console.log("infix:", lhs, symbol, rhs);
+            evalLog("infix:", lhs, symbol, rhs);
             
             // Disjunction A \/ B.
             if(symbol.type === "lor"){
-                console.log("PARSING LOR ACTION");
                 return this.parseActionsFromNode(lhs).concat(this.parseActionsFromNode(rhs));
             }
         }
@@ -2027,7 +2026,6 @@ class TLASpec {
                 // self.globalDefTable[opName] = op_defs[defUniqueId];
                 self.globalDefTable[defUniqueId] = op_defs[defUniqueId];
                 // self.globalDefTableObj.addDefinition(opName, defObject);
-                console.log("added recursive decl:", opName);
 
                 cursor.gotoParent();
                 if(isLocalDef){
@@ -2099,7 +2097,6 @@ class TLASpec {
                 // record a pointer to us.
                 let prevRecOp = _.find(op_defs, o => o.name === opName && o.recursive_declaration);
                 if(prevRecOp !== undefined){
-                    console.log("found prev rec op:", prevRecOp);
                     op_defs[prevRecOp.id]["recursive_definition_id"] = defUniqueId;
                 }
 
