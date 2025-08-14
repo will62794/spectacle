@@ -60,7 +60,7 @@ let model = {
     replResult: null,
     replError : false,
     constantsPaneHidden: false,
-    selectedTab: Tab.SpecEditor,
+    selectedTab: Tab.StateSelection,
     selectedTraceTab: TraceTab.Trace,
     rootModName: "",
     debug: false,
@@ -2344,16 +2344,19 @@ function stateSelectionPane(hidden){
 
     let fetchingInProgress = model.rootModName.length === 0 && !model.loadSpecFailed;
 
+    let stateChoicesDiv =
+        m("div", { id: "initial-states", class: "tlc-state" }, [
+            model.currTrace.length === 0 && model.nextStatePred !== null ? m("div", {style: "padding:10px;", id:"choose-initial-state-title"}, "Choose Initial State") : m("span"),
+            model.nextStatePred === null && !fetchingInProgress ? m("div", {style: "padding:20px;"}, "No transition relation found. Spec can be explored in the REPL.") : m("span"),
+            componentNextStateChoices()
+        ]);
+
     // return m("div", {id:"mid-pane", hidden: hidden}, 
     return m("div", {id: "state-choices-pane", hidden: hidden}, [
         // chooseConstantsPane(),
         fullNextStatesSwitch,
         // m("h5", { id: "poss-next-states-title", class: "" }, (model.currTrace.length > 0) ? "Choose Next Action" : "Choose Initial State"),
-        m("div", { id: "initial-states", class: "tlc-state" }, [
-            model.currTrace.length === 0 && model.nextStatePred !== null ? m("div", {style: "padding:10px;", id:"choose-initial-state-title"}, "Choose Initial State") : m("span"),
-            model.nextStatePred === null && !fetchingInProgress ? m("div", {style: "padding:20px;"}, "No transition relation found. Spec can be explored in the REPL.") : m("span"),
-            componentNextStateChoices()
-        ]),
+        model.traceLoadingInProgress ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...") : stateChoicesDiv,
     ]);    
 }
 
