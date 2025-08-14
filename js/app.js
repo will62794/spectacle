@@ -2076,8 +2076,10 @@ async function handleCodeChange(editor, changes) {
     // parsedSpecTree = parseSpec(newText, model.specPath);
 
     let spec = new TLASpec(newText, model.specPath);
+    let parseStartTime = performance.now();
     return spec.parse().then(function(){
-        console.log("SPEC WAS PARSED.", spec);
+        let parseEndTime = performance.now();
+        console.log("SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
         onSpecParse(newText, spec.spec_obj, spec);
         m.redraw(); //explicitly re-draw on promise resolution.
     }).catch(function(e){
