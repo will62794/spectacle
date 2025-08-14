@@ -3271,6 +3271,20 @@ function handleKeyboardNavigation(event) {
         return;
     }
 
+    // Check for Ctrl/Cmd + Shift + L combination
+    // Switches current app path to local server (FOR DEBUGGING ONLY).
+    if ((event.ctrlKey) && event.shiftKey && event.key === 'L') {
+        console.log('Ctrl/Cmd + Shift + L pressed!');
+        let currBase = window.location.href.split("#!")[0];
+        let currTail = window.location.href.split("#!")[1];
+        console.log("currBase", currBase);
+        let newBase = 'http://127.0.0.1:8000';
+        let newLoc = newBase + "#!" + currTail;
+        console.log("newLoc", newLoc);
+        window.location.href = newLoc;
+        return;
+    }
+
     if (event.key === 'ArrowLeft' && model.currTrace.length > 1) {
         traceStepBack();
     } else if (event.key === 'ArrowRight') {
