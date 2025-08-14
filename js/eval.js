@@ -880,7 +880,7 @@ class SyntaxRewriter {
             rewriteBatch = this.genSyntaxRewrites(specTree);
         }
         const duration = (performance.now() - start).toFixed(1);
-        evalLog(`Completed spec rewriting in ${duration}ms`)
+        console.log(`Completed spec rewriting in ${duration}ms`)
         // console.log(specTextRewritten);
         return specTextRewritten;
     }
