@@ -3195,12 +3195,10 @@ async function loadApp() {
 
     // Check for given spec in URL args.
     specPathArg = m.route.param("specpath");
-    console.log("specpatharg", specPathArg);
     // specPathArg = urlParams["specpath"];
 
     // Check for repl mode.
     replArg = m.route.param("repl");
-    console.log("replArg", replArg);
     model.replMode = replArg === true;
 
     // Load given spec.

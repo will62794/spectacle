@@ -1968,7 +1968,7 @@ class TLASpec {
             }
 
             if(node.type === "recursive_declaration"){
-                console.log("RECURSIVE DECLARATION:", node);
+                // console.log("RECURSIVE DECLARATION:", node);
 
                 cursor.gotoFirstChild();
 
@@ -1993,9 +1993,9 @@ class TLASpec {
                 console.log("NODE:", node);
 
                 let opName = node.namedChildren[0].text;
-                console.log("OP NAME:", opName);
+                // console.log("OP NAME:", opName);
                 let placeholders = node.namedChildren.filter(n => n.type === "placeholder");
-                console.log("PLACEHOLDERS:", placeholders);
+                // console.log("PLACEHOLDERS:", placeholders);
 
                 let parentModuleName = root_mod_name;
                 let defUniqueId = self.nextGlobalDefId();
