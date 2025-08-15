@@ -932,6 +932,22 @@ class SyntaxRewriter {
     // Apply a given set of text rewrites to a given source text. Assumes the given
     // 'text' argument is a string given as a list of lines.
     applySyntaxRewrites(text, rewrites) {
+        // console.log("num rewrites:", rewrites.length);
+
+        // Sort rewrites from bottom to top, with later rows coming first. This
+        // allows us to apply batches of rewrites without worrying about earlier
+        // rewrites in the document affecting positions of later ones. 
+        rewrites.sort((a, b) => {
+            let aRow = a["startPosition"]["row"];
+            let bRow = b["startPosition"]["row"];
+            if (aRow === bRow) {
+                // If same row, sort by column descending
+                return b["startPosition"]["column"] - a["startPosition"]["column"];
+            }
+            // Sort by row descending
+            return bRow - aRow;
+        });
+
         let lines = text.split("\n");
         // let sourceMapFn = (line, col) => (line, col);
 
@@ -1130,7 +1146,7 @@ class SyntaxRewriter {
                             endPosition: node.endPosition,
                             newStr: ""
                         });
-                        return sourceRewrites;
+                        // return sourceRewrites;
                     }
 
                     // Comments.
@@ -1143,7 +1159,7 @@ class SyntaxRewriter {
                             // deleteRow: node.startPosition["row"]
                         }
                         sourceRewrites.push(rewrite);
-                        return sourceRewrites;
+                        // return sourceRewrites;
                     }
 
                     // Bound infix ops.
@@ -1177,7 +1193,7 @@ class SyntaxRewriter {
                                 newStr: outStr
                             }
                             sourceRewrites.push(rewrite);
-                            return sourceRewrites;
+                            // return sourceRewrites;
                         }
 
                     }
@@ -1263,7 +1279,7 @@ class SyntaxRewriter {
                                 newStr: outStr
                             }
                             sourceRewrites.push(rewrite);
-                            return sourceRewrites;
+                            // return sourceRewrites;
                         }
 
                     }
