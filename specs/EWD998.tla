@@ -198,6 +198,6 @@ MessageCount ==
         ("fill" :> "black" @@ "text-anchor" :> "middle" @@ "transform" :> "translate(22.5 18) scale(0.5 0.5)"))]
 
 AnimView ==
-    Group(NodeCount \o RingNetwork \o Token \o MessageCount, ("transform" :> "translate(20 20) scale(1.5 1.5)"))
+    Group(NodeCount \o RingNetwork \o Token \o MessageCount, ("transform" :> "translate(40 40) scale(1.75 1.75)"))
 
 =============================================================================

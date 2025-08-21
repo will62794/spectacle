@@ -153,7 +153,7 @@ BoatElem ==
         BoatActorElems>>, [i \in {} |-> {}])
 RiverElem == Image(55, 5, 80, 80, RiverIcon, [style |-> "opacity:0.3;transform:scale(1,1.75); /* W3C */"])
 
-AnimView == Group(<<SideElem(1), SideElem(2), SuccessElem(2), RiverElem, BoatElem>>, [i \in {} |-> {}])
+AnimView == Group(<<SideElem(1), SideElem(2), SuccessElem(2), RiverElem, BoatElem>>, [transform |-> "translate(60, 40) scale(1.75)"])
 
 
 
