@@ -213,6 +213,6 @@ TMTextElems == <<
 TextElems == RMTextElems \o TMTextElems
 
 
-AnimView == Group(RMElems \o <<TMElem>> \o TextElems, [i \in {} |-> {}])
+AnimView == Group(RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.25)"])
 
 =============================================================================

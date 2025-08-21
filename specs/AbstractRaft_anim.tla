@@ -272,17 +272,17 @@ c2 == Circle(20, 10, 5, [fill |-> "red"])
 \* ServerIdDomain == 1..Cardinality(Server)
 RMIdDomain == 1..Cardinality(Server)
 Spacing == 40
-XBase == 10
+XBase == 30
 logEntryStroke(i,ind) == IF \E c \in committed : c[1] = ind /\ c[2] = log[i][ind] THEN "orange" ELSE "black"
-logEntry(i, ybase, ind) == Group(<<Rect(20 * ind + 100, ybase, 18, 18, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
-                                   Text(20 * ind + 105, ybase + 15, ToString(log[i][ind]), ("text-anchor" :>  "start"))>>, [h \in {} |-> {}])
+logEntry(i, ybase, ind) == Group(<<Rect(20 * ind + (XBase + 100), ybase - 5, 18, 18, [fill |-> "lightgray", stroke |-> logEntryStroke(i,ind)]), 
+                                   Text(20 * ind + (XBase + 105), ybase + 8, ToString(log[i][ind]), ("text-anchor" :>  "start" @@ "font-size" :> "12px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 5)]
 
 
 CrownIcon == "https://www.svgrepo.com/download/274106/crown.svg"
 
-CrownElem(rmid, i) == Image(0, i * Spacing - 6, 15, 15, CrownIcon, IF state[rmid] # Primary THEN [hidden |-> "true"] ELSE <<>>)
+CrownElem(rmid, i) == Image(20, i * Spacing - 6, 15, 15, CrownIcon, IF state[rmid] # Primary THEN [hidden |-> "true"] ELSE <<>>)
 
 cs == [i \in RMIdDomain |-> 
         LET rmid == ToString(RMId[i]) IN
@@ -307,7 +307,7 @@ labels == [i \in RMIdDomain |->
 \* 
 \* The overall animation view as one big SVG element.
 \* 
-AnimView == Group(cs \o labels \o logElems, [i \in {} |-> {}])
+AnimView == Group(cs \o labels \o logElems, [transform |-> "translate(40, 40) scale(1.25)"])
 
 
 
