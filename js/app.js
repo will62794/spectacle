@@ -2671,10 +2671,19 @@ function animationPane(hidden) {
             ]);
         }
 
+
+        let svgParams = { 
+            width: "100%", 
+            height: "100%", 
+            style: { border: "0px solid red" } 
+        }
+
+        // svgParams.viewBox =  "0 0 320 320";
+
         return m("div", { id: "trace-and-buttons-container", hidden: hidden }, [
             componentButtonsContainer(),
             traceStateCounter(),
-            m("div", { id: "anim-div" }, m("svg", { width: "100%", height: "100%", viewBox: "0 0 200 240" }, [viewSvgObj]))
+            m("div", { id: "anim-div", }, m("svg", svgParams, [viewSvgObj]))
         ]);
     }
 }
