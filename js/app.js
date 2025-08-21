@@ -1335,7 +1335,7 @@ function makeSvgAnimObj(tlaAnimElem) {
         let nodes = attrs.applyArg(new StringValue("V"));
         let edges = attrs.applyArg(new StringValue("E"));
         let nodeAttrsFn = attrs.applyArg(new StringValue("nodeAttrsFn"));
-        console.log(attrs)
+        // console.log(attrs)
         let edgeAttrsFn = attrs.applyArg(new StringValue("edgeAttrsFn"));
 
         // console.log("nodes:", nodes);
@@ -1348,7 +1348,7 @@ function makeSvgAnimObj(tlaAnimElem) {
             let node = nodes.getElems()[i];
             let nodeStr = node.toString();
 
-            console.log(nodeAttrsFn.getDomain())
+            // console.log(nodeAttrsFn.getDomain())
 
             let nodeAttrsObj = {};
             nodeAttrsFn.applyArg(node).getDomain().forEach(v => {
