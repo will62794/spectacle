@@ -463,7 +463,7 @@ safetyViolationElems ==  <<violationElem(5)>>
 \* 
 \* Animation view.
 \* 
-AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems, [i \in {} |-> {}])
+AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems, [transform |-> "translate(120, 30) scale(1.75)"])
 
 
 =============================================================================
