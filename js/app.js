@@ -2719,7 +2719,7 @@ function replPane(hidden) {
                 value: model.replInput,
                 placeholder: "Enter TLA+ expression."
             }),
-            m("h5", { id: "repl-tifftle", class: "panje-title", style:"margin-top:20px" }, "Result"),
+            m("h5", { id: "repl-tifftle", class: "panje-title", style:"margin-top:20px" }, "Output"),
             m("div", { id: "repl-result" }, replResult())
         ])
     ]);
@@ -2730,13 +2730,13 @@ function checkPane(hidden) {
     if(model.invariantCheckingResponse !== undefined){
         invCheckStatesExplored = model.invariantCheckingResponse.numStatesExplored; 
     }
-    return m("div", {hidden: hidden, style: {margin: "20px"}}, [
+    return m("div", {hidden: hidden, style: {"margin-top": "20px"}}, [
         m("div", {style: {display: "flex", gap: "10px"}}, [
             m("input", {
                 class: "form-control",
                 placeholder: "Enter TLA+ state predicate.",
                 value: model.invariantExprToCheck,
-                style: {width: "500px", "font-family": "monospace", "font-size": "14px"},
+                style: {width: "500px", "font-family": "monospace"},
                 oninput: (e) => model.invariantExprToCheck = e.target.value
             }),
             m("button", {
