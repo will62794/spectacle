@@ -1371,7 +1371,7 @@ function makeSvgAnimObj(tlaAnimElem) {
             let from = edge.getValues()[0].getVal();
             let to = edge.getValues()[1].getVal();
             let edgeAttrsStr = Object.entries(edgeAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
-            let edgeStr = `  ${from} -> ${to} [${edgeAttrsStr}];`;
+            let edgeStr = `  "${from}" -> "${to}" [${edgeAttrsStr}];`;
             graphvizStr += `${edgeStr}\n`;
         }
         graphvizStr += `}`;
