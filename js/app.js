@@ -1776,9 +1776,18 @@ function componentTraceViewer(hidden) {
     if (model.traceLoadingError) {
         return m("div", { hidden: hidden }, [
             m("div", { class: "pane-heading", id: "", style: "margin-top: 10px;"  }, [
-                m("div", { class: "alert alert-danger" }, [
-                    m("strong", "Error loading trace: "),
-                    model.traceLoadingError
+                m("div", { class: "alert alert-danger d-flex justify-content-between align-items-center" }, [
+                    m("div", [
+                        m("strong", "Error loading trace: "),
+                        model.traceLoadingError
+                    ]),
+                    m("button", {
+                        class: "btn btn-outline-danger btn-sm",
+                        onclick: () => {
+                            model.traceLoadingError = null;
+                            resetTrace();
+                        }
+                    }, "Reset Trace")
                 ])
             ])
         ]);
@@ -2358,7 +2367,7 @@ function stateSelectionPane(hidden){
         // chooseConstantsPane(),
         fullNextStatesSwitch,
         // m("h5", { id: "poss-next-states-title", class: "" }, (model.currTrace.length > 0) ? "Choose Next Action" : "Choose Initial State"),
-        model.traceLoadingInProgress ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...") : stateChoicesDiv,
+        model.traceLoadingInProgress || model.traceLoadingError ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...") : stateChoicesDiv,
     ]);    
 }
 
