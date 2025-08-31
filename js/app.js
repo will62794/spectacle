@@ -17,8 +17,9 @@ let Tab = {
     StateSelection: 1,
     Constants: 2,
     SpecEditor: 3,
-    Load: 4,
-    EvalGraph: 5
+    SpecAnimationEditor: 4,
+    Load: 5,
+    EvalGraph: 6
 }
 
 let TraceTab = {
@@ -1438,11 +1439,13 @@ function getActionLabelText(actionLabel, quantBounds) {
 }
 
 function animationViewForTraceState(state){
-    let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
+    // let animViewDef = model.spec.getDefinitionByName(model.animViewDefName)
+    let animViewDef = model.animSpec.getDefinitionByName(model.animViewDefName)
+    let viewNode = animViewDef.node;
     let initCtx = new Context(null, state, model.specDefs, {}, model.specConstVals);
-    initCtx.setGlobalDefTable(model.spec.globalDefTable);
-    initCtx.setSpecObj(model.spec);
-    initCtx["defns_curr_context"] = model.spec.getDefinitionByName(model.animViewDefName)["curr_defs_context"];
+    initCtx.setGlobalDefTable(model.animSpec.globalDefTable);
+    initCtx.setSpecObj(model.animSpec);
+    initCtx["defns_curr_context"] = animViewDef["curr_defs_context"];
     let start = performance.now();
     // evalNodeGraph = [];
     try{
@@ -1480,7 +1483,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
     let actionLabelObj = getActionLabelText(actionLabel, stateQuantBounds);
     let actionLabelText = actionLabelObj.name + actionLabelObj.params;
 
-    model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName);
+    model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName) || model.animationExists === true;
     let vizSvg = m("svg", { width: 0, height: 0 }, []);
 
     if (model.animationExists && model.enableAnimationView) {
@@ -1999,6 +2002,12 @@ function onSpecParse(newText, parsedSpecTree, spec){
 
     model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName);
 
+    // If an animation view definition exists in the main spec itself, then we prefer to use that.
+    // Otherwise, we use the animation view definition from the separate animation spec module.
+    if(model.animationExists){
+        model.animSpec = model.spec;
+    }
+
     if(hasNext){
         model.nextStatePred = model.spec.getDefinitionByName("Next")["node"];
     }
@@ -2326,6 +2335,14 @@ function componentHiddenStateVars(hidden) {
     // return m("div", { id: "choose-constants-container" }, componentChooseConstants());
 // }
 
+function specAnimationEditorPane(hidden){
+    return m("div", { id: "code-anim-input-pane", hidden:hidden }, [
+        m("div", { id: "code-anim-container" }, [
+            m("textarea", { id: "code-anim-input" })
+        ])
+    ]);
+}
+
 function specEditorPane(hidden){
     return m("div", { id: "code-input-pane", hidden:hidden }, [
         m("div", { id: "code-container" }, [
@@ -2480,6 +2497,12 @@ function headerTabBar() {
         m("li", {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
+            onclick: () => model.selectedTab = Tab.SpecAnimationEditor,
+            // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
+        }, m("a", {class: model.selectedTab === Tab.SpecAnimationEditor ? "nav-link active" : "nav-link"}, "Animation Spec")),
+        m("li", {
+            // id: "spec-editor-tab-button", 
+            class: "nav-item",
             onclick: () => model.selectedTab = Tab.Load,
             // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
         }, m("a", {class: model.selectedTab === Tab.Load ? "nav-link active" : "nav-link"}, "Load"))
@@ -2524,6 +2547,7 @@ function midPane() {
         stateSelectionPane(model.selectedTab !== Tab.StateSelection),
         componentChooseConstants(model.selectedTab !== Tab.Constants),
         specEditorPane(model.selectedTab !== Tab.SpecEditor),
+        specAnimationEditorPane(model.selectedTab !== Tab.SpecAnimationEditor),
         loadPane(model.selectedTab !== Tab.Load)
     ];
     let debug_tabs = [
@@ -3035,6 +3059,37 @@ function loadSpecFromPath(specPath){
     // Download the specified spec and load it in the editor pane.
     return m.request(specPath, { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
+        let animSpecPath = specPath.replace(".tla", "_anim.tla");
+        m.request(animSpecPath, { responseType: "text" }).then(function(animText){
+            console.log("found animText", animText);
+            model.specAnimText = animText;
+            model.animationExists = true;
+
+
+            let spec = new TLASpec(animText, animSpecPath);
+            let parseStartTime = performance.now();
+            console.log("PARSING ANIM SPEC", animSpecPath);
+            return spec.parse().then(function(){
+                let parseEndTime = performance.now();
+                console.log("ANIM SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
+                
+                model.animSpec = spec;
+                model.animationExists = true;
+                // let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
+
+                
+                // onSpecParse(newText, spec.spec_obj, spec);
+                // m.redraw(); //explicitly re-draw on promise resolution.
+            }).catch(function(e){
+                console.log("Error parsing and loading spec.", e);
+                model.errorObj = {parseError: true, obj: e, message: "Error parsing spec."};
+            });
+
+            // loadSpecText(specText, specPath);
+        }).catch(function(e){
+            console.log("No animation spec found for ", specPath);
+            // loadSpecText(specText, specPath);
+        });
     }).catch(function(e) {
         console.log("Error loading file ", specPath, e);
         model.loadSpecFailed = true;
@@ -3078,6 +3133,13 @@ async function loadApp() {
                 });
                 // Set font size using CSS
                 codeEditor.getWrapperElement().style.fontSize = "13px";
+            }
+            const codeAnimInput = document.getElementById('code-anim-input');
+            if(codeAnimInput){
+                codeAnimEditor = CodeMirror.fromTextArea(codeAnimInput, {
+                    lineNumbers: true,
+                    showCursorWhenSelecting: true,
+                });
             }
         },
         onupdate: function () {

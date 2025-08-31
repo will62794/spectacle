@@ -37,6 +37,11 @@ const TLA_COMMUNITY_MODULES = [
     "UndirectedGraphs"
 ]
 
+// Custom internal modules that can be loaded specially.
+const CUSTOM_INTERNAL_MODULES = [
+    "Animation"
+]
+
 const TLA_COMMUNITY_MODULES_BASE_URL = "https://raw.githubusercontent.com/tlaplus/CommunityModules/master/modules";
 
 // Simple assertion utility.
@@ -1136,6 +1141,7 @@ class SyntaxRewriter {
 
                     // Detect errors.
                     if (node.type === "ERROR") {
+                        console.log("PARSING ERROR", node);
                         throw new Error("Parsing error.", { cause: node });
                     }
 
@@ -1442,6 +1448,10 @@ class TLASpec {
 
         // console.log("fetching modules:", modulesToFetch);
         let modulePromises = modulesToFetch.map(function (modName) {
+
+            if(CUSTOM_INTERNAL_MODULES.includes(modName)){
+                return fetch(`${baseSpecPath}/lib/${modName}.tla`).then(response => response.text());
+            }
 
             // Look up CommunityModule imports from hard-coded repo.
             // TODO: This will likely not work properly unitl we handle LOCAL INSTANCE 

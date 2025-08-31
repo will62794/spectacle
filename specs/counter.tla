@@ -1,8 +1,11 @@
 ---- MODULE counter ----
 EXTENDS TLC, Naturals
 
-VARIABLE x
+VARIABLE xval
 
-Init == x = 0
-Next == x' = x + 1
+Init == xval = 0
+Next == xval' = xval + 1
+
+
+
 ====
