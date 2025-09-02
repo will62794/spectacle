@@ -34,7 +34,8 @@ const TLA_COMMUNITY_MODULES = [
     "Graphs",
     "Relation",
     "SequencesExt",
-    "UndirectedGraphs"
+    "UndirectedGraphs",
+    "SVG"
 ]
 
 const TLA_COMMUNITY_MODULES_BASE_URL = "https://raw.githubusercontent.com/tlaplus/CommunityModules/master/modules";
