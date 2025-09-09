@@ -2811,11 +2811,14 @@ function resizeGutter() {
         onmousedown: (e) => {
             // resizer(e)
             e.preventDefault()
+            e.redraw = false;
+
             resize_initial_pos_x = e.x;
             window.addEventListener('mousemove', resize_mousemove);
             window.addEventListener('mouseup', resize_mouseup);
         },
         onmouseup: (e) => {
+            e.redraw = false;
             window.removeEventListener('mousemove', resize_mousemove);
         },
         ondragstart : function() { return false; }
