@@ -572,7 +572,7 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
     }
     let actionNameDiv = [m("div", {
         class: classList.join(" "),
-        onclick: function () {
+        onclick: function (e) {
             if (!actionDisabled && actionLabelObj.params.length == 0) {
                 let hash = nextStatesForAction[0]["state"].fingerprint();
                 console.log("choose next hash:", hash);
