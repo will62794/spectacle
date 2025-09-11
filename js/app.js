@@ -1482,6 +1482,12 @@ function animationViewForTraceState(state){
     const duration = (performance.now() - start).toFixed(1);
     model.animRenderTime = duration;
     console.log(`Animation view computed in ${duration}ms.`);
+
+    //
+    // Useful watch expression to determine memory leakage:
+    // Object.keys(model.spec.globalDefTable).length
+    //
+
     // displayEvalGraph(evalNodeGraph);
     viewVal = ret[0]["val"];
     let viewSvgObj = makeSvgAnimObj(viewVal);
