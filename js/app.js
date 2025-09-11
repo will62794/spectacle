@@ -73,6 +73,7 @@ let model = {
     generatingInitStates: false,
     // Special definition that will enable animation feature.
     animViewDefName: "AnimView",
+    animRenderTime: null,
     lockedTrace: null,
     lockedTraceActions: null,
     showStateDiffsInSelection: false,
@@ -1455,6 +1456,7 @@ function animationViewForTraceState(state){
     }
     // console.log("evalNodeGraph:", evalNodeGraph.length);
     const duration = (performance.now() - start).toFixed(1);
+    model.animRenderTime = duration;
     console.log(`Animation view computed in ${duration}ms.`);
     // displayEvalGraph(evalNodeGraph);
     viewVal = ret[0]["val"];
@@ -2654,13 +2656,19 @@ function replResult(){
     }
 }
 
-function traceStateCounter(){
-    let style = {"font-size": "14px"};
-    if(model.forwardHistory.length > 0){
-        return m("div", {style: style}, `Trace state ${model.currTrace.length} / ${model.currTrace.length + model.forwardHistory.length}`);
-    } else{
-        return m("div", {style: style}, `Trace state ${model.currTrace.length}`);
+function traceStateCounter() {
+    let style = { "font-size": "14px" };
+    let traceStateStr = "";
+    if (model.forwardHistory.length > 0) {
+        traceStateStr = `Trace state ${model.currTrace.length} / ${model.currTrace.length + model.forwardHistory.length}`;
+    } else {
+        traceStateStr = `Trace state ${model.currTrace.length}`;
     }
+
+    return m("div", { style: style }, [
+        m("span", {}, traceStateStr),
+        m("span", { style: { fontSize: "10px", color: "gray", "margin-left": "10px" } }, `  (Animation rendered in ${model.animRenderTime}ms)`)
+    ]);
 }
 
 function animationPane(hidden) {
