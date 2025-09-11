@@ -5102,7 +5102,7 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
     // branch, which contains a computed value along with a list of 
     // generated states.
     let initCtx = new Context(null, emptyInitState, defns, {}, constvals, null, null, moduleTable);
-    initCtx.setGlobalDefTable(globalDefTable);
+    initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
     initCtx["defns_curr_context"] = spec.getDefinitionByName("Init")["curr_defs_context"];
 
@@ -5130,7 +5130,7 @@ function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, gl
     evalLog("currStateVars:", currStateVars);
 
     let initCtx = new Context(null, currStateVars, defns, {}, constvals, null, null, moduleTable);
-    initCtx.setGlobalDefTable(globalDefTable);
+    initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
     initCtx["defns_curr_context"] = spec.getDefinitionByName("Next")["curr_defs_context"];
     // console.log("currStateVars:", currStateVars);
