@@ -1464,7 +1464,7 @@ function getActionLabelText(actionLabel, quantBounds) {
 function animationViewForTraceState(state){
     let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
     let initCtx = new Context(null, state, model.specDefs, {}, model.specConstVals);
-    initCtx.setGlobalDefTable(model.spec.globalDefTable);
+    initCtx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
     initCtx.setSpecObj(model.spec);
     initCtx["defns_curr_context"] = model.spec.getDefinitionByName(model.animViewDefName)["curr_defs_context"];
     let start = performance.now();
@@ -1624,7 +1624,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
         let ctx = new Context(null, state, model.specDefs, {}, model.specConstVals);
         // All definitions in the root module should be accessible.
         ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
-        ctx.setGlobalDefTable(model.spec.globalDefTable);
+        ctx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
         ctx.setSpecObj(model.spec);
         let exprVal = evalExprStrInContext(ctx, expr);
         let cols = [
@@ -1660,7 +1660,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
 
             // All definitions in the root module should be accessible.
             ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
-            ctx.setGlobalDefTable(model.spec.globalDefTable);
+            ctx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
             ctx.setSpecObj(model.spec);
             exprVal = evalExprStrInContext(ctx, model.traceExprInputText);
             // console.log("exprVal:", exprVal);
@@ -2747,7 +2747,7 @@ function replPane(hidden) {
                     try {
                         // All definitions in the root module should be accessible.
                         ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
-                        ctx.setGlobalDefTable(model.spec.globalDefTable);
+                        ctx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
                         ctx.setSpecObj(model.spec);
                         let res = evalExprStrInContext(ctx, model.replInput);
                         model.replResult = res;
