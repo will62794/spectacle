@@ -934,6 +934,13 @@ function updateTraceRouteParams() {
         delete newParams.explodedConstantExpr;
     }
 
+    // Update trace expressions.
+    if (model.traceExprs.length > 0) {
+        newParams["traceExprs"] = model.traceExprs;
+    } else {
+        delete newParams.traceExprs;
+    }
+
     // Update CONSTANT params.
     if (Object.keys(model.specConstInputVals).length !== 0) {
         Object.assign(newParams, { constants: model.specConstInputVals });
