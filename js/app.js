@@ -541,7 +541,11 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
             class: classList.join(" "), 
             "data-testid": "action-choice-param",
             // colspan: 2,
-            onclick: () => chooseNextState(hash, hashQuantBounds(quantBounds)),
+            onclick: (e) => {
+                // Explicit redraw will be triggered inside 'chooseNextState'.
+                e.redraw = false;
+                chooseNextState(hash, hashQuantBounds(quantBounds))
+            },
             // onmouseover: () => {
             //     // Enable if UI performance lag isn't too noticeable.
             //     console.log("onmouseover:", st["state"]);
@@ -571,6 +575,8 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
             if (!actionDisabled && actionLabelObj.params.length == 0) {
                 let hash = nextStatesForAction[0]["state"].fingerprint();
                 console.log("choose next hash:", hash);
+                // Explicit redraw will be triggered inside 'chooseNextState'.
+                e.redraw = false;
                 chooseNextState(hash);
             }
         }
@@ -664,7 +670,11 @@ function componentNextStateChoiceElement(stateObj, ind, actionLabel, diffOnly) {
         class: "init-state next-state-choice-full",
         style: `opacity: ${opac}%`,
         "data-testid": "next-state-choice",
-        onclick: () => chooseNextState(hash),
+        onclick: (e) => {
+            // Explicit redraw will be triggered inside 'chooseNextState'.
+            e.redraw = false;
+            chooseNextState(hash)
+        },
         // onmouseover: () => {
         //     model.nextStatePreview = state;
         // },
@@ -940,6 +950,9 @@ function actionIdForNextState(nextStateHash) {
     return actionId;
 }
 
+// Choose next state and re-compute next state choices. Note that 'updateTraceRouteParams'
+// will always trigger an explicit redraw so it's OK to diable an initial redraw on an event that triggers
+// this function.
 function chooseNextState(statehash_short, quantBoundsHash, rethrow = false) {
     // Clear forward history since we're taking a new path
     model.forwardHistory = [];
@@ -990,6 +1003,8 @@ function chooseNextState(statehash_short, quantBoundsHash, rethrow = false) {
     // Recrod the quant bounds used in the action as well in case we need to tell between two different actions
     // with the same type but different params that lead to the same state.
     model.currTraceActions.push([nextStateActionId, quantBoundsHash]);
+
+    // Update trace route params. Note that setting the route will also explicitly trigger a redraw.
     updateTraceRouteParams();
 
     const start = performance.now();
