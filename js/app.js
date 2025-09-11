@@ -182,6 +182,7 @@ const urlSearchParams = new URLSearchParams(window.location.search);
 const urlParams = Object.fromEntries(urlSearchParams.entries());
 let enableEvalTracing = false;
 let evalNodeGraphsPerAction = {};
+let evalNodeGraphsForAnimation = null;
 
 let invCheckerWebWorker = null;
 
@@ -1463,6 +1464,7 @@ function animationViewForTraceState(state){
     // evalNodeGraph = [];
     try{
         ret = evalExpr(viewNode, initCtx);
+        evalNodeGraphsForAnimation = evalNodeGraph;
     }
     catch(e){
         console.error(e);
@@ -2902,7 +2904,18 @@ function componentEvalGraphPane(hidden){
         actionSelectButtons = model.actions.map(action => m("button", {class: "btn btn-sm btn-outline-primary", onclick: () => {
             displayEvalGraph(evalNodeGraphsPerAction[action.id]);
         }}, action.name));
+
+
+       
     }
+
+    if(evalNodeGraphsForAnimation !== null){
+        let animGraph = m("button", {class: "btn btn-sm btn-outline-primary", onclick: () => {
+            displayEvalGraph(evalNodeGraphsForAnimation);
+        }}, "Animation")
+        actionSelectButtons.push(animGraph);
+    }
+    
     
     return m("div", {hidden: hidden}, [
         m("div", {class: "btn-group", role: "group", style: {"margin-left": "10px", "margin-bottom": "20px", "margin-top": "8px"}}, actionSelectButtons),
