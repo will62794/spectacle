@@ -2589,7 +2589,7 @@ function componentHiddenStateVars(hidden) {
 // }
 
 function specEditorPane(hidden){
-    return m("div", { id: "code-input-pane", hidden: hidden}, [
+    return m("div", { id: "code-input-pane", style: {display: hidden ? "none" : "block"}}, [
         m("div", { id: "code-container" }, [
             m("textarea", { id: "code-input" })
         ])
@@ -2744,7 +2744,13 @@ function headerTabBar() {
         m("li", {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
-            onclick: () => model.selectedTab = Tab.SpecEditor,
+            onclick: () => {
+                model.selectedTab = Tab.SpecEditor;
+                // Refresh the code editor.
+                setTimeout(() => {
+                    getCodeMirrorEditor().refresh();
+                }, 50);
+            },
             // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
         }, m("a", {class: model.selectedTab === Tab.SpecEditor ? "nav-link active" : "nav-link"}, "Spec")),
         m("li", {
@@ -3286,6 +3292,12 @@ function loadRouteParamsState() {
             }
         }
     }
+}
+
+function getCodeMirrorEditor() {
+    const $codeEditor = document.querySelector('.CodeMirror');
+    const editor = $codeEditor.CodeMirror;
+    return editor;
 }
 
 //
