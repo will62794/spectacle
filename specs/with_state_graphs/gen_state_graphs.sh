@@ -20,6 +20,6 @@ for spec in `ls $specarg.tla`; do
     # $tlc -deadlock -fp 10 -seed 10 -metadir "states/$spec" -dump jsonitf $spec.json -noGenerateSpecTE $spec
     
     # Generate DOT state graph and then convert it to JSON.
-    $tlc -fp 10 -seed 10 -deadlock -dump dot $spec.dot $spec
+    $tlc -fp 10 -seed 10 -deadlock -noGenerateSpecTE -dump dot $spec.dot $spec
     dot -Txdot_json -o $spec.dot.json $spec.dot
 done
