@@ -75,7 +75,7 @@ body {
     grid-template-rows: 20% 20% 20% 20% 20%;
   }
 
-    #constants-box {
+    #config-box {
         width:96%;
         /* height:100px; */
         /* height:20%; */
@@ -130,8 +130,8 @@ body {
 
   #choose-constants-elems{
       font-size: 14px;
-      font-family: monospace;
-      font-family: Menlo, Monaco, "Times";
+      /* font-family: monospace; */
+      /* font-family: Menlo, Monaco, "Times"; */
       /* float:left; */
       /* height:100%; */
       padding-left:10px;

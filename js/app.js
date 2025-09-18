@@ -15,7 +15,7 @@ let Pane = {
 
 let Tab = {
     StateSelection: 1,
-    Constants: 2,
+    Config: 2,
     SpecEditor: 3,
     Load: 4,
     EvalGraph: 5
@@ -31,6 +31,8 @@ let TraceTab = {
 let model = {
     specText: null,
     allInitStates: [],
+    initStatePredName: "Init",
+    nextStatePredName: "Next",
     nextStatePred: null,
     currState: null,
     currNextStates: [],
@@ -411,16 +413,81 @@ function toggleHiddenConstants(){
     model.constantsPaneHidden = !model.constantsPaneHidden;
 }
 
-function componentChooseConstants(hidden) {
-    // If there are CONSTANT declarations in the spec, we must
-    // instantiate them with some concrete values.
-    if (_.isEmpty(model.specConsts)) {
-        return m("span", {}, "");
+
+function hideButtonDiv(){
+    let text = model.constantsPaneHidden ? "Show CONSTANTs" : "Hide CONSTANTs";
+    let hideButtonDiv = m("div", { id: "hide-constants-button", class: "btn btn-primary btn-sm", onclick: toggleHiddenConstants }, text)
+    return hideButtonDiv;
+}
+
+function setConfigButtons(){
+    let setButtonDiv = m("button", { 
+        id: "set-constants-button", 
+        "data-testid": "set-constant-config-button",
+        class: "btn btn-sm btn-primary", 
+        disabled: (model.spec && !model.spec.hasDefinitionByName(model.nextStatePredName)) || (model.spec && !model.spec.hasDefinitionByName(model.initStatePredName)),
+        onclick: () => {
+            // clearRouteParams();
+
+            // TODO: Properly clear out trace route params and constants and stuff.
+            model.currTrace = [];
+            updateTraceRouteParams();
+            model.spec
+            loadSpecText(model.specText, model.specPath);
+            // setConstantValues();
+            // model.selectedTab = Tab.StateSelection;
+        } 
+    }, "Set Config");
+    if(model.constantsPaneHidden){
+        // return [hideButtonDiv()];
     }
-    // console.log("Instantiating spec constants.");
+    return [setButtonDiv];
+}
+
+function initNextDef(){
+    return m("div", { style: { "margin-top": "15px", "margin-bottom": "15px" } }, [
+        m("h6", "Initial and Transition Predicates"),
+        m("table", {}, [
+            m("tr", {}, [
+                m("td", { style: { "padding-right": "10px", "vertical-align": "middle" } }, "Init:"),
+                m("td", {}, [
+                    m("input", {
+                        class: "form-control form-control-sm" + (model.spec && !model.spec.hasDefinitionByName(model.initStatePredName) ? " is-invalid" : ""),
+                        type: "text",
+                        value: model.initStatePredName,
+                        title: model.spec && !model.spec.hasDefinitionByName(model.initStatePredName) ? "Definition not found in specification" : "",
+                        oninput: (e) => {
+                            model.initStatePredName = e.target.value;
+                        }
+                    }),
+                    m("div", { class: "invalid-tooltip", hidden:  model.spec && !model.spec.hasDefinitionByName(model.initStatePredName)}, "Definition not found in specification") 
+                ])
+            ]),
+            m("tr", {}, [
+                m("td", { style: { "padding-right": "10px", "vertical-align": "middle" } }, "Next:"),
+                m("td", {}, [
+                    m("input", {
+                        class: "form-control form-control-sm" + (model.spec && !model.spec.hasDefinitionByName(model.nextStatePredName) ? " is-invalid" : ""),
+                        type: "text",
+                        value: model.nextStatePredName,
+                        title: model.spec && !model.spec.hasDefinitionByName(model.nextStatePredName) ? "Definition not found in specification" : "",
+                        oninput: (e) => {
+                            let exists = model.spec.hasDefinitionByName(e.target.value);
+                            console.log("exists:", exists);
+                            model.nextStatePredName = e.target.value;
+                        }
+                    }),
+                    m("div", { class: "invalid-tooltip", hidden:  model.spec && !model.spec.hasDefinitionByName(model.nextStatePredName)}, "Definition not found in specification") 
+                ])
+            ])
+        ])
+    ]);
+}
+
+function chooseConstantsTable(specConsts){
 
     let chooseConstsElems = [];
-    for (const constDecl in model.specConsts) {
+    for (const constDecl in specConsts) {
         let newRow = m("tr", {}, [
             m("td", { style: { "vertical-align": "middle" } }, constDecl),
             m("td", { style: { "vertical-align": "middle" } }, "←"),
@@ -454,41 +521,26 @@ function componentChooseConstants(hidden) {
     }
 
     chooseConstsTable = m("table", {id:"choose-constants-table"}, chooseConstsElems);
+    return chooseConstsTable;
+}
 
+function componentChooseConfig(hidden) {
+    // If there are CONSTANT declarations in the spec, we must
+    // instantiate them with some concrete values.
+    // if (_.isEmpty(model.specConsts)) {
+        // return m("span", {}, "");
+    // }
+    // console.log("Instantiating spec constants.");
 
-    function hideButtonDiv(){
-        let text = model.constantsPaneHidden ? "Show CONSTANTs" : "Hide CONSTANTs";
-        let hideButtonDiv = m("div", { id: "hide-constants-button", class: "btn btn-primary btn-sm", onclick: toggleHiddenConstants }, text)
-        return hideButtonDiv;
-    }
+    let specConsts = model.specConsts || {};
 
-    function constantButtons(){
-        let setButtonDiv = m("button", { 
-            id: "set-constants-button", 
-            "data-testid": "set-constant-config-button",
-            class: "btn btn-sm btn-primary", 
-            onclick: () => {
-                setConstantValues();
-                model.selectedTab = Tab.StateSelection;
-            } 
-        }, "Set CONSTANTs");
-        if(model.constantsPaneHidden){
-            // return [hideButtonDiv()];
-        }
-        return [setButtonDiv];
-    }
-
-    return m("div", {id: "constants-box", hidden: hidden}, [
-        // m("div", { id: "constants-header" },
-        //     [
-                // Allow hiding of choose constants pane.
-                // m("div", { id: "constants-title", class: "pane-title", onclick: function(x){
-                //     model.constantsPaneHidden = !model.constantsPaneHidden;
-                // }}, "CONSTANT Instantiation"),
-        // m("div", { id: "set-constants-button" }, setButtonDiv),
-        m("div", { id: "constant-buttons-div" }, constantButtons()),
-            // ]),
-        m("div", { id: "choose-constants-elems", hidden: model.constantsPaneHidden }, chooseConstsTable),
+    return m("div", {id: "config-box", hidden: hidden, style: { "padding": "20px" }}, [
+        m("div", { id: "constant-buttons-div" }, setConfigButtons()),
+        m("div", { id: "constant-buttons-div", style: { "border-bottom": "1px solid #dee2e6" } }, initNextDef()),
+        m("div", { id: "choose-constants-elems", hidden: model.constantsPaneHidden || _.isEmpty(model.specConsts), style: { "margin-top": "15px" } }, [
+            m("h6", {style: { "margin-top": "15px" }}, "Instantiate Constants"),
+            chooseConstantsTable(specConsts)
+            ]),
     ]);
 }
 
@@ -855,10 +907,10 @@ function componentNextStateChoices(nextStates) {
 }
 
 
-function recomputeInitStates(){
+function recomputeInitStates(initDefName="Init"){
     let interp = new TlaInterpreter();
     let includeFullCtx = true;
-    initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec);
+    initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec, initDefName);
     initStates = initStates.map(c => ({"state": c["state"], "quant_bound": c["quant_bound"]}))
     model.allInitStates = _.cloneDeep(initStates);
     console.log("Set initial states: ", model.allInitStates);
@@ -885,7 +937,7 @@ function recomputeNextStates(fromState) {
 
             let nextStatesForAction;
             try {
-                nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
+                nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec, model.nextStatePredName)
             } catch (e) {
                 model.errorInfo = {
                     actionEvalError : action,
@@ -915,7 +967,7 @@ function recomputeNextStates(fromState) {
         }
         nextStates = nextStatesByAction;
     } else {
-        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec)
+        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec, model.nextStatePredName)
             .map(c => {
                 let deprimed = c["state"].deprimeVars();
                 return { "state": deprimed, "quant_bound": c["quant_bound"] };
@@ -1241,8 +1293,10 @@ function reloadSpec() {
     //     return;
     // }
 
-    let hasInit = model.spec.hasDefinitionByName("Init");
-    let hasNext = model.spec.hasDefinitionByName("Next");
+
+
+    let hasInit = model.spec.hasDefinitionByName(model.initStatePredName);
+    let hasNext = model.spec.hasDefinitionByName(model.nextStatePredName);
 
     // let hasInit = model.specTreeObjs["op_defs"].hasOwnProperty("Init");
     // let hasNext = model.specTreeObjs["op_defs"].hasOwnProperty("Next");
@@ -1258,6 +1312,7 @@ function reloadSpec() {
         return;
     }
 
+
     console.log("Generating initial states.");
     let interp = new TlaInterpreter();
     const start = performance.now();
@@ -1271,7 +1326,7 @@ function reloadSpec() {
     // let allInitStates;
     let initStates;
     try {
-        initStates = recomputeInitStates();
+        initStates = recomputeInitStates(model.initStatePredName);
     } catch (e) {
         console.error(e);
         console.error("Error computing initial states.");
@@ -2059,7 +2114,9 @@ function loadTraceWebWorker(stateHashList){
         stateHashList: stateHashList,
         newText: model.specText,
         specPath: model.specPath,
-        constValInputs: model.specConstInputVals
+        constValInputs: model.specConstInputVals,
+        initDefName: model.initStatePredName,
+        nextDefName: model.nextStatePredName
     });
 }
 
@@ -2117,14 +2174,14 @@ function onSpecParse(newText, parsedSpecTree, spec){
     model.specText = newText;
     model.specTreeObjs = parsedSpecTree;
     model.errorInfo = null;
-    model.actions = parsedSpecTree.actions;
+    // model.actions = parsedSpecTree.actions;
 
     model.currTrace = [];
     model.currNextStates = [];
     model.replInput = "";
 
-    let hasInit = model.spec.hasDefinitionByName("Init");
-    let hasNext = model.spec.hasDefinitionByName("Next");
+    let hasInit = model.spec.hasDefinitionByName(model.initStatePredName);
+    let hasNext = model.spec.hasDefinitionByName(model.nextStatePredName);
 
     // 
     // Now we allow specs without an Init or Next explicitly defined 
@@ -2150,7 +2207,10 @@ function onSpecParse(newText, parsedSpecTree, spec){
     model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName);
 
     if(hasNext){
-        model.nextStatePred = model.spec.getDefinitionByName("Next")["node"];
+        let nextDef = model.spec.getDefinitionByName(model.nextStatePredName);
+        model.nextStatePred = nextDef["node"];
+        model.actions = spec.parseActionsFromNode(nextDef["node"]);
+
     }
 
      // Load constants if given.
@@ -2173,7 +2233,7 @@ function onSpecParse(newText, parsedSpecTree, spec){
         console.log("specConsts:", model.specConsts);
         console.log("Switching to constants pane");
         // model.currPane = Pane.Constants; // TODO: Work out pane UI.
-        model.selectedTab = Tab.Constants
+        model.selectedTab = Tab.Config
         m.redraw();
         return;
     }
@@ -2547,6 +2607,8 @@ function loadSpecBox(hidden){
                 model.traceExprs = [];
                 model.rootModName = "";
                 model.explodedConstantExpr = null;
+                model.initStatePredName = "Init";
+                model.nextStatePredName = "Next";
                 updateTraceRouteParams();
                 loadSpecFromPath(model.specPath)
                 if(exampleSpecs[k].constant_vals !== undefined){
@@ -2626,10 +2688,14 @@ function headerTabBar() {
         m("li", {
             // id: "state-selection-tab-button",
             class: "nav-item",
-            hidden: _.isEmpty(model.specConsts),
-            onclick: () => model.selectedTab = Tab.Constants,
+            // hidden: _.isEmpty(model.specConsts),
+            onclick: () => model.selectedTab = Tab.Config,
             // style: "background-color:" + ((model.selectedTab === Tab.StateSelection) ? "lightgray" : "none")
-        }, m("a", {class: model.selectedTab === Tab.Constants ? "nav-link active" : "nav-link"}, "Constants")),
+        }, m("a", {class: model.selectedTab === Tab.Config ? "nav-link active" : "nav-link"}, [
+            "Config",
+            (!model.spec || !model.spec.hasDefinitionByName(model.initStatePredName) || !model.spec.hasDefinitionByName(model.nextStatePredName)) ? 
+                m("span", {class: "text-warning ms-1", title: "Missing Init or Next definition"}, "⚠") : ""
+        ])),
         m("li", {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
@@ -2681,7 +2747,7 @@ function midPane() {
     let tabs = [
         headerTabBar(),
         stateSelectionPane(model.selectedTab !== Tab.StateSelection),
-        componentChooseConstants(model.selectedTab !== Tab.Constants),
+        componentChooseConfig(model.selectedTab !== Tab.Config),
         specEditorPane(model.selectedTab !== Tab.SpecEditor),
         loadPane(model.selectedTab !== Tab.Load)
     ];

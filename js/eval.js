@@ -1393,7 +1393,7 @@ function fetchModuleExtends(moduleNames, urlPath) {
  */
 class TLASpec {
     // TODO: We probably want to eventually rename this to more accurately represent its role as a single (e.g. root) TLA+ module.
-    constructor(specText, specPath) {
+    constructor(specText, specPath, nextDefName="Next") {
 
         this.moduleTable = {};
         this.moduleTableParsed = {};
@@ -1633,10 +1633,22 @@ class TLASpec {
         return parsedSpec;
     }
 
+
     /**
      * Extract set of actions from a syntax node.
      */
     parseActionsFromNode(node, ind){
+        let actions = this.parseActionsFromNodeRec(node, ind);
+        if(actions.includes(null)){
+            actions = [new TLAAction(0, node, "Next")];
+        }
+        for(var i = 0; i < actions.length; i++){
+            actions[i].id = i;
+        }
+        return actions;
+    }
+
+    parseActionsFromNodeRec(node, ind){
         if(ind === undefined){
             ind = 0;
         }
@@ -2242,38 +2254,6 @@ class TLASpec {
         evalLog("module var declarations:", var_decls);
         evalLog("module definitions:", op_defs);
 
-        // Try parsing out actions if possible.
-        let actions = [];
-        if (_.keys(op_defs).map(k => op_defs[k].name).includes("Next")) {
-            let nextNode = _.find(op_defs, d => d.name === "Next").node;
-
-            //
-            // Syntactic Action Pattern I:
-            //
-            // \/ Action1
-            // \/ Action2
-            // \/ ...
-            // \/ ActionN
-            //
-
-            // TODO: Do recursively.    
-            // console.log("NEXTNODE:", nextNode);
-            // console.log("NEXT_CHILDR:", nextNode.namedChildren);
-
-            actions = self.parseActionsFromNode(nextNode);
-            console.log("parsed actions:", actions);
-
-            // Fall back to single action case.
-            if (actions.includes(null)) {
-                actions = [new TLAAction(0, nextNode, "Next")];
-            }
-        }
-
-        // Ensure unique ids assigned to each action.
-        for (var i = 0; i < actions.length; i++) {
-            actions[i].id = i;
-        }
-
         let objs = {
             "root_mod_name": root_mod_name,
             "const_decls": const_decls,
@@ -2281,7 +2261,6 @@ class TLASpec {
             "op_defs": op_defs,
             "imported_op_defs": imported_op_defs,
             "extends_modules": extends_modules,
-            "actions": actions,
             "spec_rewritten": specTextRewritten,
             "rewriter": rewriter
         }
@@ -5087,7 +5066,7 @@ function evalExpr(node, ctx) {
  * initial state predicate and an object 'vars' which contains exactly the
  * specification's state variables as keys.
  */
-function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTable, spec) {
+function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTable, spec, initDefName="Init") {
     // TODO: Pass this variable value as an argument to the evaluation functions.
     ASSIGN_PRIMED = false;
     depth = 0;
@@ -5105,7 +5084,7 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
     let initCtx = new Context(null, emptyInitState, defns, {}, constvals, null, null, moduleTable);
     initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
-    initCtx["defns_curr_context"] = spec.getDefinitionByName("Init")["curr_defs_context"];
+    initCtx["defns_curr_context"] = spec.getDefinitionByName(initDefName)["curr_defs_context"];
 
     let ret_ctxs = evalExpr(initDef, initCtx);
     if (ret_ctxs === undefined) {
@@ -5118,7 +5097,7 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
  * Generates all possible successor states from a given state and the syntax
  * tree node for the definition of the next state predicate.
  */
-function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, globalDefTable, spec) {
+function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, globalDefTable, spec, nextDefName="Next") {
     // TODO: Pass this variable value as an argument to the evaluation functions.
     ASSIGN_PRIMED = true;
     depth = 0;
@@ -5133,7 +5112,7 @@ function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, gl
     let initCtx = new Context(null, currStateVars, defns, {}, constvals, null, null, moduleTable);
     initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
-    initCtx["defns_curr_context"] = spec.getDefinitionByName("Next")["curr_defs_context"];
+    initCtx["defns_curr_context"] = spec.getDefinitionByName(nextDefName)["curr_defs_context"];
     // console.log("currStateVars:", currStateVars);
     let ret = evalExpr(nextDef, initCtx);
     evalLog("getNextStates eval ret:", ret);
@@ -5181,8 +5160,10 @@ function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, gl
 
 class TlaInterpreter {
 
-    computeInitStates(treeObjs, constvals, includeFullCtx, spec) {
+    computeInitStates(treeObjs, constvals, includeFullCtx, spec, initDefName=null) {
         var includeFullCtx = includeFullCtx || false;
+
+        var initDefName = initDefName || "Init";
 
         let consts = treeObjs["const_decls"];
         let vars = treeObjs["var_decls"];
@@ -5194,11 +5175,11 @@ class TlaInterpreter {
 
         evalLog("consts:", consts);
 
-        let initDef = spec.getDefinitionByName("Init");
+        let initDef = spec.getDefinitionByName(initDefName);
         evalLog("initDef.childCount: ", initDef["node"].childCount);
         evalLog("initDef.type: ", initDef["node"].type);
 
-        let initStates = getInitStates(initDef["node"], vars, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec);
+        let initStates = getInitStates(initDef["node"], vars, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, initDefName);
         // Keep only the valid states.
         if(includeFullCtx){
             return initStates.filter(actx => actx["val"].getVal())
@@ -5207,16 +5188,18 @@ class TlaInterpreter {
         }
     }
 
-    computeNextStates(treeObjs, constvals, initStates, action, spec) {
+    computeNextStates(treeObjs, constvals, initStates, action, spec, nextDefName) {
         let consts = treeObjs["const_decls"];
         let vars = treeObjs["var_decls"];
         let defns = treeObjs["op_defs"];
+
+        var nextDefName = nextDefName || "Next";
 
         // Reset for debugging.
         evalNodeGraph = [];
         edgeOrder = 0;
 
-        let nextDef = spec.getDefinitionByName("Next")["node"];
+        let nextDef = spec.getDefinitionByName(nextDefName)["node"];
 
         // Optionally specify an action to consider as the next state relation
         // when computing next state.
@@ -5230,7 +5213,7 @@ class TlaInterpreter {
         for (const istate of initStates) {
             let currState = _.cloneDeep(istate);
             // console.log("###### Computing next states from state: ", currState);
-            let ret = getNextStates(nextDef, currState, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec);
+            let ret = getNextStates(nextDef, currState, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, nextDefName);
             allNext = allNext.concat(ret);
         }
         return allNext;

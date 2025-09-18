@@ -234,7 +234,7 @@ onmessage = async (e) => {
                 // Generate initial states.
                 let interp = new TlaInterpreter();
 
-                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec);
+                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec, spec.initDefName);
                 console.log("initStates:", initStates);
                 model.currNextStates = initStates;
 
