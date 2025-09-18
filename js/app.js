@@ -52,7 +52,7 @@ let model = {
     hiddenStateVars: [],
     // State hash that trace lasso goes back to.
     lassoTo: null,
-    errorObj: null,
+    errorInfo: null,
     currPane: Pane.Trace,
     tracePaneHidden: false,
     nextStatePreview: null,
@@ -686,20 +686,101 @@ function componentNextStateChoiceElement(stateObj, ind, actionLabel, diffOnly) {
     return nextStateElem;
 }
 
-function errorMsgStr(errorObj) {
+function errorMsgStr(errorInfo) {
     errorPosStr = "";
-    if (errorObj !== null && errorObj.errorPos === null) {
-        errorPosStr = errorObj.errorPos === null ? "" : "(" + errorObj.errorPos + ")";
+    if (errorInfo !== null && errorInfo.errorPos !== null) {
+        errorPosStr = errorInfo.errorPos === null ? "" : "(" + errorInfo.errorPos + ")";
+        if(errorInfo.actionEvalError !== null){
+            errorPosStr += " (action: " + errorInfo.actionEvalError.name + ")";
+            return m("span", [
+                "Error computing next states for action: ",
+                m("span", {style: "font-size: 12px;font-weight: bold"}, errorInfo.actionEvalError.name)
+            ]);
+        }
     }
-    return errorObj === null ? "" : "ERROR: " + errorObj.message + " " + errorPosStr;
+    return errorInfo === null ? "" : "ERROR: " + errorInfo.message + " " + errorPosStr;
+}
+
+function clearErrorMarks() {
+    const $codeEditor = document.querySelector('.CodeMirror');
+    const editor = $codeEditor.CodeMirror;
+    editor.getAllMarks().forEach(mark => mark.clear());
+}
+
+
+function highlightError(){
+    const $codeEditor = document.querySelector('.CodeMirror');
+    const editor = $codeEditor.CodeMirror;
+    // editor.scrollTo(0,20);
+    // let errLine = model.errorInfo.errorPos[0];
+    // let errCol = model.errorInfo.errorPos[1];
+    // console.log("evalNode:", model.errorInfo.evalNode.text);
+    
+
+    let errLine = model.errorInfo.evalErrNode.startPosition.row ;
+    let errCol = model.errorInfo.evalErrNode.startPosition.column;
+    // let errCol = 0;
+
+    let endLine = model.errorInfo.evalErrNode.endPosition.row;
+    let endCol = model.errorInfo.evalErrNode.endPosition.column;
+    // let endCol = 10;
+
+    // editor.markText(
+    //     {line:errLine, ch:errCol}, 
+    //     {line:endLine, ch:endCol},
+    //     // {className: "error-highlight"}
+    //     {className: "line-error"}
+    // )
+    // Move cursor to error position
+    // editor.setCursor({line: model.errorInfo.errorPos[0], ch: model.errorInfo.errorPos[1]});
+    console.log("errorPos:", model.errorInfo.errorPos);
+    console.log("evalErrNode:", model.errorInfo.evalErrNode);
+
+
+    let startLoc = model.specTreeObjs["rewriter"].getOrigLocation(errLine, errCol);
+    let endLoc = model.specTreeObjs["rewriter"].getOrigLocation(endLine, endCol);
+
+    let start = {
+        line: errLine, 
+        ch: errCol
+    };
+    let end = {
+        line: endLine, 
+        ch: endCol
+    };
+    console.log("start:", start);
+    console.log("end:", end);
+    // editor.setSelection(start, end);
+    editor.markText(start, end, {className: "line-error-highlight"});
+
+    // editor.scrollIntoView(errLine,errCol);
+    // editor.setCursor(errLine,errCol);
+
+    setTimeout(() => {
+        editor.scrollIntoView(errLine,errCol, 100);
+        // editor.setCursor(errLine,errCol);
+        // editor.refresh();
+    }, 50);
+    // m.redraw();
+
 }
 
 function componentErrorInfo() {
     let errorInfo = m("div", {
         class: "error-info alert alert-danger",
         role: "alert",
-        hidden: model.errorObj === null
-    }, errorMsgStr(model.errorObj));
+        hidden: model.errorInfo === null
+    }, [
+        m("div", {
+            style: "font-size: 12px;",
+            class: "hover-link",
+            onclick: () => {
+                model.selectedTab = Tab.SpecEditor;
+                m.redraw();
+                highlightError();
+            }
+        }, errorMsgStr(model.errorInfo)),
+    ]);
     return errorInfo;
 }
 
@@ -758,6 +839,10 @@ function componentNextStateChoices(nextStates) {
     let statesPerRow = 1;
     let currRow = [];
     let count = 0;
+    // If we have encountered an evaluation error, don't present next state choices.
+    if(model.errorInfo !== null){
+        nextStateElems = []
+    }
     for (const elem of nextStateElems) {
         currRow.push(m("th", elem));
         count += 1;
@@ -798,7 +883,20 @@ function recomputeNextStates(fromState) {
             numClones = 0;
 
 
-            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
+            let nextStatesForAction;
+            try {
+                nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
+            } catch (e) {
+                model.errorInfo = {
+                    actionEvalError : action,
+                    actionNode: action.node,
+                    // evalNode: currEvalNode,
+                    evalErrNode: evalNodeError[0]
+                }
+                // showEvalError(action.node, e);
+                nextStatesForAction = [];
+                throw e;
+            }
             // console.log("nextStatesForAction", nextStatesForAction); 
             nextStatesForAction = nextStatesForAction.map(c => {
                 let deprimed = c["state"].deprimeVars();
@@ -844,6 +942,8 @@ function traceStepBack() {
     model.currTrace = model.currTrace.slice(0, model.currTrace.length - 1);
     model.currTraceActions = model.currTraceActions.slice(0, model.currTraceActions.length - 1);
     updateTraceRouteParams();
+
+    model.errorInfo = null;
 
     // Back to initial states.
     if (model.currTrace.length === 0) {
@@ -1028,9 +1128,11 @@ function chooseNextState(statehash_short, quantBoundsHash, rethrow = false) {
         console.log(`Generating next states took ${duration}ms (cloning took ${duration2}ms )`)
     } catch (e) {
         console.error("Error computing next states.", e);
-        if (currEvalNode !== null) {
+        console.error("currEvalNode:", evalNodeError[0]);
+        if (evalNodeError.length > 0) {
             // Display line where evaluation error occurred.
-            showEvalError(currEvalNode, e);
+            // showEvalError(currEvalNode, e);
+            showEvalError(evalNodeError[0], e);
         }
         if(rethrow){
             throw e;
@@ -1108,10 +1210,14 @@ function showEvalError(currEvalNode, e) {
     let ret = model.specTreeObjs["rewriter"].getOrigLocation(errorLine, errorCol);
     console.log("ERROR pos:", ret);
 
-    model.errorObj = Object.assign(e, { errorPos: [errorLine, errorCol] });
+    if(model.errorInfo === null){
+        model.errorInfo = {}
+    } 
+    model.errorInfo = Object.assign(model.errorInfo, { exception: e, errorPos: [errorLine, errorCol] })
+    // model.errorInfo = Object.assign(e, { errorPos: [errorLine, errorCol] });
 
     // $codeEditor.CodeMirror.addLineClass(errorLine, 'background', 'line-error');
-    $codeEditor.CodeMirror.addLineClass(ret[0], 'background', 'line-error');
+    // $codeEditor.CodeMirror.addLineClass(ret[0], 'background', 'line-error');
     console.log("error evaluating node: ", currEvalNode);
     console.log(e);
 }
@@ -1125,7 +1231,7 @@ function reloadSpec() {
     model.currTraceActions = []
     model.currTraceAliasVals = []
     model.lassoTo = null;
-    model.errorObj = null;
+    model.errorInfo = null;
     model.traceExprs = [];
     model.hiddenStateVars = [];
 
@@ -1188,6 +1294,18 @@ function reloadSpec() {
     model.currNextStates = _.cloneDeep(initStates);
 
     // displayEvalGraph();
+
+    model.selectedTab = Tab.SpecEditor;
+    
+    // Refresh the CodeMirror editor to ensure proper display
+    setTimeout(() => {
+        const $codeEditor = document.querySelector('.CodeMirror');
+        if ($codeEditor && $codeEditor.CodeMirror) {
+            $codeEditor.CodeMirror.refresh();
+        }
+        model.selectedTab = Tab.StateSelection;
+        m.redraw();
+    }, 100);
 
     // Check for trace to load from given link.
     // displayStateGraph();
@@ -1758,7 +1876,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
     // let rowElems = m("div", { class: "trace-state-table-div" }, rowElemsTable);
 
     // stateVarElems = m("div", {id:"trace-state-holder"}, [rowElems,vizSvg]);
-    stateVarElems = m("div", { id: "trace-state-holder" }, [rowElemsTable]);
+    stateVarElems = m("div", { id: "trace-state-holder", style: { "background-color": model.errorInfo !== null && isLastState ? "rgba(255, 0, 0, 0.2)" : "transparent" } }, [rowElemsTable]);
 
     let traceStateElemChildren = [stateVarElems];
     if (model.animationExists && model.enableAnimationView) {
@@ -1998,7 +2116,7 @@ function onSpecParse(newText, parsedSpecTree, spec){
     model.spec = spec;
     model.specText = newText;
     model.specTreeObjs = parsedSpecTree;
-    model.errorObj = null;
+    model.errorInfo = null;
     model.actions = parsedSpecTree.actions;
 
     model.currTrace = [];
@@ -2045,7 +2163,7 @@ function onSpecParse(newText, parsedSpecTree, spec){
              setConstantValues(reload);
          } catch (e) {
              console.error("Error setting constant values:", e);
-             model.errorObj = {parseError: true, obj: e, message: e};
+             model.errorInfo = {parseError: true, obj: e, message: e};
              return;
          }
      }
@@ -2125,7 +2243,7 @@ async function handleCodeChange(editor, changes) {
         m.redraw(); //explicitly re-draw on promise resolution.
     }).catch(function(e){
         console.log("Error parsing and loading spec.", e);
-        model.errorObj = {parseError: true, obj: e, message: "Error parsing spec."};
+        model.errorInfo = {parseError: true, obj: e, message: "Error parsing spec."};
     });
 }
 
@@ -2141,7 +2259,14 @@ function resetTrace() {
     model.currTraceActions = []
     model.currTraceAliasVals = []
     model.lassoTo = null;
-    model.errorObj = null;
+    model.errorInfo = null;
+    model.selectedTab = Tab.StateSelection;
+
+    const $codeEditor = document.querySelector('.CodeMirror');
+    const editor = $codeEditor.CodeMirror;
+    editor.removeLineClass(0, 'background', 'line-error');
+
+    clearErrorMarks();
 
     let nextStates = recomputeInitStates();
     model.currNextStates = _.cloneDeep(nextStates);
@@ -2359,7 +2484,7 @@ function componentHiddenStateVars(hidden) {
 // }
 
 function specEditorPane(hidden){
-    return m("div", { id: "code-input-pane", hidden:hidden }, [
+    return m("div", { id: "code-input-pane", hidden: hidden}, [
         m("div", { id: "code-container" }, [
             m("textarea", { id: "code-input" })
         ])
@@ -2374,6 +2499,7 @@ function stateSelectionPane(hidden){
             type: "checkbox",
             role: "switch",
             id: "fullNextStatesSwitchCheck",
+            hidden: model.errorInfo !== null,
             onclick: function (event) {
                 model.showStateDiffsInSelection = !model.showStateDiffsInSelection;
             }
@@ -2381,7 +2507,8 @@ function stateSelectionPane(hidden){
         m("label", {
             class: "form-check-label",
             for: "fullNextStatesSwitchCheck",
-            role: "switch"
+            role: "switch",
+            hidden: model.errorInfo !== null,
         }, "Show full next states")
     ]);
 
@@ -3064,6 +3191,9 @@ function loadSpecText(text, specPath) {
             })
         });
         $codeEditor.CodeMirror.setValue(spec);
+        const editor = $codeEditor.CodeMirror;
+        // editor.refresh();
+
 
         // Load changes if given.
         // TODO: Enable once working out concurrency subtleties.
@@ -3083,7 +3213,7 @@ function loadSpecText(text, specPath) {
 
 // Fetch spec from given path (e.g. URL) and reload it in the editor pane and UI.
 function loadSpecFromPath(specPath){
-    model.errorObj = null;
+    model.errorInfo = null;
     // Download the specified spec and load it in the editor pane.
     return m.request(specPath, { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
@@ -3146,7 +3276,7 @@ async function loadApp() {
         },
         view: function () {
             let fetchingInProgress = model.rootModName.length === 0 && !model.loadSpecFailed;
-            let isParseErr = model.errorObj != null && model.errorObj.hasOwnProperty("parseError");
+            let isParseErr = model.errorInfo != null && model.errorInfo.hasOwnProperty("parseError");
 
             let spinner = fetchingInProgress ? m("div", {class:"spinner-border spinner-border-sm"}) : m("span");
             let fetchingText = fetchingInProgress ? "Fetching spec... " : "";

@@ -1688,6 +1688,7 @@ class TLASpec {
 
         // Perform syntactic rewrites.
         let rewriter = new SyntaxRewriter(specText, parser);
+        this.rewriter = rewriter;
         let specTextRewritten = rewriter.doRewrites();
         specText = specTextRewritten;
 
@@ -5371,9 +5372,18 @@ let evalNodeGraph = [];
 let edgeOrder = 0;
 
 let origevalExpr = evalExpr;
+let evalNodeError = [];
 evalExpr = function (...args) {
     if(!enableEvalTracing){
-        return origevalExpr(...args);
+        // If an exception is thrown, capture the node throwing the exception.
+        let ret;
+        try{
+            ret = origevalExpr(...args);
+        } catch (e) {
+            evalNodeError.push(args[0]);
+            throw e;
+        }
+        return ret;
     }
     depth += 1;
 
