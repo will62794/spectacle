@@ -1,0 +1,51 @@
+strict digraph DiskGraph {
+nodesep=0.35;
+subgraph cluster_graph {
+color="white";
+1317622219392791164 [label="/\\ x = 0\n/\\ y = 0",style = filled]
+1317622219392791164 -> 4893700435511492333 [label="",color="black",fontcolor="black"];
+4893700435511492333 [label="/\\ x = 6\n/\\ y = 0"];
+1317622219392791164 -> 3480188005806878388 [label="",color="black",fontcolor="black"];
+3480188005806878388 [label="/\\ x = 7\n/\\ y = 0"];
+1317622219392791164 -> 3480188005806878388 [label="",color="black",fontcolor="black"];
+1317622219392791164 -> 1317622219392791164 [label="",color="black",fontcolor="black"];
+4893700435511492333 -> -6583692315316380065 [label="",color="black",fontcolor="black"];
+-6583692315316380065 [label="/\\ x = 4\n/\\ y = 0"];
+4893700435511492333 -> -2952126410107482618 [label="",color="black",fontcolor="black"];
+-2952126410107482618 [label="/\\ x = 5\n/\\ y = 0"];
+4893700435511492333 -> -2952126410107482618 [label="",color="black",fontcolor="black"];
+4893700435511492333 -> 4893700435511492333 [label="",color="black",fontcolor="black"];
+3480188005806878388 -> -2952126410107482618 [label="",color="black",fontcolor="black"];
+3480188005806878388 -> 4893700435511492333 [label="",color="black",fontcolor="black"];
+3480188005806878388 -> 4893700435511492333 [label="",color="black",fontcolor="black"];
+3480188005806878388 -> 3480188005806878388 [label="",color="black",fontcolor="black"];
+-6583692315316380065 -> -791843759525555506 [label="",color="black",fontcolor="black"];
+-791843759525555506 [label="/\\ x = 2\n/\\ y = 0"];
+-6583692315316380065 -> -8743958198329212265 [label="",color="black",fontcolor="black"];
+-8743958198329212265 [label="/\\ x = 3\n/\\ y = 0"];
+-6583692315316380065 -> -8743958198329212265 [label="",color="black",fontcolor="black"];
+-6583692315316380065 -> -6583692315316380065 [label="",color="black",fontcolor="black"];
+-2952126410107482618 -> -8743958198329212265 [label="",color="black",fontcolor="black"];
+-2952126410107482618 -> -6583692315316380065 [label="",color="black",fontcolor="black"];
+-2952126410107482618 -> -6583692315316380065 [label="",color="black",fontcolor="black"];
+-2952126410107482618 -> -2952126410107482618 [label="",color="black",fontcolor="black"];
+-791843759525555506 -> 1317622219392791164 [label="",color="black",fontcolor="black"];
+-791843759525555506 -> 7056248354844844581 [label="",color="black",fontcolor="black"];
+7056248354844844581 [label="/\\ x = 1\n/\\ y = 0"];
+-791843759525555506 -> 7056248354844844581 [label="",color="black",fontcolor="black"];
+-791843759525555506 -> -791843759525555506 [label="",color="black",fontcolor="black"];
+-8743958198329212265 -> 7056248354844844581 [label="",color="black",fontcolor="black"];
+-8743958198329212265 -> -791843759525555506 [label="",color="black",fontcolor="black"];
+-8743958198329212265 -> -791843759525555506 [label="",color="black",fontcolor="black"];
+-8743958198329212265 -> -8743958198329212265 [label="",color="black",fontcolor="black"];
+7056248354844844581 -> 3480188005806878388 [label="",color="black",fontcolor="black"];
+7056248354844844581 -> 1317622219392791164 [label="",color="black",fontcolor="black"];
+7056248354844844581 -> 1317622219392791164 [label="",color="black",fontcolor="black"];
+7056248354844844581 -> 7056248354844844581 [label="",color="black",fontcolor="black"];
+{rank = same; 1317622219392791164;}
+{rank = same; 3480188005806878388;4893700435511492333;}
+{rank = same; -2952126410107482618;-6583692315316380065;}
+{rank = same; -8743958198329212265;-791843759525555506;}
+{rank = same; 7056248354844844581;}
+}
+}
