@@ -772,11 +772,23 @@ function errorMsgStr(errorInfo) {
     errorPosStr = "";
     if (errorInfo !== null && errorInfo.errorPos !== null) {
         errorPosStr = errorInfo.errorPos === null ? "" : "(" + errorInfo.errorPos + ")";
-        if(errorInfo.actionEvalError !== null){
+        if (errorInfo.actionEvalError !== null) {
             errorPosStr += " (action: " + errorInfo.actionEvalError.name + ")";
-            return m("span", [
-                "Error computing next states for action: ",
-                m("span", {style: "font-size: 12px;font-weight: bold"}, errorInfo.actionEvalError.name)
+            return m("span", { style: "font-size: 14px;" }, [
+                m("div", { style: "margin-bottom: 10px;font-weight: normal" }, "Error computing next states. "),
+                m("div", {
+                    style: "font-size: 14px;font-weight: normal",
+                    class: "hover-link",
+                    onclick: () => {
+                        model.selectedTab = Tab.SpecEditor;
+                        m.redraw();
+                        highlightError();
+                    }
+                }, [
+                    m("div", "Action: ", m("span", { style: "font-weight: bold" }, errorInfo.actionEvalError.name)),
+                    // m("div", "Expression: ", m("span", { style: "font-weight: bold" }, errorInfo.actionEvalError.node.text)),
+                    m("div", `Line ${errorInfo.errorPos[0] + 1}, Column ${errorInfo.errorPos[1]}`)
+                ])
             ]);
         }
     }
@@ -849,13 +861,14 @@ function highlightError(){
 
 function componentErrorInfo() {
     let errorInfo = m("div", {
-        class: "error-info alert alert-danger",
+        class: "alert alert-danger",
         role: "alert",
-        hidden: model.errorInfo === null
+        hidden: model.errorInfo === null,
+        style: {"margin": "8px"},
     }, [
         m("div", {
             style: "font-size: 12px;",
-            class: "hover-link",
+            class: "",
             onclick: () => {
                 model.selectedTab = Tab.SpecEditor;
                 m.redraw();
@@ -2598,7 +2611,10 @@ function specEditorPane(hidden){
 
 function stateSelectionPane(hidden){
 
-    let fullNextStatesSwitch = m("div", { class: "form-check form-switch show-full-next-states-switch", hidden: model.currTrace.length === 0 }, [
+    let fullNextStatesSwitch = m("div", { 
+        class: "form-check form-switch show-full-next-states-switch", 
+        hidden: model.currTrace.length === 0 || model.errorInfo !== null
+    }, [
         m("input", {
             class: "form-check-input",
             type: "checkbox",

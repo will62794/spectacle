@@ -1057,6 +1057,13 @@ body {
     /* color: blue; */
   }
 
+  .hover-error-box:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    color: red;
+    background-color: red;
+  }
+
   .show-full-next-states-switch{
     margin-left:10px;
     margin-top:5px;
