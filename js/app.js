@@ -1406,7 +1406,7 @@ function reloadSpec() {
 
     // displayEvalGraph();
 
-    model.selectedTab = Tab.SpecEditor;
+    // model.selectedTab = Tab.SpecEditor;
     
     // Refresh the CodeMirror editor to ensure proper display
     setTimeout(() => {
