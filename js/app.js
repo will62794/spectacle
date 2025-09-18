@@ -420,22 +420,52 @@ function hideButtonDiv(){
     return hideButtonDiv;
 }
 
+// Are the Init and Next predicate names present as definitions in the current spec.
+function initAndNextDefsValid(){
+    return model.spec && model.spec.hasDefinitionByName(model.nextStatePredName) && model.spec.hasDefinitionByName(model.initStatePredName);
+}
+
+function allConstValsSet(){
+    if(model.specConsts && Object.keys(model.specConsts).length === 0){
+        return true;
+    }
+    return model.specConstInputVals && model.specConsts &&
+        _.isEqual(Object.keys(model.specConstInputVals), Object.keys(model.specConsts)) &&
+        Object.values(model.specConstInputVals).every(val => val.length > 0);
+}
+
 function setConfigButtons(){
+
+    let disabled = false;
+    if (!initAndNextDefsValid()){
+        disabled = true;
+    }
+
+    // Check if all constants have values input for them.
+    if (!allConstValsSet()) {
+        disabled = true;
+    }
+
     let setButtonDiv = m("button", { 
         id: "set-constants-button", 
-        "data-testid": "set-constant-config-button",
+        "data-testid": "set-config-button",
         class: "btn btn-sm btn-primary", 
-        disabled: (model.spec && !model.spec.hasDefinitionByName(model.nextStatePredName)) || (model.spec && !model.spec.hasDefinitionByName(model.initStatePredName)),
+        disabled: disabled,
         onclick: () => {
-            // clearRouteParams();
 
             // TODO: Properly clear out trace route params and constants and stuff.
             model.currTrace = [];
+            model.currTraceActions = [];
+            model.currTraceAliasVals = [];
+            
+            // Re-set next state definitions and actions.
+            let nextDef = model.spec.getDefinitionByName(model.nextStatePredName);
+            model.nextStatePred = nextDef["node"];
+            model.actions = model.spec.parseActionsFromNode(nextDef["node"]);
             updateTraceRouteParams();
-            model.spec
-            loadSpecText(model.specText, model.specPath);
-            // setConstantValues();
-            // model.selectedTab = Tab.StateSelection;
+            setConstantValues();
+            model.selectedTab = Tab.StateSelection;
+            model.selectedTraceTab = TraceTab.Trace;
         } 
     }, "Set Config");
     if(model.constantsPaneHidden){
@@ -910,7 +940,7 @@ function componentNextStateChoices(nextStates) {
 function recomputeInitStates(initDefName="Init"){
     let interp = new TlaInterpreter();
     let includeFullCtx = true;
-    initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec, initDefName);
+    initStates = interp.computeInitStates(model.specTreeObjs, model.specConstVals, includeFullCtx, model.spec, model.initStatePredName);
     initStates = initStates.map(c => ({"state": c["state"], "quant_bound": c["quant_bound"]}))
     model.allInitStates = _.cloneDeep(initStates);
     console.log("Set initial states: ", model.allInitStates);
@@ -1098,6 +1128,19 @@ function updateTraceRouteParams() {
         Object.assign(newParams, { constants: model.specConstInputVals });
     } else {
         delete newParams["constants"];
+    }
+
+    // Update init and next predicate names.
+    if (model.initStatePredName !== null) {
+        newParams["initPred"] = model.initStatePredName;
+    } else {
+        delete newParams.initPred;
+    }
+
+    if (model.nextStatePredName !== null) {
+        newParams["nextPred"] = model.nextStatePredName;
+    } else {
+        delete newParams.nextPred;
     }
 
     m.route.set("/home", newParams);
@@ -1307,7 +1350,7 @@ function reloadSpec() {
         console.log("Warning: 'Init' or 'Next' predicate not found. Still loading spec without generating states.");
 
         // Switch to spec pane and REPL pane.
-        model.selectedTab = Tab.SpecEditor;
+        model.selectedTab = Tab.Config;
         model.selectedTraceTab = TraceTab.REPL;
         return;
     }
@@ -2130,7 +2173,9 @@ function startCheckInvariantWebWorker(invariantExpr){
         newText: model.specText,
         specPath: model.specPath,
         constValInputs: model.specConstInputVals,
-        invariantExpr: invariantExpr
+        invariantExpr: invariantExpr,
+        initDefName: model.initStatePredName,
+        nextDefName: model.nextStatePredName
     });
     console.log("Posted message to invariant checking worker.");
 
@@ -3184,12 +3229,37 @@ function loadRouteParamsState() {
         model.enableAnimationView = true;
     }
 
+    // Load init and next predicate names if given.
+    let initPredParam = m.route.param("initPred");
+    if (initPredParam) {
+        model.initStatePredName = initPredParam;
+    }
+
+    let nextPredParam = m.route.param("nextPred");
+    if (nextPredParam) {
+        model.nextStatePredName = nextPredParam;
+        // Re-set next state definitions and actions.
+        let nextDef = model.spec.getDefinitionByName(model.nextStatePredName);
+        model.nextStatePred = nextDef["node"];
+        model.actions = model.spec.parseActionsFromNode(nextDef["node"]);
+    }
+
+    if(!initAndNextDefsValid() || !allConstValsSet()){
+        model.selectedTab = Tab.Config;
+    }
+
+    if(initAndNextDefsValid() && allConstValsSet()){
+        setConstantValues();
+        model.selectedTab = Tab.StateSelection;
+    }
+
     // Feature flag to use web worker for trace loading.
     const useWebWorkerLoad = true;
 
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
+        model.selectedTraceTab = TraceTab.Trace;
         let traceParams = traceParamStr.split(",");
 
         if(useWebWorkerLoad){

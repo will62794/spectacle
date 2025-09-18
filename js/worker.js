@@ -48,7 +48,7 @@ function recomputeNextStates(model,fromState) {
             console.log("fromState:", fromState);
             console.log("actions:", model.actions);
             console.log("actions:", model.specTreeObjs);
-            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec)
+            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec, model.nextDefName)
             console.log("nextStatesForAction", nextStatesForAction); 
 
             nextStatesForAction = nextStatesForAction.map(c => {
@@ -68,7 +68,7 @@ function recomputeNextStates(model,fromState) {
         }
         nextStates = nextStatesByAction;
     } else {
-        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec)
+        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec, model.nextDefName)
             .map(c => {
                 let deprimed = c["state"].deprimeVars();
                 return { "state": deprimed, "quant_bound": c["quant_bound"] };
@@ -159,6 +159,8 @@ onmessage = async (e) => {
     let specPath = e.data.specPath;
     let constValInputs = e.data.constValInputs;
     let invariantExpr = e.data.invariantExpr;
+    let initDefName = e.data.initDefName;
+    let nextDefName = e.data.nextDefName;
 
     await TreeSitter.init();
     parser = new TreeSitter();
@@ -199,7 +201,11 @@ onmessage = async (e) => {
         model.specText = newText;
         model.specTreeObjs = spec.spec_obj;
         model.errorObj = null;
-        model.actions = spec.spec_obj.actions;
+        model.nextDefName = nextDefName;
+        model.initDefName = initDefName;
+
+        let nextDef = model.spec.getDefinitionByName(model.nextDefName);
+        model.actions = spec.parseActionsFromNode(nextDef["node"]);
 
         // Evaluate each CONSTANT value expression.
         for (var constDecl in constValInputs) {
@@ -234,7 +240,7 @@ onmessage = async (e) => {
                 // Generate initial states.
                 let interp = new TlaInterpreter();
 
-                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec, spec.initDefName);
+                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec, model.initDefName);
                 console.log("initStates:", initStates);
                 model.currNextStates = initStates;
 
@@ -268,6 +274,7 @@ onmessage = async (e) => {
                         stateInfo.actionId = nextState["actionId"];
                         trace.push(stateInfo);
                     } catch (err) {
+                        console.error("Error loading state", err);
                         postMessage({
                             type: "error",
                             error: `Error loading state ${i + 1}/${totalSteps}: ${err.message}`
