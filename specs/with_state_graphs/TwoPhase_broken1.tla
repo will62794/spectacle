@@ -85,7 +85,7 @@ TMRcvPrepared(rm) ==
   (*************************************************************************)
   /\ tmState = "init"
   /\ [type |-> "Prepared", rm |-> rm] \in msgs
-  /\ tmPrepared' = tmPrepared + {rm} (************************ INTERPRETER ERROR 1 *************************)
+  /\ tmPrepared' = tmPrepared + {rm} (************************ INTERPRETER ERROR 1 (line 88, col 20) *************************)
   /\ UNCHANGED <<rmState, tmState, msgs>>
 
 TMCommit ==
@@ -140,7 +140,7 @@ RMRcvAbortMsg(rm) ==
   (* Resource manager $rm$ is told by the TM to abort.                     *)
   (*************************************************************************)
   /\ [type |-> "Abort"] \in msgs
-  /\ (rmState[rm] \cup {}) # "aborted" \* no need to abort twice. (************************ INTERPRETER ERROR 2 *************************)
+  /\ (rmState[rm] \cup {}) # "aborted" \* no need to abort twice. (************************ INTERPRETER ERROR 2 (line 143, col 7) *************************)
   /\ rmState' = [rmState EXCEPT ![rm] = "aborted"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
