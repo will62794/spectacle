@@ -1005,6 +1005,15 @@ class SyntaxRewriter {
 
                 let newStartRow = startRow;
                 let newStartCol = startCol;
+
+                //////////////////////
+                // TODO!! Goal is to just try to get rid of rewrites entirely
+                // and just fix the few remaining cases where the interpreter
+                // was relying on rewrites for semantic correctness!
+                //////////////////////
+
+                // Assume all new rewritten blocks are one-liners, so the the new end row will always be the same as the
+                // start row of the chunk being rewritten.
                 let newEndRow = startRow;
                 let newEndCol = prechunk[prechunk.length - 1].length + rewrite["newStr"].length - 1;
 
@@ -1194,7 +1203,8 @@ class SyntaxRewriter {
                                 endPosition: node.endPosition,
                                 newStr: outStr
                             }
-                            sourceRewrites.push(rewrite);
+                            // REWRITE DISABLED.
+                            // sourceRewrites.push(rewrite);
                             // return sourceRewrites;
                         }
 
@@ -1203,7 +1213,10 @@ class SyntaxRewriter {
                     // TODO: Initial framework for rewriting operator arguments to enforce global argname uniqueness.
                     // But, need to think a bit more carefully about how this works in all cases e.g. with LAMBDA expressions
                     // and nested LET-IN operator definitions, before we enable this via above syntax rewrite generation logic.
+                    
+                    /**
                     if(node.type === "operator_definition"){
+                        continue;
 
                         let opName = node.namedChildren[0].text;
                         let opArgsIdents = node.namedChildren.slice(1).filter(n => n.type === "identifier");
@@ -1235,6 +1248,7 @@ class SyntaxRewriter {
                             this.opArgsToRename[opName]["argsToRenameMap"][a] = argsToRenameMap[a];
                         }
                     }
+                    **/
 
                     if (node.type == "bounded_quantification") {
                         //
@@ -1280,7 +1294,8 @@ class SyntaxRewriter {
                                 endPosition: quantifierBoundNodes[quantifierBoundNodes.length - 1].endPosition,
                                 newStr: outStr
                             }
-                            sourceRewrites.push(rewrite);
+                            // REWRITE DISABLED.
+                            // sourceRewrites.push(rewrite);
                             // return sourceRewrites;
                         }
 
@@ -1367,7 +1382,7 @@ function extractActionName(node) {
         // Strip away all outer quantifiers.
         let curr_node = node;
         while (curr_node.type === "bounded_quantification") {
-            curr_node = curr_node.namedChildren[2];
+            curr_node = curr_node.namedChildren.at(-1);
         }
         return curr_node.text;
     } else {
@@ -1702,6 +1717,7 @@ class TLASpec {
         let rewriter = new SyntaxRewriter(specText, parser);
         this.rewriter = rewriter;
         let specTextRewritten = rewriter.doRewrites();
+        this.specTextRewritten = specTextRewritten;
         specText = specTextRewritten;
 
         // console.log("REWRITTEN:");
@@ -3137,9 +3153,32 @@ function evalBoundInfix(node, ctx) {
 
     // Set membership.
     if (symbol.type === "in" || symbol.type === "notin") {
-        // We should have rewritten these during AST pre-processing.
-        assert(symbol.type !== "in");
-        assert(symbol.type !== "notin");
+        // 
+        // We can just treat '<expr> \in S' as '\E h \in S : <expr> = h'
+        // 
+
+        // Pass this through to eval bounded quantification logic so it can be
+        // treated as a standard existential quantifier expression.
+        let domainVal = evalExpr(rhs, ctx)[0]["val"];
+        let quantifier = {type: "exists"};
+        // Create a unique, dummy identifer name to serve as quant ident in '\E h \in S : <expr> = h' 
+        let uniqIdentName = "set_in_ident_" + ctx.spec_obj.nextGlobalDefId()
+        let quant_expr_fn = (boundContext) => {
+            return evalEq(lhs, {type: "identifier_ref", text: uniqIdentName, children: [] }, boundContext);
+        }
+        let retCtxs = evalOverQuantBounds(ctx, [[uniqIdentName, domainVal.getElems()]], quant_expr_fn, quantifier);
+        
+        // Evaluate 'notin', making the assumption that these will never be
+        // expressions that fork into a disjunctive context.
+        if(symbol.type === "notin"){
+            let retVal = !retCtxs.some(rctx => rctx["val"].getVal())
+            return [ctx.withVal(new BoolValue(retVal))];
+        }
+        else{
+            let currAssignedVars = _.keys(ctx["state"].stateVars).filter(k => ctx["state"].stateVars[k] !== null)
+            return processDisjunctiveContexts(ctx, retCtxs, currAssignedVars);
+        }
+
     }
 
     // Set intersection.
@@ -3769,101 +3808,112 @@ function evalIdentifierRef(node, ctx) {
     }
 }
 
-function evalBoundedQuantification(node, ctx) {
-    evalLog("bounded_quantification", node);
+// 
+// Takes a set of identifier names each mapped to their domains and evaluates
+// expression contexts over cross product of all these domain values.
+// 
+// Can also pass 'quant_expr' as a function which takes in a context bound with 
+// quantified identifier and evaluates expression in this context.
+// 
+function evalOverQuantBounds(ctx, quantIdentAndDomains, quant_expr, quantifier){
 
-    //
-    // Assume all quantifiers have previously been put into a normalized form during 
-    // syntactic pre-processing i.e.
-    //
-    // \E i1 \in S1 : \E i2 \in S2 : ... : \E in \in Sn : <expr>
-    //
-    // <quantfier> \in <bound> : <expression>
-    let quantBoundNodes = node.namedChildren.filter(c => c.type === "quantifier_bound");
-    // Only a single quantifier bound.
-    assert(quantBoundNodes.length === 1);
-
-    // First element can also be tuple_of_identifiers.
-    let tupOfIdents = null;
-    if (quantBoundNodes[0].namedChildren[0].type === "tuple_of_identifiers") {
-        tupOfIdents = quantBoundNodes[0].namedChildren[0];
-        evalLog("tupOfIdents:", tupOfIdents);
-    } else{
-        assert(quantBoundNodes[0].namedChildren.filter(c => c.type === "identifier").length === 1);
-    }
-
-    let quantifier = node.namedChildren[0];
-    assert(quantifier.type === "exists" || quantifier.type === "forall");
-
-    // Extract all quantifier bounds/domains.
-    // TODO: This should likely be obsolete now since we should have
-    // always normalized down to a single quantifier bound in all cases.
-    let currInd = 1;
-    quantBounds = [];
-    while (node.namedChildren[currInd].type === "quantifier_bound") {
-        quantBounds.push(node.namedChildren[currInd]);
-        currInd += 1;
-    }
-
-    let quantBound = node.namedChildren[1];
-
-    // The quantified expression.
-    let quant_expr = node.namedChildren[currInd];
-    evalLog("quant bound:", quantBound);
-    evalLog("quant expr:", quant_expr);
-
-    evalLog("qbound child:", quantBound.namedChildren);
-    let domainVal = evalExpr(quantBound.lastNamedChild, ctx)[0]["val"];
-    assert(domainVal instanceof SetValue);
-    let quantDomain = domainVal.getElems();
-    evalLog("quantDomain: ", quantDomain);
-    // If we have a tuple of identifiers, then each element in the domain should be a tuple.
-
-    let quantIdent;
-    if(tupOfIdents == null){
-        quantIdent = quantBound.namedChildren.filter(c => c.type === "identifier")[0].text;
-    } else{
-        quantIdent = tupOfIdents.namedChildren.filter(c => c.type === "identifier").map(c => c.text);
-    }
-    evalLog("quantIdent: ", quantIdent);
-
-    // Iterate over the product of all quantified domains and evaluate
-    // the quantified expression with the appropriately bound values.
+    let allDomains = quantIdentAndDomains.map(identAndDomain => identAndDomain[1]);
+    domainProduct = cartesianProductOf(...allDomains);
+    // console.log("allDomains:", allDomains);
+    // console.log("domainProduct:", domainProduct);
 
     // Trivial case of empty domain.
-    if (quantDomain.length === 0) {
+    if (domainProduct.length === 0) {
+        // console.log("TRIVIAL CASE OF EMPTY DOMAIN");
         // \forall x \in {} : <expr> is always true.
         // \exists x \in {} : <expr> is always false.
         let retVal = (quantifier.type === "forall");
         return [ctx.withVal(new BoolValue(retVal))];
     }
 
-    let currAssignedVars = _.keys(ctx["state"].stateVars).filter(k => ctx["state"].stateVars[k] !== null)
-
-    // Evaluate each sub-expression with the properly bound values.
-    retCtxs = _.flattenDeep(quantDomain.map(domVal => {
+    let retCtxs = domainProduct.map(domainVals => {
         let boundContext = ctx.clone();
         // Bound values to quantified variables.
         if (!boundContext.hasOwnProperty("quant_bound")) {
             boundContext["quant_bound"] = {};
         }
+        for(var i = 0; i < domainVals.length; i++){
+            let quantIdent = quantIdentAndDomains[i][0];
+            // console.log("quantIdent:", quantIdent);
 
-        if(tupOfIdents == null){
-            boundContext["quant_bound"][quantIdent] = domVal;
-        } else{
-            // Handle identifier tuple.
-            for(var ind = 0; ind < quantIdent.length; ind++){
-                boundContext["quant_bound"][quantIdent[ind]] = domVal.getValues()[ind];
+            // If quantIdent is a list of identifiers, this came from a
+            // tuple_of_identifiers, and we bind each tuple identifier
+            // accordingly.
+            if (quantIdent instanceof Array) {
+                for (var ind = 0; ind < quantIdent.length; ind++) {
+                    boundContext["quant_bound"][quantIdent[ind]] = domainVals[i].getValues()[ind];
+                }
+            } else {
+                boundContext["quant_bound"][quantIdent] = domainVals[i];
             }
+        }            
+        // evalLog("quantDomain val:", domVal);
+        if(typeof quant_expr === 'function'){
+            return quant_expr(boundContext);
         }
-
-        evalLog("quantDomain val:", domVal);
-        evalLog("boundContext:", boundContext);
-        let ret = evalExpr(quant_expr, boundContext.clone());
+        let ret = evalExpr(quant_expr, boundContext);
         return ret;
-    }));
+    })
 
-    evalLog("quant returned contexts:", retCtxs);
+    return _.flattenDeep(retCtxs);
+}
+
+function evalBoundedQuantification(node, ctx) {
+    evalLog("bounded_quantification", node);
+
+    //
+    // Bounded quantification expression in general form is like the following:
+    //
+    // \E i,j,k \in S, c,d \in T ... 
+    //
+    // Overall it will simply become a list of identifiers, each mapped to the domain (set of values) 
+    // they are quantified over.
+    // 
+    let quantBoundNodes = node.namedChildren.filter(c => c.type === "quantifier_bound");
+    // console.log("quantBoundNodes:", quantBoundNodes);
+    
+    // We now produce a list containing tuples of (identifier, domain) pairs.
+    quantIdentsWithDomains = quantBoundNodes.map(q => {
+        // \E i,j,k \in S, c,d \in T ... 
+        // Remove the last 2 elements (the '\in' and the set expression)
+        let setExpr = q.namedChildren.at(-1);
+        let domainVal = evalExpr(setExpr, ctx)[0]["val"];
+        assert(domainVal instanceof SetValue);
+        let quantDomain = domainVal.getElems();
+
+        let identifiers;
+        // Also handle tuple identifier cases e.g. \E <<i,j>> \in S In this
+        // case, each tuple identifier is bound to the correspondingtuple entry
+        // of each value in the domain S.
+        if (q.namedChildren[0].type === "tuple_of_identifiers"){
+            console.log("tuple_of_identifiers", q.namedChildren[0]);
+            let tupleOfIdents = q.namedChildren[0];
+            // Store tuple identifiers as a list of identifiers.
+            identifiers = [tupleOfIdents.namedChildren.filter(c => c.type === "identifier").map(c => c.text)];
+        } else{
+            identifiers = q.namedChildren.slice(0, -2).map(c => c.text);
+        }
+        return identifiers.map(i => [i, quantDomain]);
+    })
+
+    quantIdentsWithDomains = _.flatten(quantIdentsWithDomains);
+
+    // console.log("quantIdentsWithDomains:", quantIdentsWithDomains);
+
+    let quantifier = node.namedChildren[0];
+    assert(quantifier.type === "exists" || quantifier.type === "forall");
+
+    // The quantified expression.
+    let quant_expr = node.namedChildren.at(-1); //[currInd];
+    let currAssignedVars = _.keys(ctx["state"].stateVars).filter(k => ctx["state"].stateVars[k] !== null)
+
+    // Now evaluate the quantified expression over all possible identifier value combinations.
+    let retCtxs = evalOverQuantBounds(ctx, quantIdentsWithDomains, quant_expr, quantifier);
 
     // If this is a universal quantifier, then we don't fork the evaluation.
     if (quantifier.type === "forall") {

@@ -18,7 +18,7 @@ Init ==
             notexists2 |-> ~(\E a \in {15,16,17} : a = 16),
             setin1 |-> 1 \in {2,3},
             setin2 |-> 2 \in {2,3},
-            setnotin1 |-> 2 \notin {2,3},
+            setnotin1 |-> 2 \notin {3,2},
             setnotin2 |-> 4 \notin {2,3},
             disj1 |-> (1 \in {2,3}) \/ (2 \in {2,3}),
             disj2 |-> FALSE \/ TRUE,
