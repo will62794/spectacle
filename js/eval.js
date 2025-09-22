@@ -1152,11 +1152,11 @@ class SyntaxRewriter {
 
                     // Delete everything inside comments.
                     if (node.type === "block_comment") {
-                        sourceRewrites.push({
-                            startPosition: node.startPosition,
-                            endPosition: node.endPosition,
-                            newStr: ""
-                        });
+                        // sourceRewrites.push({
+                        //     startPosition: node.startPosition,
+                        //     endPosition: node.endPosition,
+                        //     newStr: ""
+                        // });
                         // return sourceRewrites;
                     }
 
@@ -1169,7 +1169,7 @@ class SyntaxRewriter {
                             // TODO: Delete line.
                             // deleteRow: node.startPosition["row"]
                         }
-                        sourceRewrites.push(rewrite);
+                        // sourceRewrites.push(rewrite);
                         // return sourceRewrites;
                     }
 
