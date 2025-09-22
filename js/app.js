@@ -3379,6 +3379,41 @@ function loadSpecText(text, specPath) {
     }
 }
 
+function tryLoadAnimSpec(specPath) {
+
+    let animSpecPath = specPath.replace(".tla", "_anim.tla");
+    m.request(animSpecPath, { responseType: "text" }).then(function (animText) {
+        console.log("found animText", animText);
+        model.specAnimText = animText;
+        model.animationExists = true;
+
+
+        let spec = new TLASpec(animText, animSpecPath);
+        let parseStartTime = performance.now();
+        console.log("PARSING ANIM SPEC", animSpecPath);
+        return spec.parse().then(function () {
+            let parseEndTime = performance.now();
+            console.log("ANIM SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
+
+            model.animSpec = spec;
+            model.animationExists = true;
+            // let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
+
+            loadAnimSpecText(animText, specPath);
+            // onSpecParse(newText, spec.spec_obj, spec);
+            // m.redraw(); //explicitly re-draw on promise resolution.
+        }).catch(function (e) {
+            console.log("Error parsing and loading spec.", e);
+            model.errorObj = { parseError: true, obj: e, message: "Error parsing spec." };
+        });
+
+    }).catch(function (e) {
+        console.log("No animation spec found for ", specPath);
+        // loadSpecText(specText, specPath);
+    });
+
+}
+
 // Fetch spec from given path (e.g. URL) and reload it in the editor pane and UI.
 function loadSpecFromPath(specPath){
     model.errorInfo = null;
