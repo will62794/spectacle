@@ -1717,8 +1717,10 @@ class TLASpec {
         // Perform syntactic rewrites.
         let rewriter = new SyntaxRewriter(specText, parser);
         this.rewriter = rewriter;
-        let specTextRewritten = rewriter.doRewrites();
-        this.specTextRewritten = specTextRewritten;
+        // Fully disable syntactic re-writing.
+        // let specTextRewritten = rewriter.doRewrites();
+        let specTextRewritten = specText;
+        this.specTextRewritten = specText;
         specText = specTextRewritten;
 
         // console.log("REWRITTEN:");
