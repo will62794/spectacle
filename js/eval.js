@@ -4859,6 +4859,11 @@ function evalExpr(node, ctx) {
     if (node.type === "comment") {
         // TOOD: Handle properly.
     }
+
+    // Do some comment cleanup as necessary.
+    _.remove(node.children, isCommentNode);
+
+
     if (node === undefined) {
         return [ctx.withVal(false)];
     }
