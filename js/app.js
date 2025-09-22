@@ -2738,6 +2738,13 @@ function loadSpecBox(hidden){
     ])
 }
 
+function openSpecEditorTab(){
+    model.selectedTab = Tab.SpecEditor;
+    setTimeout(() => {
+        getCodeMirrorEditor().refresh();
+    }, 50);
+}
+
 function headerTabBar() {
     let activeClasses = "nav-link active";
     let tabs = [
@@ -2762,11 +2769,7 @@ function headerTabBar() {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
             onclick: () => {
-                model.selectedTab = Tab.SpecEditor;
-                // Refresh the code editor.
-                setTimeout(() => {
-                    getCodeMirrorEditor().refresh();
-                }, 50);
+                openSpecEditorTab();
             },
             // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
         }, m("a", {class: model.selectedTab === Tab.SpecEditor ? "nav-link active" : "nav-link"}, "Spec")),
