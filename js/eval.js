@@ -1669,9 +1669,13 @@ class TLASpec {
             ind = 0;
         }
 
+        // Clear comments eagerly.
+        _.remove(node.children, isCommentNode);
+        _.remove(node.namedChildren, isCommentNode);
+
         // De-parenthesize.
         if(node.type === "parentheses"){
-            return this.parseActionsFromNode(node.namedChildren[0], ind);
+            return this.parseActionsFromNodeRec(node.namedChildren[0], ind);
         }
 
         // If an action is just a plain identifier, then we treat it as its own action.
@@ -1692,15 +1696,14 @@ class TLASpec {
             
             // Disjunction A \/ B.
             if(symbol.type === "lor"){
-                return this.parseActionsFromNode(lhs).concat(this.parseActionsFromNode(rhs));
+                return this.parseActionsFromNodeRec(lhs).concat(this.parseActionsFromNodeRec(rhs));
             }
         }
 
         // For a disjunction list, recurse on each disjunct.
         if (node.type == "disj_list") {
             let disjActions = node.namedChildren.map((cnode, ind) => {
-                // console.log(cnode);
-                return this.parseActionsFromNode(cnode.namedChildren[1], ind);
+                return this.parseActionsFromNodeRec(cnode.namedChildren[1], ind);
             });
             return _.flatten(disjActions);
         }
