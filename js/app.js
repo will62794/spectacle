@@ -1412,12 +1412,14 @@ function reloadSpec() {
     
     // Refresh the CodeMirror editor to ensure proper display
     setTimeout(() => {
-        const $codeEditor = document.querySelector('.CodeMirror');
-        if ($codeEditor && $codeEditor.CodeMirror) {
-            $codeEditor.CodeMirror.refresh();
+        if(model.selectedTab !== Tab.SpecEditor){
+            const $codeEditor = document.querySelector('.CodeMirror');
+            if ($codeEditor && $codeEditor.CodeMirror) {
+                $codeEditor.CodeMirror.refresh();
+            }
+            model.selectedTab = Tab.StateSelection;
+            m.redraw();
         }
-        model.selectedTab = Tab.StateSelection;
-        m.redraw();
     }, 100);
 
     // Check for trace to load from given link.
@@ -2386,7 +2388,6 @@ function resetTrace() {
     model.currTraceAliasVals = []
     model.lassoTo = null;
     model.errorInfo = null;
-    model.selectedTab = Tab.StateSelection;
 
     const $codeEditor = document.querySelector('.CodeMirror');
     const editor = $codeEditor.CodeMirror;
@@ -2533,7 +2534,10 @@ function componentButtonsContainer() {
                 class: "btn btn-sm btn-outline-primary button-bagse", 
                 id: "trace-reset-button", 
                 "data-testid": "trace-reset-button",
-                onclick: resetTrace 
+                onclick: () => {
+                    resetTrace();
+                    model.selectedTab = Tab.StateSelection;
+                }
             }, "Reset"),
             // Explode dropdown.
             explodeButtonDropdown(),
@@ -3297,12 +3301,18 @@ function loadRouteParamsState() {
     }
 
     if(!initAndNextDefsValid() || !allConstValsSet()){
-        model.selectedTab = Tab.Config;
+        if(model.selectedTab !== Tab.SpecEditor){
+            model.selectedTab = Tab.Config;
+        }
     }
 
     if(initAndNextDefsValid() && allConstValsSet()){
         setConstantValues();
-        model.selectedTab = Tab.StateSelection;
+        // If we are currently in the spec editor, this should imply we
+        // were simply editing the existing spec, so don't switch over to state selection.
+        if(model.selectedTab !== Tab.SpecEditor){
+            model.selectedTab = Tab.StateSelection;
+        }
     }
 
     // Feature flag to use web worker for trace loading.
@@ -3311,7 +3321,10 @@ function loadRouteParamsState() {
     // Load trace if given.
     let traceParamStr = m.route.param("trace")
     if (traceParamStr) {
-        model.selectedTraceTab = TraceTab.Trace;
+        // Similarly, if we are viewing an animation, don't switch to trace tab.
+        if(model.selectedTraceTab !== TraceTab.Animation){
+            model.selectedTraceTab = TraceTab.Trace;
+        }
         let traceParams = traceParamStr.split(",");
 
         if(useWebWorkerLoad){
