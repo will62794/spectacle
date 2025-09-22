@@ -5249,6 +5249,8 @@ class TlaInterpreter {
         evalNodeGraph = [];
         edgeOrder = 0;
 
+        evalNodeError = [];
+
         evalLog("consts:", consts);
 
         let initDef = spec.getDefinitionByName(initDefName);
@@ -5274,6 +5276,8 @@ class TlaInterpreter {
         // Reset for debugging.
         evalNodeGraph = [];
         edgeOrder = 0;
+
+        evalNodeError = [];
 
         let nextDef = spec.getDefinitionByName(nextDefName)["node"];
 

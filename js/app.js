@@ -775,7 +775,7 @@ function errorMsgStr(errorInfo) {
         if (errorInfo.actionEvalError !== null) {
             errorPosStr += " (action: " + errorInfo.actionEvalError.name + ")";
             return m("span", { style: "font-size: 14px;" }, [
-                m("div", { style: "margin-bottom: 10px;font-weight: normal" }, "Error computing next states. "),
+                m("div", { style: "margin-bottom: 10px;font-weight: normal;font-size: 16px;font-family: sans-serif;" }, "Error computing next states. "),
                 m("div", {
                     style: "font-size: 14px;font-weight: normal",
                     class: "hover-link",
@@ -851,7 +851,7 @@ function highlightError(){
     // editor.setCursor(errLine,errCol);
 
     setTimeout(() => {
-        editor.scrollIntoView(errLine,errCol, 100);
+        editor.scrollIntoView(errLine + 5, errCol, 0);
         // editor.setCursor(errLine,errCol);
         // editor.refresh();
     }, 50);
@@ -1039,6 +1039,7 @@ function traceStepBack() {
     updateTraceRouteParams();
 
     model.errorInfo = null;
+    clearErrorMarks();
 
     // Back to initial states.
     if (model.currTrace.length === 0) {
