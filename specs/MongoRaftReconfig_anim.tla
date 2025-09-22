@@ -402,8 +402,8 @@ logEntryStyle(i,ind) ==
     IF \E c \in immediatelyCommitted : c[1] = ind /\ c[2] = log[i][ind] 
         THEN ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px")
         ELSE ("fill" :> "lightgray" @@ "stroke" :> "black" @@ "stroke-width" :> "1px")
-logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)), 
-                                   Text(18 * ind + 115, ybase + 12, ToString(log[i][ind]), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
+logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 140, ybase, 16, 16, logEntryStyle(i,ind)), 
+                                   Text(18 * ind + 145, ybase + 12, ToString(log[i][ind]), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 
@@ -420,15 +420,24 @@ cs == [i \in RMIdDomain |->
             CrownElem(XBase-10, RMId[i],i)>>, [h \in {} |-> {}])
         ]
 
-configStr(i) == ToString(config[RMId[i]])
-labels == [i \in RMIdDomain |-> Text(XBase + 38, i * Spacing + 5, 
-        \* ToString(RMId[i]) \o ", t=" \o ToString(currentTerm[RMId[i]]) \o ",  " \o configStr(i), 
-        ToString(RMId[i]) \o "     " \o configStr(i), 
-        [fill |-> 
-            IF state[RMId[i]] = Primary 
-                THEN "black" 
-            ELSE IF state[RMId[i]] = Secondary THEN "black" 
-            ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))] 
+configStr(rmid) == ToString(config[rmid])
+configVersionAndTermStr(rmid) == "(" \o ToString(configVersion[rmid]) \o ", " \o ToString(configTerm[rmid]) \o ")"
+labelText(i, rmid) == 
+    Group(<<
+        Text(XBase + 38, i * Spacing + 5, 
+            ToString(rmid) \o "     " \o configStr(rmid), 
+                [fill |-> 
+                    IF state[rmid] = Primary 
+                        THEN "black" 
+                    ELSE IF state[rmid] = Secondary THEN "black" 
+                    ELSE "gray"] @@ ("font-family" :> "monospace" @@ "font-size" :> "8px"))
+                    ,
+        Text(XBase + 130, i * Spacing + 5, configVersionAndTermStr(rmid), ("fill" :> "black" @@ "font-family" :> "monospace" @@ "font-size" :> "6px"))
+            >>, [h \in {} |-> {}])
+
+labels == [i \in RMIdDomain |-> labelText(i, RMId[i])] 
+
+configVersionTermTitleLabel == <<Text(100,20, "(version, term)", ("fill" :> "black" @@ "font-family" :> "monospace" @@ "font-size" :> "6px"))>>
 
 termLabels == 
     [i \in RMIdDomain |-> 
@@ -463,7 +472,7 @@ safetyViolationElems ==  <<violationElem(5)>>
 \* 
 \* Animation view.
 \* 
-AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems, [transform |-> "translate(120, 30) scale(1.75)"])
+AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems \o configVersionTermTitleLabel, [transform |-> "translate(120, 30) scale(1.75)"])
 
 
 =============================================================================
