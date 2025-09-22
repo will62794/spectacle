@@ -16,6 +16,7 @@ Init ==
                     w == y + z IN (y + z + w)
         ]
     \* Operator definitions inside LET IN.
+    \/ x = (** hello comment **) LET Op1(a) == a + 2 IN Op1(16)
     \/ x = LET Op1(a) == a + 2 IN Op1(16)
     \/ x = LET Op2(a,b) == a + b IN Op2(12,3)
     \/ x = LET Op1(a) == a + 3 
