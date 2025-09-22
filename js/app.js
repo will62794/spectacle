@@ -17,8 +17,9 @@ let Tab = {
     StateSelection: 1,
     Config: 2,
     SpecEditor: 3,
-    Load: 4,
-    EvalGraph: 5
+    SpecAnimationEditor: 4,
+    Load: 5,
+    EvalGraph: 6
 }
 
 let TraceTab = {
@@ -1692,11 +1693,11 @@ function getActionLabelText(actionLabel, quantBounds) {
 }
 
 function animationViewForTraceState(state){
-    let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
+    let viewNode = model.animSpec.getDefinitionByName(model.animViewDefName).node;
     let initCtx = new Context(null, state, model.specDefs, {}, model.specConstVals);
-    initCtx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
-    initCtx.setSpecObj(model.spec);
-    initCtx["defns_curr_context"] = model.spec.getDefinitionByName(model.animViewDefName)["curr_defs_context"];
+    initCtx.setGlobalDefTable(_.cloneDeep(model.animSpec.globalDefTable));
+    initCtx.setSpecObj(model.animSpec);
+    initCtx["defns_curr_context"] = model.animSpec.getDefinitionByName(model.animViewDefName)["curr_defs_context"];
     let start = performance.now();
     // evalNodeGraph = [];
     try{
@@ -1742,7 +1743,7 @@ function componentTraceViewerState(stateCtx, ind, isLastState, actionId) {
     let actionLabelObj = getActionLabelText(actionLabel, stateQuantBounds);
     let actionLabelText = actionLabelObj.name + actionLabelObj.params;
 
-    model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName);
+    // model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName) || model.animationExists === true;
     let vizSvg = m("svg", { width: 0, height: 0 }, []);
 
     if (model.animationExists && model.enableAnimationView) {
@@ -2263,7 +2264,13 @@ function onSpecParse(newText, parsedSpecTree, spec){
     model.specDefs = model.specTreeObjs["op_defs"];
     model.specAlias = model.specTreeObjs["op_defs"]["Alias"];
 
-    model.animationExists = model.spec.hasDefinitionByName(model.animViewDefName);
+    // Record whether there is an animation definition that exists in the main spec itself.
+    // This will take preference over an external animation spec.
+    model.inlineAnimationExists = model.spec.hasDefinitionByName(model.animViewDefName);
+    model.animationExists = model.inlineAnimationExists;
+    if(model.inlineAnimationExists){
+        model.animSpec = model.spec;
+    }
 
     if(hasNext){
         let nextDef = model.spec.getDefinitionByName(model.nextStatePredName);
@@ -2738,6 +2745,14 @@ function loadSpecBox(hidden){
     ])
 }
 
+function specAnimationEditorPane(hidden){
+    return m("div", { id: "code-anim-input-pane", hidden:hidden }, [
+        m("div", { id: "code-anim-container" }, [
+            m("textarea", { id: "code-anim-input" })
+        ])
+    ]);
+}
+
 function openSpecEditorTab(){
     model.selectedTab = Tab.SpecEditor;
     setTimeout(() => {
@@ -2780,6 +2795,16 @@ function headerTabBar() {
             // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
         }, m("a", {class: model.selectedTab === Tab.Load ? "nav-link active" : "nav-link"}, "Load"))
     ]
+
+    // If an external animation spec exists, then show the animation spec tab separately.
+    let anim_spec_tab = m("li", {
+        class: "nav-item",
+        onclick: () => model.selectedTab = Tab.SpecAnimationEditor,
+    }, m("a", {class: model.selectedTab === Tab.SpecAnimationEditor ? "nav-link active" : "nav-link"}, "Animation Spec"));
+    if(model.animationExists && !model.inlineAnimationExists){
+        tabs.push(anim_spec_tab);
+    }
+    
     let debug_tabs = [
         m("div", {
             // id: "eval-graph-tab-button", 
@@ -2820,6 +2845,7 @@ function midPane() {
         stateSelectionPane(model.selectedTab !== Tab.StateSelection),
         componentChooseConfig(model.selectedTab !== Tab.Config),
         specEditorPane(model.selectedTab !== Tab.SpecEditor),
+        specAnimationEditorPane(model.selectedTab !== Tab.SpecAnimationEditor),
         loadPane(model.selectedTab !== Tab.Load)
     ];
     let debug_tabs = [
@@ -3320,6 +3346,32 @@ function getCodeMirrorEditor() {
     return editor;
 }
 
+function loadAnimSpecText(animText, specPath) {
+    const $codeEditor = document.querySelector('.CodeMirror-anim-spec');
+    console.log("CODE EDITROS:", $codeEditor);
+    spec = animText;
+
+    // console.log("Retrieved spec:", specPath);
+    if ($codeEditor) {
+        $codeEditor.CodeMirror.setSize("100%", "100%");
+        $codeEditor.CodeMirror.on("changes", () => {
+            // CodeMirror listeners are not known to Mithril, so trigger an explicit redraw after
+            // processing the code change.
+            handleCodeChange().then(function () {
+                // loadRouteParamsState();
+                m.redraw();
+            })
+        });
+        $codeEditor.CodeMirror.setValue(spec);
+        // const editor = $codeEditor.CodeMirror;
+        // editor.refresh();
+
+        // model.selectedTab = Tab.StateSelection;
+        // model.selectedTraceTab = TraceTab.Trace;
+    }
+}
+
+
 //
 // Load spec from given spec text and reload it in the editor pane and UI.
 // Given 'specPath' may be null if spec is loaded from a file directly.
@@ -3420,6 +3472,9 @@ function loadSpecFromPath(specPath){
     // Download the specified spec and load it in the editor pane.
     return m.request(specPath, { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
+        // if(!model.inlineAnimationExists){
+        //     tryLoadAnimSpec(specPath);
+        // }
     }).catch(function(e) {
         console.log("Error loading file ", specPath, e);
         model.loadSpecFailed = true;
@@ -3458,11 +3513,21 @@ async function loadApp() {
                     showCursorWhenSelecting: true,
                     fontSize: "13px",
                     theme: "default",
+                    scrollbarStyle: "null",
                     // TODO: Work out tlaplus mode functionality for syntax highlighting.
                     // mode:"tlaplus"
                 });
                 // Set font size using CSS
                 codeEditor.getWrapperElement().style.fontSize = "13px";
+            }
+            const codeAnimInput = document.getElementById('code-anim-input');
+            if(codeAnimInput){
+                codeAnimEditor = CodeMirror.fromTextArea(codeAnimInput, {
+                    lineNumbers: true,
+                    showCursorWhenSelecting: true,
+                    scrollbarStyle: "null",
+                });
+                codeAnimEditor.getWrapperElement().classList.add("CodeMirror-anim-spec");
             }
         },
         onupdate: function () {
