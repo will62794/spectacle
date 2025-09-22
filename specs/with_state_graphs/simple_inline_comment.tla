@@ -13,6 +13,12 @@ Init ==
         /\ \* test inline 2. 
            x \in {44,55}
         /\ (* test inline 3. *) x > 50
+    \/ x = <<
+        \* inline tuple comment
+        1, 2,
+        (* inline tuple comment 2 *)
+        5, 60
+        >>
 
 Next == x' = x 
 ====================

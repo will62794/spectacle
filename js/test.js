@@ -360,6 +360,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             { "spec": "simple_implies", "constvals": undefined },
             { "spec": "simple_inline_comment", "constvals": undefined },
             { "spec": "simple_inline_comment_conj", "constvals": undefined },
+            { "spec": "simple_inline_comment_constant", "constvals": {"C": new IntValue(44), "D": new IntValue(55)} },
             { "spec": "simple_definition", "constvals": undefined },
             { "spec": "simple_definition2", "constvals": undefined },
             { "spec": "simple6", "constvals": undefined },

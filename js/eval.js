@@ -1997,7 +1997,7 @@ class TLASpec {
 
             // CONSTANT c1, c2, c3
             if (node.type === "constant_declaration") {
-                let constDecls = cursor.currentNode().namedChildren.filter(c => c.type !== "comment");
+                let constDecls = cursor.currentNode().namedChildren.filter(isNotCommentNode);
                 for (const declNode of constDecls) {
                     let constDeclName = null;
                     if (declNode.type === "operator_declaration") {
@@ -4865,6 +4865,7 @@ function evalExpr(node, ctx) {
 
     // Do some comment cleanup as necessary.
     _.remove(node.children, isCommentNode);
+    _.remove(node.namedChildren, isCommentNode);
 
 
     if (node === undefined) {
