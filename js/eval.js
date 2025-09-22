@@ -891,6 +891,7 @@ class SyntaxRewriter {
      * Compute original location of given position from the rewritten spec.
      */
     getOrigLocation(line, col) {
+        return [line, col];
         console.log("#getOrigLocation");
         let lineArg = line;
         let colArg = col;
