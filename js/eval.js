@@ -2008,7 +2008,7 @@ class TLASpec {
 
             // VARIABLE x, y, z
             if (node.type === "variable_declaration") {
-                let varDecls = cursor.currentNode().namedChildren.filter(c => c.type !== "comment");
+                let varDecls = cursor.currentNode().namedChildren.filter(isNotCommentNode);
                 for (const declNode of varDecls) {
                     var_decls[declNode.text] = { "id": declNode.id };
                 }
@@ -2193,7 +2193,7 @@ class TLASpec {
 
                 // Skip any intervening comment nodes.
                 cursor.gotoNextSibling();
-                while (cursor.currentNode().type === "comment") {
+                while (isCommentNode(cursor.currentNode())) {
                     cursor.gotoNextSibling();
                     console.log(cursor.currentNode());
                     console.log(cursor.currentNode().type);
@@ -2545,6 +2545,14 @@ class Context {
             return this["operators_bound"][defName];
         }
     }
+}
+
+function isNotCommentNode(node){
+    return !["comment", "block_comment"].includes(node.type)
+}
+
+function isCommentNode(node){
+    return !isNotCommentNode(node);
 }
 
 function evalLnot(v, ctx) {
@@ -3618,8 +3626,15 @@ function evalDisjList(parent, disjs, ctx) {
     let currAssignedVars = _.keys(ctx["state"].stateVars).filter(k => ctx["state"].stateVars[k] !== null)
 
     // Split into separate evaluation cases for each disjunct.
+
     // Also filter out any comments in this disjunction list.
-    // TODO: Process disjunctive contexts properly?
+    disjs = disjs.filter(isNotCommentNode);
+    for (var i = 0; i < disjs.length; i++) {
+        // Remove any inline/inner comment nodes as well.
+        // e.g. \/ (* inline comment *) x = 2
+        _.remove(disjs[i].children, isCommentNode);
+    }
+
     let retCtxs = _.flattenDeep(disjs.map(disj => evalExpr(disj, ctx)));
     return processDisjunctiveContexts(ctx, retCtxs, currAssignedVars);
 }
@@ -3637,7 +3652,14 @@ function evalConjList(parent, conjs, ctx) {
     let shortCircuit = true;
 
     // Filter out any comments contained in this conjunction.
-    let conjs_filtered = conjs.filter(c => !["comment", "block_comment"].includes(c.type));
+    let conjs_filtered = conjs.filter(isNotCommentNode);
+    for (var i = 0; i < conjs_filtered.length; i++) {
+        // Remove any inline/inner comment nodes as well.
+        // e.g. \/ (* inline comment *) x = 2
+        _.remove(conjs_filtered[i].children, isCommentNode);
+    }
+
+
     return conjs_filtered.reduce((prev, conj) => {
         let res = prev.map(ctxPrev => {
             // If this context has already evaluated to false, then the overall
@@ -5088,9 +5110,10 @@ function evalExpr(node, ctx) {
         let record_obj = {};
         let recordDom = [];
         let recordVals = [];
-        for (var i = 0; i < node.namedChildren.length; i += 3) {
-            let ident = node.namedChildren[i]
-            let exprNode = node.namedChildren[i + 2]
+        let namedChildrenVals = node.namedChildren.filter(isNotCommentNode);
+        for (var i = 0; i < namedChildrenVals.length; i += 3) {
+            let ident = namedChildrenVals[i]
+            let exprNode = namedChildrenVals[i + 2]
 
             let identName = ident.text;
             let exprVal = evalExpr(exprNode, ctx);
