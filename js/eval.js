@@ -2198,9 +2198,6 @@ class TLASpec {
                 cursor.gotoNextSibling();
                 while (isCommentNode(cursor.currentNode())) {
                     cursor.gotoNextSibling();
-                    console.log(cursor.currentNode());
-                    console.log(cursor.currentNode().type);
-                    console.log(cursor.currentFieldName());
                 }
 
                 // We should now be at the definition node.
