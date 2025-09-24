@@ -2729,6 +2729,7 @@ function loadSpecBox(hidden){
                 onclick: () => {
                     model.rootModName = "";
                     model.specPath = model.specUrlInputText;
+                    plausible('LoadSpec', {props: {loaded_spec_path: model.specPath}})
                     model.specConstInputVals = {};
                     updateTraceRouteParams();
                     loadSpecFromPath(model.specPath);
