@@ -3413,6 +3413,8 @@ function loadSpecText(text, specPath) {
     }
     m.route.set("/home", newParams);
 
+    plausible('LoadSpec', {props: {loaded_spec_path: specPath}})
+
     console.log("Retrieved spec:", specPath);
     if ($codeEditor) {
         $codeEditor.CodeMirror.setSize("100%", "100%");
