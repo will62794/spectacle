@@ -46,6 +46,6 @@ ServerIdDomain == 1..2
 cs == [i \in ServerIdDomain |-> Circle(20 * i, 10, 3, [fill |-> IF semaphore[ServerId[i]] THEN "green" ELSE "orange"])]
         \* ServerId[i] ]
 \* ctest == [i \in {1,2} |-> Circle(i*15, 10, 3, [fill |-> "red"])]
-AnimView == Group(cs, [i \in {} |-> {}])
+AnimView == Group(cs, ("transform" :> "scale(2.5) translate(30 20)"))
 
 ====
