@@ -42,7 +42,7 @@ You can also see a live demo of the tool and its features in [this presentation]
 
 ## Animations
 
-Spectacle provides an easy way to create animated visualizations of your specifications by defining them in an SVG-based format right in your spec. See [here](./doc/animation.md) for more details on how to define these animations.
+Spectacle provides an easy way to create animated visualizations of your specifications by defining them in an SVG-based format right in a specification. See [here](./doc/animation.md) for more details on how to define these animations.
 
 ## Running Locally
 
