@@ -761,7 +761,7 @@ function errorMsgStr(errorInfo) {
     errorPosStr = "";
     if (errorInfo !== null && errorInfo.errorPos !== null) {
         errorPosStr = errorInfo.errorPos === null ? "" : "(" + errorInfo.errorPos + ")";
-        if (errorInfo.actionEvalError !== null) {
+        if (errorInfo.actionEvalError !== null && errorInfo.actionEvalError !== undefined) {
             errorPosStr += " (action: " + errorInfo.actionEvalError.name + ")";
             return m("span", { style: "font-size: 14px;" }, [
                 m("div", { style: "margin-bottom: 10px;font-weight: normal;font-size: 16px;font-family: sans-serif;" }, "Error computing next states. "),
