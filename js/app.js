@@ -2834,10 +2834,23 @@ function openSpecAnimationEditorTab(){
     }, 50);
 }
 
+function specAnimTabElem(){
+
+    // No need for animation dropdown if no external animation exists.
+    if(model.externalAnimationExists){
+        return m("li", {
+            class: "nav-item",
+            onclick: () => {
+                openSpecAnimationEditorTab();
+            },
+        }, m("a", {class: model.selectedTab === Tab.SpecAnimationEditor ? "nav-link active" : "nav-link"}, "Animation"));
+    }
+}
+
 function specTabElem(){
 
     // No need for animation dropdown if no external animation exists.
-    if(!model.externalAnimationExists){
+    if(!model.externalAnimationExists || true){
         return m("li", {
             class: "nav-item",
             onclick: () => {
@@ -2846,42 +2859,42 @@ function specTabElem(){
         }, m("a", {class: model.selectedTab === Tab.SpecEditor ? "nav-link active" : "nav-link"}, "Spec"));
     }
     
-    return m("li", {
-        class: "nav-item dropdown"
-    }, [
-        m("a", {
-            class: "nav-link dropdown-toggle" + (model.selectedTab === Tab.SpecEditor || model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
-            // href: "#",
-            role: "button",
-            "data-bs-toggle": "dropdown",
-            "aria-expanded": "false"
-        }, "Spec"),
-        m("ul", {
-            class: "dropdown-menu"
-        }, [
-            m("li", [
-                m("a", {
-                    class: "dropdown-item" + (model.selectedTab === Tab.SpecEditor ? " active" : ""),
-                    // href: "#",
-                    onclick: (e) => {
-                        e.preventDefault();
-                        openSpecEditorTab();
-                    }
-                }, "Spec")
-            ]),
-            m("li", [
-                m("a", {
-                    class: "dropdown-item" + (model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
-                    // href: "#",
-                    hidden: !model.externalAnimationExists,
-                    onclick: (e) => {
-                        e.preventDefault();
-                        openSpecAnimationEditorTab();
-                    }
-                }, "Animation")
-            ])
-        ])
-    ]);
+    // return m("li", {
+    //     class: "nav-item dropdown"
+    // }, [
+    //     m("a", {
+    //         class: "nav-link dropdown-toggle" + (model.selectedTab === Tab.SpecEditor || model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
+    //         // href: "#",
+    //         role: "button",
+    //         "data-bs-toggle": "dropdown",
+    //         "aria-expanded": "false"
+    //     }, "Spec"),
+    //     m("ul", {
+    //         class: "dropdown-menu"
+    //     }, [
+    //         m("li", [
+    //             m("a", {
+    //                 class: "dropdown-item" + (model.selectedTab === Tab.SpecEditor ? " active" : ""),
+    //                 // href: "#",
+    //                 onclick: (e) => {
+    //                     e.preventDefault();
+    //                     openSpecEditorTab();
+    //                 }
+    //             }, "Spec")
+    //         ]),
+    //         m("li", [
+    //             m("a", {
+    //                 class: "dropdown-item" + (model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
+    //                 // href: "#",
+    //                 hidden: !model.externalAnimationExists,
+    //                 onclick: (e) => {
+    //                     e.preventDefault();
+    //                     openSpecAnimationEditorTab();
+    //                 }
+    //             }, "Animation")
+    //         ])
+    //     ])
+    // ]);
 }
 
 function headerTabBar() {
@@ -2905,6 +2918,7 @@ function headerTabBar() {
                 m("span", {class: "text-warning ms-1", title: "Missing Init or Next definition"}, "⚠") : ""
         ])),
         specTabElem(),
+        specAnimTabElem(),
         m("li", {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
