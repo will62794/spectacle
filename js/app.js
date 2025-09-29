@@ -419,7 +419,7 @@ function allConstValsSet(){
         return true;
     }
     return model.specConstInputVals && model.specConsts &&
-        _.isEqual(Object.keys(model.specConstInputVals), Object.keys(model.specConsts)) &&
+        _.isEqual(new Set(Object.keys(model.specConstInputVals)), new Set(Object.keys(model.specConsts))) &&
         Object.values(model.specConstInputVals).every(val => val.length > 0);
 }
 
