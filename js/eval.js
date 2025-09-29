@@ -1409,7 +1409,7 @@ function fetchModuleExtends(moduleNames, urlPath) {
  */
 class TLASpec {
     // TODO: We probably want to eventually rename this to more accurately represent its role as a single (e.g. root) TLA+ module.
-    constructor(specText, specPath, nextDefName="Next") {
+    constructor(specText, specPath, nextDefName="Next", module_overrides={}) {
 
         this.moduleTable = {};
         this.moduleTableParsed = {};
@@ -1423,6 +1423,11 @@ class TLASpec {
 
         // Stores the parsed root spec object.
         this.spec_obj = {};
+
+        // An optional map that can be supplied that maps from a module name to
+        // the full text of that module to use if any module during parsing is
+        // looked up by that name.
+        this.module_overrides = module_overrides;
 
     }
 
@@ -1607,7 +1612,15 @@ class TLASpec {
 
         return this.resolveModuleImports(this.specText).then(function (fullModuleTable) {
             console.log(`Resolved module table (${Object.keys(fullModuleTable).length} transitively imported modules):`, Object.keys(fullModuleTable));
+            // console.log("FULL MODULE TABLE:", fullModuleTable);
             self.moduleTable = fullModuleTable;
+
+            // If there explicit module overrides, we set those in the constructed module table.
+            if(self.module_overrides){
+                for(const modName in self.module_overrides){
+                    self.moduleTable[modName] = self.module_overrides[modName];
+                }
+            }
 
             // 
             // Once the global module table has been fetched and stored, we shouldn't need to fetch any more specs.

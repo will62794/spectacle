@@ -31,6 +31,7 @@ let TraceTab = {
 
 let model = {
     specText: null,
+    specAnimText: null,
     allInitStates: [],
     initStatePredName: "Init",
     nextStatePredName: "Next",
@@ -2311,6 +2312,72 @@ function onSpecParse(newText, parsedSpecTree, spec){
     reloadSpec();
 }
 
+// Used to re-parse an external (*_anim.tla) file e.g. on either local edit of
+// the animation spec file or the root module spec file.
+function reparseExternalAnimSpec(newText){
+
+    let animSpecPath = model.specPath.replace(".tla", "_anim.tla");
+
+    // If we are editing an external animation spec, then upon any edits to it
+    // or to the root spec, we will re-parse but use the locally edited version
+    // of the root and animation spec, instead of reloading the external version
+    // of the root spec i.e. so that local edits to the root spec are reflected
+    // in the animation spec as well.
+    let moduleOverrides = {};
+    moduleOverrides[model.rootModName] = model.specText;
+    let spec = new TLASpec(newText, animSpecPath, nextDefName = "Next", module_overrides = moduleOverrides);
+    let parseStartTime = performance.now();
+
+    console.log("PARSING ANIM SPEC", animSpecPath);
+
+    return spec.parse().then(function () {
+        let parseEndTime = performance.now();
+        console.log("ANIM SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
+
+        model.animSpec = spec;
+        model.externalAnimationExists = true;
+
+        // let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
+        // loadAnimSpecText(animText, specPath);
+        // onSpecParse(newText, spec.spec_obj, spec);
+        // m.redraw(); //explicitly re-draw on promise resolution.
+        m.redraw();
+    }).catch(function (e) {
+        console.log("Error parsing and loading spec.", e);
+        model.errorObj = { parseError: true, obj: e, message: "Error parsing spec." };
+    });
+}
+
+
+async function handleAnimCodeChange(editor, changes) {
+    console.log("handle anim code change");
+
+    const animCodeEditor = document.querySelector('.CodeMirror-anim-spec').CodeMirror;
+
+    // Remove any existing line error highlights.
+    var nlines = animCodeEditor.lineCount();
+    for (var i = 0; i < nlines; i++) {
+        animCodeEditor.removeLineClass(i, "background");
+    }
+
+    const newText = animCodeEditor.getValue() + '\n';
+    const edits = tree && changes && changes.map(treeEditForEditorChange);
+
+    const start = performance.now();
+    if (edits) {
+        for (const edit of edits) {
+            tree.edit(edit);
+        }
+    }
+
+    let parsedSpecTree;
+    // parsedSpecTree = parseSpec(newText, model.specPath);
+
+    model.specAnimText = newText;
+    reparseExternalAnimSpec(newText);
+
+}
+
 async function handleCodeChange(editor, changes) {
     console.log("handle code change");
 
@@ -2369,6 +2436,9 @@ async function handleCodeChange(editor, changes) {
         console.log("SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
         onSpecParse(newText, spec.spec_obj, spec);
         m.redraw(); //explicitly re-draw on promise resolution.
+        if(model.externalAnimationExists){
+            reparseExternalAnimSpec(model.specAnimText);
+        }
     }).catch(function(e){
         console.log("Error parsing and loading spec.", e);
         model.errorInfo = {parseError: true, obj: e, message: "Error parsing spec."};
@@ -2614,9 +2684,13 @@ function componentHiddenStateVars(hidden) {
 // }
 
 function specEditorPane(hidden){
+    let liStyle = {"font-size": "12px", "padding-top": "3px", "padding-bottom": "3px"};
     return m("div", { id: "code-input-pane", style: {display: hidden ? "none" : "block"}}, [
-        m("div", { id: "code-container" }, [
+        m("div", { id: "code-container", hidden: model.selectedTab !== Tab.SpecEditor }, [
             m("textarea", { id: "code-input" })
+        ]),
+        m("div", { id: "code-anim-container", hidden: model.selectedTab !== Tab.SpecAnimationEditor }, [
+            m("textarea", { id: "code-anim-input" })
         ])
     ]);
 }
@@ -2765,6 +2839,72 @@ function openSpecEditorTab(){
     }, 50);
 }
 
+function openSpecAnimationEditorTab(){
+    model.selectedTab = Tab.SpecAnimationEditor;
+    setTimeout(() => {
+        getAnimationCodeMirrorEditor().refresh();
+    }, 50);
+}
+
+function openSpecAnimationEditorTab(){
+    model.selectedTab = Tab.SpecAnimationEditor;
+    setTimeout(() => {
+        getCodeMirrorEditor().refresh();
+    }, 50);
+}
+
+function specTabElem(){
+
+    // No need for animation dropdown if no external animation exists.
+    if(!model.externalAnimationExists){
+        return m("li", {
+            class: "nav-item",
+            onclick: () => {
+                openSpecEditorTab();
+            },
+        }, m("a", {class: model.selectedTab === Tab.SpecEditor ? "nav-link active" : "nav-link"}, "Spec"));
+    }
+    
+    return m("li", {
+        class: "nav-item dropdown"
+    }, [
+        m("a", {
+            class: "nav-link dropdown-toggle" + (model.selectedTab === Tab.SpecEditor || model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
+            href: "#",
+            role: "button",
+            "data-bs-toggle": "dropdown",
+            "aria-expanded": "false"
+        }, "Spec"),
+        m("ul", {
+            class: "dropdown-menu"
+        }, [
+            m("li", [
+                m("a", {
+                    class: "dropdown-item" + (model.selectedTab === Tab.SpecEditor ? " active" : ""),
+                    href: "#",
+                    onclick: (e) => {
+                        e.preventDefault();
+                        openSpecEditorTab();
+                    }
+                }, "Spec")
+            ]),
+            m("li", [
+                m("a", {
+                    class: "dropdown-item" + (model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
+                    href: "#",
+                    hidden: !model.externalAnimationExists,
+                    onclick: (e) => {
+                        
+                        e.preventDefault();
+                        model.selectedTab = Tab.SpecAnimationEditor;
+                        // Add second option functionality here
+                    }
+                }, "Animation")
+            ])
+        ])
+    ]);
+}
+
 function headerTabBar() {
     let activeClasses = "nav-link active";
     let tabs = [
@@ -2785,14 +2925,7 @@ function headerTabBar() {
             (!model.spec || !model.spec.hasDefinitionByName(model.initStatePredName) || !model.spec.hasDefinitionByName(model.nextStatePredName)) ? 
                 m("span", {class: "text-warning ms-1", title: "Missing Init or Next definition"}, "⚠") : ""
         ])),
-        m("li", {
-            // id: "spec-editor-tab-button", 
-            class: "nav-item",
-            onclick: () => {
-                openSpecEditorTab();
-            },
-            // style: "background-color:" + ((model.selectedTab === Tab.SpecEditor) ? "lightgray" : "none")
-        }, m("a", {class: model.selectedTab === Tab.SpecEditor ? "nav-link active" : "nav-link"}, "Spec")),
+        specTabElem(),
         m("li", {
             // id: "spec-editor-tab-button", 
             class: "nav-item",
@@ -2801,15 +2934,6 @@ function headerTabBar() {
         }, m("a", {class: model.selectedTab === Tab.Load ? "nav-link active" : "nav-link"}, "Load"))
     ]
 
-    // If an external animation spec exists, then show the animation spec tab separately.
-    let anim_spec_tab = m("li", {
-        class: "nav-item",
-        onclick: () => model.selectedTab = Tab.SpecAnimationEditor,
-    }, m("a", {class: model.selectedTab === Tab.SpecAnimationEditor ? "nav-link active" : "nav-link"}, "Animation Spec"));
-    if(model.animationExists && !model.inlineAnimationExists){
-        tabs.push(anim_spec_tab);
-    }
-    
     let debug_tabs = [
         m("div", {
             // id: "eval-graph-tab-button", 
@@ -2849,8 +2973,8 @@ function midPane() {
         headerTabBar(),
         stateSelectionPane(model.selectedTab !== Tab.StateSelection),
         componentChooseConfig(model.selectedTab !== Tab.Config),
-        specEditorPane(model.selectedTab !== Tab.SpecEditor),
-        specAnimationEditorPane(model.selectedTab !== Tab.SpecAnimationEditor),
+        specEditorPane(model.selectedTab !== Tab.SpecEditor && model.selectedTab !== Tab.SpecAnimationEditor),
+        // specAnimationEditorPane(model.selectedTab !== Tab.SpecAnimationEditor),
         loadPane(model.selectedTab !== Tab.Load)
     ];
     let debug_tabs = [
@@ -2903,7 +3027,7 @@ function tracePane() {
         }, m("a", {class: model.selectedTraceTab === TraceTab.REPL ? "nav-link active" : "nav-link"}, "REPL"))
     ]
 
-    if (model.animationExists) {
+    if (model.animationExists || model.externalAnimationExists) {
         let animTab = m("li", {
             class: "nav-item",
             onclick: function () {
@@ -2956,9 +3080,9 @@ function tracePane() {
         checkPane(model.selectedTraceTab !== TraceTab.Check)
     ]
 
-    if(model.animationExists){
+    if(model.animationExists || model.externalAnimationExists){
         otherTabs.push(animationPane(model.selectedTraceTab !== TraceTab.Animation));   
-    }
+    }    
 
     if(model.tracePaneHidden){
         return toggleTracePaneButton();
@@ -2997,7 +3121,7 @@ function traceStateCounter() {
 }
 
 function animationPane(hidden) {
-    if (model.animationExists && model.enableAnimationView && model.currTrace.length > 0) {
+    if ((model.animationExists || model.externalAnimationExists) && model.enableAnimationView && model.currTrace.length > 0) {
         // Last state in trace.
         let state = model.currTrace[model.currTrace.length - 1]["state"];
         // If hidden, no need to compute the animation view.
@@ -3360,6 +3484,12 @@ function getCodeMirrorEditor() {
     return editor;
 }
 
+function getAnimationCodeMirrorEditor() {
+    const $codeEditor = document.querySelector('.CodeMirror-anim-spec');
+    const editor = $codeEditor.CodeMirror;
+    return editor;
+}
+
 function loadAnimSpecText(animText, specPath) {
     const $codeEditor = document.querySelector('.CodeMirror-anim-spec');
     console.log("CODE EDITROS:", $codeEditor);
@@ -3371,7 +3501,7 @@ function loadAnimSpecText(animText, specPath) {
         $codeEditor.CodeMirror.on("changes", () => {
             // CodeMirror listeners are not known to Mithril, so trigger an explicit redraw after
             // processing the code change.
-            handleCodeChange().then(function () {
+            handleAnimCodeChange().then(function () {
                 // loadRouteParamsState();
                 m.redraw();
             })
@@ -3450,21 +3580,30 @@ function loadSpecText(text, specPath) {
 function tryLoadAnimSpec(specPath) {
 
     let animSpecPath = specPath.replace(".tla", "_anim.tla");
+    model.externalAnimationExists = false;
     m.request(animSpecPath, { responseType: "text" }).then(function (animText) {
-        console.log("found animText", animText);
         model.specAnimText = animText;
         model.animationExists = true;
+        model.externalAnimationExists = true;
 
 
         let spec = new TLASpec(animText, animSpecPath);
         let parseStartTime = performance.now();
         console.log("PARSING ANIM SPEC", animSpecPath);
         return spec.parse().then(function () {
+
+            if(!spec.spec_obj.extends_modules.includes(model.rootModName)){
+                console.log("ANIM SPEC DOES NOT EXTEND ROOT MODULE", model.rootModName);
+                model.animationExists = false;
+                model.externalAnimationExists = false;
+                return;
+            }
+
             let parseEndTime = performance.now();
             console.log("ANIM SPEC WAS PARSED IN", (parseEndTime - parseStartTime).toFixed(1), "ms.", spec);
 
             model.animSpec = spec;
-            model.animationExists = true;
+            model.externalAnimationExists = true;
             // let viewNode = model.spec.getDefinitionByName(model.animViewDefName).node;
 
             loadAnimSpecText(animText, specPath);
@@ -3485,12 +3624,14 @@ function tryLoadAnimSpec(specPath) {
 // Fetch spec from given path (e.g. URL) and reload it in the editor pane and UI.
 function loadSpecFromPath(specPath){
     model.errorInfo = null;
+    model.animationExists = false;
+    model.externalAnimationExists = false;
     // Download the specified spec and load it in the editor pane.
     return m.request(specPath, { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
-        // if(!model.inlineAnimationExists){
-        //     tryLoadAnimSpec(specPath);
-        // }
+        if(!model.inlineAnimationExists){
+            tryLoadAnimSpec(specPath);
+        }
     }).catch(function(e) {
         console.log("Error loading file ", specPath, e);
         model.loadSpecFailed = true;
