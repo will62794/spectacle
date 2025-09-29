@@ -95,11 +95,8 @@ let model = {
 }
 
 const exampleSpecs = {
-    "TwoPhase": {
-        specpath: "./specs/TwoPhase.tla",
-    },
     "TwoPhase (animated)": {
-        specpath: "./specs/TwoPhase_anim.tla",
+        specpath: "./specs/TwoPhase.tla",
         constant_vals: {
             "RM": "{rm1,rm2}",
         }
@@ -128,18 +125,8 @@ const exampleSpecs = {
             "None": "None"
         }
     },
-    "Raft": {
-        specpath: "./specs/AbstractRaft.tla",
-        constant_vals: {
-            "Server": "{s1,s2,s3}",
-            "Primary": "\"Primary\"",
-            "Secondary": "\"Secondary\"",
-            "Nil": "\"Nil\"",
-            "InitTerm": 0
-        }
-    },
     "Raft (animated)": {
-        specpath: "./specs/AbstractRaft_anim.tla",
+        specpath: "./specs/AbstractRaft.tla",
         constant_vals: {
             "Server": "{s1,s2,s3}",
             "Primary": "\"Primary\"",
