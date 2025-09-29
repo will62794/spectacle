@@ -37,15 +37,14 @@ You can also explore some interesting (and infamous) traces of different protoco
 
 <!-- A basic, preliminary test suite can be found [here](https://will62794.github.io/spectacle/test.html). -->
 
-## Usage Notes
-
-The current tool expects that a specification has defined its initial state predicate and next state relation as `Init` and `Next` definitions, respectively. If your specification has these defined under different names, they will not be recognized and no initial state or next state evaluation will occur. In this case, you can still use the tool in REPL mode, though. 
-
-Eventually this will be made configurable, but the current tool looks for these hard-coded definitions. Also, there is incomplete support for user module imports, so specs are largely expected to be written in a single module. The interpreter does, however, support most operators from the [TLA+ standard modules](https://github.com/tlaplus/tlaplus/tree/c25a01393ef7d9b0315f3d3b1581988e7a4a57b2/tlatools/org.lamport.tlatools/src/tla2sany/StandardModules) by default.
 
 You can also see a live demo of the tool and its features in [this presentation](https://www.youtube.com/watch?v=kSSWmxQLvmw), which also gives a very high level overview of the tool architecture and implementation details. 
 
-### Running Locally
+## Animations
+
+Spectacle provides an easy way to create animated visualizations of your specifications by defining them in an SVG-based format right in your spec. See [here](./doc/animation.md) for more details on how to define these animations.
+
+## Running Locally
 
 If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running `make serve` from the root directory. This will start up a local Python server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
 
@@ -59,6 +58,8 @@ If you would like to run Spectacle locally and offline, you can do so by cloning
 <!-- ### REPL Mode -->
 
 <!-- You can also open a specification in REPL mode, which gives you access to a live REPL for dynamically evaluating TLA+ expressions in the context of a specification. See [here](https://will62794.github.io/tla-web/#!/home?specpath=./specs/repl.tla&repl=true) for an example REPL scratchpad. -->
+
+
 
 ## Testing
 
