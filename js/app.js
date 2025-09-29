@@ -420,7 +420,7 @@ function allConstValsSet(){
     }
     return model.specConstInputVals && model.specConsts &&
         _.isEqual(new Set(Object.keys(model.specConstInputVals)), new Set(Object.keys(model.specConsts))) &&
-        Object.values(model.specConstInputVals).every(val => val.length > 0);
+        Object.values(model.specConstInputVals).every(val => val.toString().length > 0);
 }
 
 function setConfigButtons(){
