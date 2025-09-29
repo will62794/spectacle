@@ -2740,6 +2740,7 @@ function loadSpecBox(hidden){
                 model.allInitStates = [];
                 model.traceExprs = [];
                 model.rootModName = "";
+                model.specConstInputVals = {};
                 model.explodedConstantExpr = null;
                 model.initStatePredName = "Init";
                 model.nextStatePredName = "Next";
