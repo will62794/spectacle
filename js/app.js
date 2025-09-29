@@ -2833,13 +2833,6 @@ function openSpecAnimationEditorTab(){
     }, 50);
 }
 
-function openSpecAnimationEditorTab(){
-    model.selectedTab = Tab.SpecAnimationEditor;
-    setTimeout(() => {
-        getCodeMirrorEditor().refresh();
-    }, 50);
-}
-
 function specTabElem(){
 
     // No need for animation dropdown if no external animation exists.
@@ -2857,7 +2850,7 @@ function specTabElem(){
     }, [
         m("a", {
             class: "nav-link dropdown-toggle" + (model.selectedTab === Tab.SpecEditor || model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
-            href: "#",
+            // href: "#",
             role: "button",
             "data-bs-toggle": "dropdown",
             "aria-expanded": "false"
@@ -2868,7 +2861,7 @@ function specTabElem(){
             m("li", [
                 m("a", {
                     class: "dropdown-item" + (model.selectedTab === Tab.SpecEditor ? " active" : ""),
-                    href: "#",
+                    // href: "#",
                     onclick: (e) => {
                         e.preventDefault();
                         openSpecEditorTab();
@@ -2878,13 +2871,11 @@ function specTabElem(){
             m("li", [
                 m("a", {
                     class: "dropdown-item" + (model.selectedTab === Tab.SpecAnimationEditor ? " active" : ""),
-                    href: "#",
+                    // href: "#",
                     hidden: !model.externalAnimationExists,
                     onclick: (e) => {
-                        
                         e.preventDefault();
-                        model.selectedTab = Tab.SpecAnimationEditor;
-                        // Add second option functionality here
+                        openSpecAnimationEditorTab();
                     }
                 }, "Animation")
             ])
