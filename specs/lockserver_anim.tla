@@ -2,15 +2,6 @@
 
 EXTENDS TLC, Naturals, FiniteSets, lockserver
 
-\*
-\* Simple lock server example.
-\*
-\* The system consists of a set of servers and a set of clients.
-\* Each server maintains a single lock, which can be granted to a 
-\* client if it currently owns that lock. 
-\* 
-
-------------------------------------------------------------
 \* 
 \* Animation stuff.
 \* 
