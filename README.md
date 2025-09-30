@@ -48,18 +48,13 @@ Spectacle provides an easy way to create animated visualizations of your specifi
 
 If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running `make serve` from the root directory. This will start up a local Python server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
 
-<!-- Note that in addition to copying and pasting in the text of a TLA+ spec or writing it in the browser interface, you can also load a spec file from a given URL by using the following URL path format: -->
-<!-- ``` -->
-<!-- https://will62794.github.io/spectacle/#!/home?specpath=<tla_spec_url> -->
-<!-- ``` -->
-<!-- where `tla_spec_url` is a URL pointing to raw TLA+ module file. For example, you can see that [this link](https://will62794.github.io/tla-web/#!/home?specpath=https://gist.githubusercontent.com/will62794/4250c4b6a8e68b0d9e038186739af8cc/raw/3470b5999f896abb478733e8fc07e7ed9e3039da/HourClock.tla) loads a simple spec from a [personal Github gist](https://gist.githubusercontent.com/will62794/4250c4b6a8e68b0d9e038186739af8cc/raw/3470b5999f896abb478733e8fc07e7ed9e3039da/HourClock.tla). -->
+Another local usage pattern is to use Spectacle to explore a local specification that you may be working on. To do this, you can clone this repo to your local system and from there run
+```
+python3 serve.py --local_dir /path/to/local/specs/dir
+``` 
+to start a local server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000). 
 
-
-<!-- ### REPL Mode -->
-
-<!-- You can also open a specification in REPL mode, which gives you access to a live REPL for dynamically evaluating TLA+ expressions in the context of a specification. See [here](https://will62794.github.io/tla-web/#!/home?specpath=./specs/repl.tla&repl=true) for an example REPL scratchpad. -->
-
-
+This will also automatically detect any `*.tla` spec files located in the directory specified by the `local_dir` argument, and you should be able to load one of these specs from the "Load" tab under the "From local server" section. This will allow Spectacle to load the specification from your local system and it will be updated as you edit your spec file locally (e.g. from a separate code editor).
 
 ## Testing
 
