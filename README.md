@@ -52,7 +52,7 @@ python3 serve.py
 ``` 
 from the root directory. This will start up a local server for the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
 
-Another local usage pattern is to use Spectacle to explore a local specification that you may be working on (e.g. in a separate code editor). To do this, you can clone the repo and instead run
+Another common pattern is to use Spectacle to explore a local specification that you may be working on (e.g. in a separate code editor). To do this, you can clone the repo and instead run
 ```
 python3 serve.py --local_dir /path/to/local/specs/dir
 ``` 
