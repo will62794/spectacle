@@ -8,6 +8,8 @@ let languageName = "tlaplus";
 
 let vizInstance = null;
 
+const LOCAL_SERVER_URL = "http://127.0.0.1:9000";
+
 let Pane = {
     Constants: 1,
     Trace: 2
@@ -2782,6 +2784,29 @@ function loadSpecBox(hidden){
                 }
             }, "File upload:"),
         ]),
+        model.local_tla_file_list && [
+            m("h5", "From local server"),
+            m("div", { class: "input-group mb-3" }, [
+                m("select", {
+                    class: "form-select form-select-sm",
+                    onchange: (e) => {
+                        if (e.target.value) {
+                            model.rootModName = "";
+                            model.specPath = "/local_dir/" + e.target.value;
+                            model.specConstInputVals = {};
+                            updateTraceRouteParams();
+                            loadSpecFromPath(model.specPath);
+                            model.showLoadFileBox = !model.showLoadFileBox;
+                        }
+                    }
+                }, [
+                    m("option", { value: "" }, "Select a file..."),
+                    model.local_tla_file_list.map(file => 
+                        m("option", { value: file }, file)
+                    )
+                ])
+            ])
+        ],
         m("h5", "From URL"),
         m("div", { class: "input-group mb-3" }, [
             m("button", {
@@ -3679,6 +3704,13 @@ async function loadApp() {
                 });
                 codeAnimEditor.getWrapperElement().classList.add("CodeMirror-anim-spec");
             }
+
+            // Make a request to list files local files.
+            m.request(LOCAL_SERVER_URL + "/api/local_dir_files")
+                .then(data => {
+                    model.local_tla_file_list = data["tla_files"];
+                    console.log("Local files:", model.local_tla_file_list);
+                });
         },
         onupdate: function () {
             // Keep trace viewer scrolled to bottom.
