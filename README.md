@@ -46,15 +46,17 @@ Spectacle provides an easy way to create animated visualizations of your specifi
 
 ## Running Locally
 
-If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running `make serve` from the root directory. This will start up a local Python server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
+If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running
+```
+python3 serve.py
+``` 
+from the root directory. This will start up a local server for the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
 
-Another local usage pattern is to use Spectacle to explore a local specification that you may be working on. To do this, you can clone this repo to your local system and from there run
+Another local usage pattern is to use Spectacle to explore a local specification that you may be working on (e.g. in a separate code editor). To do this, you can clone the repo and instead run
 ```
 python3 serve.py --local_dir /path/to/local/specs/dir
 ``` 
-to start a local server serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000). 
-
-This will also automatically detect any `*.tla` spec files located in the directory specified by the `local_dir` argument, and you should be able to load one of these specs from the "Load" tab under the "From local server" section. This will allow Spectacle to load the specification from your local system and it will be updated as you edit your spec file locally (e.g. from a separate code editor).
+which will start serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000) but will also automatically detect any `*.tla` spec files located in the directory specified by the `local_dir` argument. You should be able to load one of these specs from the "Load" tab under the "From local server" section, where they should be automatically listed. This will allow Spectacle to load the specification from your local system and have it be updated as you edit your spec file locally.
 
 ## Testing
 
