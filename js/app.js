@@ -8,7 +8,7 @@ let languageName = "tlaplus";
 
 let vizInstance = null;
 
-const LOCAL_SERVER_URL = "http://127.0.0.1:9000";
+const LOCAL_SERVER_URL = "http://127.0.0.1:8000";
 
 let Pane = {
     Constants: 1,

@@ -53,7 +53,7 @@ class MultiDirHandler(http.server.SimpleHTTPRequestHandler):
         # fallback: default directory
         return http.server.SimpleHTTPRequestHandler.translate_path(self, path)
 
-PORT = 9000
+PORT = 8000
 with socketserver.TCPServer(("", PORT), MultiDirHandler) as httpd:
     print(f"Serving at port {PORT}")
     httpd.serve_forever()
