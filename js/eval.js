@@ -4187,7 +4187,7 @@ function evalBoundOp(node, ctx) {
         let selectLambda = node.namedChildren[2];
 
         let seqArgExprVal = evalExpr(seqArgExpr, ctx)[0]["val"];
-        console.log(selectLambda);
+        // console.log(selectLambda);
 
         // Try to interpret value as tuple, if possible.
         seqArgExprVal = seqArgExprVal.toTuple();
