@@ -545,6 +545,79 @@ function chooseConstantsTable(specConsts){
     return chooseConstsTable;
 }
 
+function defOverridesElems() {
+    // Definition overrides UI
+    return m("div", { style: { "margin-top": "15px" } }, [
+        m("h6", { style: { "margin-top": "15px" } }, "Override Definitions"),
+        m("div", { style: { display: "flex", gap: "8px", "align-items": "center", "flex-wrap": "wrap" } }, [
+            m("input", {
+                class: "form-control form-control-sm",
+                style: "width:260px;font-family:monospace;font-size:11px",
+                list: "defn-overrides-datalist",
+                placeholder: "Search definition (e.g., Init, Next, Foo)",
+                value: model.overrideDefnName || "",
+                oninput: e => { model.overrideDefnName = e.target.value }
+            }),
+            m("datalist", { id: "defn-overrides-datalist" },
+                Object.values(model.spec?.spec_obj?.op_defs || {}).map(d =>
+                    m("option", { value: d.name })
+                )
+            ),
+            m("input", {
+                class: "form-control form-control-sm",
+                style: "width:420px;font-family:monospace;font-size:11px",
+                placeholder: "Enter TLA+ expression for override",
+                value: model.overrideExprText || "",
+                oninput: e => { model.overrideExprText = e.target.value; model.overrideExprError = false; }
+            }),
+            m("button", {
+                class: "btn btn-sm btn-outline-primary",
+                disabled: !(model.overrideDefnName && model.overrideExprText),
+                onclick: () => {
+                    try {
+                        // Light validation by parsing in a throwaway context
+                        let ctx = new Context(null, new TLAState({}), model.specDefs, {}, model.specConstVals);
+                        ctx.evalModelVals = true;
+                        ctx["defns_curr_context"] = _.keys(model.spec.spec_obj["op_defs"]);
+                        ctx.setGlobalDefTable(_.cloneDeep(model.spec.globalDefTable));
+                        ctx.setSpecObj(model.spec);
+                        // parse only; ignore value
+                        evalExprStrInContext(ctx, model.overrideExprText, "OVERRIDE_VALIDATE");
+
+                        model.definitionOverrides = model.definitionOverrides || {};
+                        model.definitionOverrides[model.overrideDefnName] = model.overrideExprText;
+                        model.overrideDefnName = "";
+                        model.overrideExprText = "";
+                        model.overrideExprError = false;
+                        updateRouteParams({ defOverrides: JSON.stringify(model.definitionOverrides) });
+                    } catch (e) {
+                        console.log("Override expression parse failed:", e);
+                        model.overrideExprError = true;
+                    }
+                }
+            }, "Add Override")
+        ]),
+        m("div", { hidden: !model.overrideExprError, style: { color: "red", "font-size": "12px" } }, "Invalid expression; could not parse."),
+        m("div", { style: { "margin-top": "8px" } }, [
+            m("table", { class: "table table-sm", style: { "font-size": "12px" } }, [
+                m("thead", [m("tr", [m("th", "Definition"), m("th", "Override Expression"), m("th", "")])]),
+                m("tbody",
+                    Object.entries(model.definitionOverrides || {}).map(([name, expr]) =>
+                        m("tr", [
+                            m("td", { style: { "font-family": "monospace" } }, name),
+                            m("td", { style: { "font-family": "monospace" } }, expr),
+                            m("td", [
+                                m("button", { class: "btn btn-sm btn-outline-danger", onclick: () => { delete model.definitionOverrides[name]; updateRouteParams({ defOverrides: JSON.stringify(model.definitionOverrides) }) } }, "Remove")
+                            ])
+                        ])
+                    )
+                )
+            ])
+        ])
+    ]);
+
+}
+
 function componentChooseConfig(hidden) {
     // If there are CONSTANT declarations in the spec, we must
     // instantiate them with some concrete values.
@@ -558,6 +631,8 @@ function componentChooseConfig(hidden) {
     return m("div", {id: "config-box", hidden: hidden, style: { "padding": "20px" }}, [
         m("div", { id: "constant-buttons-div" }, setConfigButtons()),
         m("div", { id: "constant-buttons-div", style: { "border-bottom": "1px solid #dee2e6" } }, initNextDef()),
+        // TODO: Enable once worked out more clearly in interpreter.
+        // defOverridesElems(),
         m("div", { id: "choose-constants-elems", hidden: model.constantsPaneHidden || _.isEmpty(model.specConsts), style: { "margin-top": "15px" } }, [
             m("h6", {style: { "margin-top": "15px" }}, "Instantiate Constants"),
             chooseConstantsTable(specConsts)
@@ -3422,6 +3497,16 @@ function loadRouteParamsState() {
     }
 
     // Check for animation parameter and switch to animation tab if available
+    // Load definition overrides if provided in route params.
+    let defOverridesParam = m.route.param("defOverrides");
+    if (defOverridesParam) {
+        try {
+            model.definitionOverrides = JSON.parse(defOverridesParam);
+        } catch (e) {
+            console.log("Failed to parse defOverrides route param:", e);
+            model.definitionOverrides = {};
+        }
+    }
     let animParam = m.route.param("anim");
     if (animParam === true && model.animationExists) {
         model.selectedTraceTab = TraceTab.Animation;
