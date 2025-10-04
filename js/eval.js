@@ -4710,7 +4710,19 @@ function evalSetFilter(ctx, node){
     // Evaluate the quantified domain.
     assert(singleQuantBound.type === "quantifier_bound");
     evalLog("singleQuantBound:", singleQuantBound, singleQuantBound.text);
-    let ident = singleQuantBound.namedChildren[0].text;
+
+    // Handle tuple of identifiers case i.e.
+    // like {<<a, b>> \in {1,2} \X {3,4} : a + b > 2}
+    let tupIdents = null;
+    let ident = null;
+    if(singleQuantBound.namedChildren[0].type === "tuple_of_identifiers"){
+        tupIdents = singleQuantBound.namedChildren[0].namedChildren.filter(c => c.type === "identifier").map(c => c.text);
+    } else{
+        // Single identifier case.
+        ident = singleQuantBound.namedChildren[0].text;
+  
+    }
+
     let domainExpr = singleQuantBound.namedChildren[2];
     evalLog(domainExpr);
     let domainExprVal = evalExpr(domainExpr, ctx)[0]["val"];
@@ -4724,7 +4736,16 @@ function evalSetFilter(ctx, node){
         if (!boundContext.hasOwnProperty("quant_bound")) {
             boundContext["quant_bound"] = {};
         }
-        boundContext["quant_bound"][ident] = exprVal;
+
+        // Bound each identifier within the tuple if neeeded.
+        if (tupIdents) {
+            for (var i = 0; i < tupIdents.length; i++) {
+                boundContext["quant_bound"][tupIdents[i]] = exprVal.getValues()[i];
+            }
+        }
+        else {
+            boundContext["quant_bound"][ident] = exprVal;
+        }
         let rhsFilterVal = evalExpr(rhsFilter, boundContext)[0]["val"];
         evalLog("rhsFilterVal:", rhsFilterVal);
         return rhsFilterVal.getVal();
