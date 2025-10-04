@@ -1,9 +1,8 @@
 ----------------------- MODULE simple_sets ------------------------
-EXTENDS Naturals, FiniteSets
+EXTENDS Naturals, FiniteSets, TLC
 \* , FiniteSetsExt
 
 VARIABLE x
-
 Init == 
     \/ x = ([ 
             union1 |-> {1,2} \cup {2,3,4},
@@ -12,6 +11,9 @@ Init ==
             cross2 |-> {1,2} \times {3,4},
             cross3 |-> {} \times {3,4}
         ])
+    \/ x = {1,2} \X {3,4} \X {5,6}
+    \/ x = {1,2} \X {3,4} \X {5,6} \X {7,8}
+    \/ x = {1,2} \X ({3,4} \X {5,6}) \X {7,8}
     \/ x = UNION {{1,2,3},{4,5}}
     \/ x = UNION {{1,2,3},{3,5}}
     \/ x = UNION {{},{},{1,2},{3,4}}

@@ -3250,16 +3250,47 @@ function evalBoundInfix(node, ctx) {
 
     // Set product. ("\X" or "\times")
     if (symbol.type === "times") {
+
+        // 
+        // When evaluating something like {1,2} \X {3,4} \X {5,6}, this produces
+        // the set of triples <<1,3,5>>, <<1,3,6>>, <<1,4,5>>, ...
+        // Note this is different from the case where we have {1,2} \X ({3,4} \X {5,6})
+        // which produces the set of pairs <<1,<<3,5>>>, <<1,<<3,6>>>, <<1,<<4,5>>>, ...
+        // 
+
+        //
+        // Find the maximal list of "linear" time expressions i.e. those that
+        // are not encapsulated by parentheses.
+        //
+        // Generate a list of nodes in times expression at 1 level of depth.
+        // e.g. {1,2} \X ({3,4} \X {5,6}) \X {7,8} will consider {1,2}, ({3,4}
+        // \X {5,6}), and {7,8} as the top level elements of the times
+        // expression domains.
+        //
+        function extractLinearTimesExprs(node) {
+            if (node.children.length < 2) {
+                return [node];
+            }
+            let symbol = node.children[1];
+            if (symbol.type === "times") {
+                let timesLeft = node.namedChildren[0];
+                let timesRight = node.namedChildren[2];
+                let out = extractLinearTimesExprs(timesLeft);
+                out.push(timesRight);
+                return out;
+            }
+            return [node];
+        }
+
+        let timesExprs = extractLinearTimesExprs(lhs).concat([rhs])
+        // console.log("timesExprs:", timesExprs.map(t => t.text));
+
+        let timesExprVals = timesExprs.map(t => evalExpr(t, ctx)[0]["val"]);
+        // console.log("timesExprVals:", timesExprVals);
+
         evalLog("bound_infix_op, symbol 'times'");
-        evalLog(lhs);
-        let lhsVal = evalExpr(lhs, ctx)[0]["val"];
-        evalLog("times lhs:", lhsVal);
-        let rhsVal = evalExpr(rhs, ctx)[0]["val"];
-        evalLog("times rhs:", lhsVal);
-        assert(lhsVal instanceof SetValue);
-        assert(rhsVal instanceof SetValue);
-        let prodElems = cartesianProductOf(lhsVal.getElems(), rhsVal.getElems()).map(e => new TupleValue(e));
-        return [ctx.withVal(new SetValue(prodElems))];
+        let fullProdElems = cartesianProductOf(...timesExprVals.map(t => t.getElems())).map(e => new TupleValue(e));
+        return [ctx.withVal(new SetValue(fullProdElems))];
     }
 
     // Enumerated set with dot notation e.g. 1..N
