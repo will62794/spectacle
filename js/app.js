@@ -1773,7 +1773,7 @@ function animationViewForTraceState(state){
     }
     catch(e){
         console.error(e);
-        console.error("Error evaluating animation view.");
+        console.error("Error evaluating animation view. Error node:", evalNodeError[0]);
         return null;
     }
     // console.log("evalNodeGraph:", evalNodeGraph.length);
