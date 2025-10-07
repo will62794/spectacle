@@ -1659,12 +1659,28 @@ function makeSvgAnimObj(tlaAnimElem) {
         let nodeAttrsFn = attrs.applyArg(new StringValue("nodeAttrsFn"));
         // console.log(attrs)
         let edgeAttrsFn = attrs.applyArg(new StringValue("edgeAttrsFn"));
+        
+        let graphAttrsObj = {};
+        if(attrs.argInDomain(new StringValue("graphAttrs"))){
+            let graphAttrs = attrs.applyArg(new StringValue("graphAttrs"));
+            graphAttrsObj = {};
+            graphAttrs.getDomain().forEach(v => {
+                let val = graphAttrs.applyArg(v);
+                graphAttrsObj[v.getVal()] = val.getVal();
+            });
+        }
 
         // console.log("nodes:", nodes);
         // console.log("edges:", edges);
         // console.log("labelFn:", labelFn);
 
+        // Start constructing the graph.
         let graphvizStr = `digraph {\n`;
+
+        // Add any graph attributes.
+        let graphAttrsStr = Object.entries(graphAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
+        graphvizStr += `${graphAttrsStr};\n`;
+
         // Add nodes and any attributes.
         for (let i = 0; i < nodes.getElems().length; i++) {
             let node = nodes.getElems()[i];
