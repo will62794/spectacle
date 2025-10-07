@@ -1367,6 +1367,48 @@ function evalExprStrInContext(evalCtx, exprStr, exprTagName = "temp") {
     return exprVal;
 }
 
+// Parse a TLA+ expression string into a syntax node that can replace a definition body.
+// This does not evaluate the expression; it only returns the AST node for the expression.
+function parseExprToNode(exprStr) {
+    let dummySpec = `---- MODULE expr_eval_spec_tmp ----\n`;
+    dummySpec += `Expr == ${exprStr}\n`;
+    dummySpec += "====";
+
+    let spec = new TLASpec(dummySpec);
+    spec.parseSync();
+    let exprNode = spec.getDefinitionByName("Expr").node;
+    return exprNode;
+}
+
+// Apply a map of overrides { defName: exprStr } to a cloned global definition table.
+// Only overrides definitions in the root module to avoid unintentionally clobbering imported modules.
+// TODO: Manually review this!!!!
+function applyDefinitionOverridesToGlobalDefTable(globalDefTable, overridesMap, spec) {
+    try {
+        if (!overridesMap || Object.keys(overridesMap).length === 0) {
+            return;
+        }
+        let rootModuleName = (spec && spec.spec_obj && spec.spec_obj["root_mod_name"]) ? spec.spec_obj["root_mod_name"] : null;
+        for (const defId in globalDefTable) {
+            const defObj = globalDefTable[defId];
+            if (!defObj || !defObj.name) continue;
+            if (rootModuleName !== null && defObj.parent_module_name !== rootModuleName) continue;
+            if (overridesMap.hasOwnProperty(defObj.name)) {
+                const exprStr = overridesMap[defObj.name];
+                try {
+                    const newNode = parseExprToNode(exprStr);
+                    // Replace the node while preserving other metadata (args, etc.).
+                    defObj.node = newNode;
+                } catch (e) {
+                    console.error("Failed to parse override expression for definition:", defObj.name, e);
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error applying definition overrides:", e);
+    }
+}
+
 /**
  * Return action name for a given action node.
  */
