@@ -8,6 +8,9 @@ EXTENDS TLC, Naturals
 
 CONSTANT TableId
 
+\* An abstract identifier that represents a snapshot/version of a specific table.
+CONSTANT Snapshot
+
 \* Commits are pointers to state of the data system at a point in time.
 \* Include some type of unique identifier for each commit?
 VARIABLE commits
@@ -23,17 +26,25 @@ VARIABLE nextCommitId
 
 EmptyFn == [x \in {} |-> {}]
 
+GetCommit(cid) == CHOOSE x \in {cm \in commits : cm.commitId = cid} : TRUE
+
 \* Create a new table 't' on branch 'b'.
-CreateTable(b, t) == 
-    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> EmptyFn]}
+CreateTable(b, t, s) == 
+    /\ t \notin DOMAIN(GetCommit(b).tables)
+    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
     /\ nextCommitId' = nextCommitId + 1
     /\ branches' = (branches \cap {b}) \cup {nextCommitId}
     
-\* Create a new snapshot on branch 
-CreateSnapshot(b, t, s) == TRUE
+\* Models a generic transformation on branch 'b' that creates a new snapshot 's'
+\* for table 't'. A new table is created if 't' was not already mapped to some snapshot.
+CreateSnapshot(b, t, s) == 
+    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
+    /\ nextCommitId' = nextCommitId + 1
+    /\ branches' = (branches \cap {b}) \cup {nextCommitId}
 
 \* Incorporates changes in commit 'c' into branch 'b'.
-Merge(b, c) == TRUE 
+Merge(b, c) == 
+    /\ branches' = (branches \cap {b}) \cup {c}
 
 \* Fast-forward merge of branch 'b' into branch 'c'.
 FFMerge == TRUE
@@ -47,7 +58,8 @@ Init ==
     /\ nextCommitId = 1
 
 Next ==
-    \/ \E b \in branches, t \in TableId : CreateTable(b, t)
+    \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateTable(b, t, s)
+    \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateSnapshot(b, t, s)
 
 
 ====
