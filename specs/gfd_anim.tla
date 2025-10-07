@@ -54,8 +54,6 @@ DiGraph(V, E, nodeAttrsFn, edgeAttrsFn, graphAttrs) == SVGElem("digraph", [V |->
 
 Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
 
-GetCommit(cid) == CHOOSE x \in {cm \in commits : cm.commitId = cid} : TRUE
-
 GraphvizHtml(s) == "< <FONT POINT-SIZE=38.0>" \o s \o "</FONT> >"
 
 
@@ -63,6 +61,10 @@ GraphvizHtml(s) == "< <FONT POINT-SIZE=38.0>" \o s \o "</FONT> >"
 nodeAttrsFn(n) == [
     label |->  ToString(n) \o "\n" \o ToString(GetCommit(n).tables) \o "\n branches:" \o ToString({b \in branches : b = n}),
     shape |-> "rect",
+    fillcolor |-> "#eee",
+    color |-> "#FFBF00",
+    penwidth |-> "3",
+    fontname |-> "Arial",
     style |-> "rounded,filled"
 ]
 

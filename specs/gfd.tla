@@ -26,6 +26,8 @@ VARIABLE nextCommitId
 
 EmptyFn == [x \in {} |-> {}]
 
+CommitIds == {c.commitId : c \in commits}
+
 GetCommit(cid) == CHOOSE x \in {cm \in commits : cm.commitId = cid} : TRUE
 
 \* Create a new table 't' on branch 'b'.
@@ -33,21 +35,37 @@ CreateTable(b, t, s) ==
     /\ t \notin DOMAIN(GetCommit(b).tables)
     /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
     /\ nextCommitId' = nextCommitId + 1
-    /\ branches' = (branches \cap {b}) \cup {nextCommitId}
+    /\ branches' = (branches \ {b}) \cup {nextCommitId}
     
 \* Models a generic transformation on branch 'b' that creates a new snapshot 's'
 \* for table 't'. A new table is created if 't' was not already mapped to some snapshot.
 CreateSnapshot(b, t, s) == 
     /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
     /\ nextCommitId' = nextCommitId + 1
-    /\ branches' = (branches \cap {b}) \cup {nextCommitId}
+    /\ branches' = (branches \ {b}) \cup {nextCommitId}
 
-\* Incorporates changes in commit 'c' into branch 'b'.
+\* Creates a new branch starting at commit 'c'.
+CreateBranch(c) == 
+    /\ c \notin branches
+    /\ branches' = (branches \cup {c})
+    /\ UNCHANGED <<commits, nextCommitId>>
+
+\* Merge commit 'c' into branch 'b'.
 Merge(b, c) == 
-    /\ branches' = (branches \cap {b}) \cup {c}
+    /\ branches' = (branches \ {b}) \cup {c}
 
+
+\* 
 \* Fast-forward merge of branch 'b' into branch 'c'.
-FFMerge == TRUE
+\* 
+\* A fast-forward merge only needs to update the commit that branch 'b' points
+\* to. We consider this as possible when 'c' can be reached by following a
+\* linear sequence of commits i.e. when 'c' is backwards reachable from 'b'.
+\* 
+FFMerge(c, b) == 
+    /\ b # c
+    /\ branches' = (branches \ {b}) \cup {c}
+    /\ UNCHANGED <<commits, nextCommitId>>
 
 \* Smart merge of branch 'b' into branch 'c'.
 SmartMerge == TRUE
@@ -60,6 +78,8 @@ Init ==
 Next ==
     \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateTable(b, t, s)
     \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateSnapshot(b, t, s)
+    \/ \E c \in CommitIds : CreateBranch(c)
+    \/ \E c \in branches, b \in branches : FFMerge(c, b)
 
 
 ====
