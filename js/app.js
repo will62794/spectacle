@@ -780,7 +780,7 @@ function componentNextStateChoiceElement(stateObj, ind, actionLabel, diffOnly) {
     if (model.currTrace.length > 0 && diffOnly) {
         let currState = model.currTrace[model.currTrace.length - 1]["state"];
         varNamesChanged = state.varDiff(currState);
-        console.log("varNamesChanged:", varNamesChanged);
+        // console.log("varNamesChanged:", varNamesChanged);
         varNames = varNames.filter(v => varNamesChanged.includes(v));
     }
 

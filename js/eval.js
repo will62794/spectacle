@@ -4362,6 +4362,30 @@ function evalBoundOp(node, ctx) {
         return [ctx.withVal(new TupleValue(argExprVal.getElems()))];
     }
 
+    // SortSeq(s, Op(_, _)) sorts a sequence 's' according to binary comparison operator 'Op'.
+    if (opName == "SortSeq") {
+        let seqArgExpr = node.namedChildren[1];
+        let selectLambda = node.namedChildren[2];
+
+        let seqArgExprVal = evalExpr(seqArgExpr, ctx)[0]["val"];
+
+        // Try to interpret value as tuple, if possible.
+        seqArgExprVal = seqArgExprVal.toTuple();
+
+        // Sort the sequence according to the lambda function comparator.
+        let lambdaArgs = selectLambda.namedChildren.filter(c => c.type === "identifier");
+        let lambdaBody = selectLambda.namedChildren[selectLambda.namedChildren.length - 1];
+
+        let seqElems = seqArgExprVal.getElems();
+        seqElems.sort(function (a, b) {
+            ret = evalExpr(lambdaBody, ctx.withBoundVar(lambdaArgs[0].text, a).withBoundVar(lambdaArgs[1].text, b));
+            let compareVal = ret[0]["val"].getVal();
+            return compareVal ? -1 : 1;
+        });
+
+        return [ctx.withVal(new TupleValue(seqElems))];
+    }
+
     if (opName == "ToString") {
         let argExpr = node.namedChildren[1];
         let argExprVal = evalExpr(argExpr, ctx)[0]["val"]
