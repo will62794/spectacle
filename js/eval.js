@@ -4215,20 +4215,20 @@ function evalBoundOp(node, ctx) {
 
     // Technically comes from 'FiniteSetsExt', but for now we implement it as a built-in operator.
     // TODO: When module semantics are fully worked out, we won't want to always include this a default operator.
-    if (opName == "Max") {
-        let argExpr = node.namedChildren[1];
-        let argExprVal = evalExpr(argExpr, ctx)[0]["val"];
-        assert(argExprVal instanceof SetValue);
-        assert(argExprVal.getElems().length > 0, "Cannot compute 'Max' of an empty set.");
-        assert(argExprVal.getElems().every(e => e instanceof IntValue));
+    // if (opName == "Max") {
+    //     let argExpr = node.namedChildren[1];
+    //     let argExprVal = evalExpr(argExpr, ctx)[0]["val"];
+    //     assert(argExprVal instanceof SetValue);
+    //     assert(argExprVal.getElems().length > 0, "Cannot compute 'Max' of an empty set.");
+    //     assert(argExprVal.getElems().every(e => e instanceof IntValue));
 
-        // Compute the max.
-        let intElems = argExprVal.getElems().map(e => e.getVal());
-        evalLog("Max val:", argExpr.text, intElems);
-        let maxVal = _.max(intElems);
-        evalLog("Max val:", maxVal);
-        return [ctx.withVal(new IntValue(maxVal))];
-    }
+    //     // Compute the max.
+    //     let intElems = argExprVal.getElems().map(e => e.getVal());
+    //     evalLog("Max val:", argExpr.text, intElems);
+    //     let maxVal = _.max(intElems);
+    //     evalLog("Max val:", maxVal);
+    //     return [ctx.withVal(new IntValue(maxVal))];
+    // }
 
     // Sequences 
     // https://github.com/tlaplus/tlaplus/blob/421bc3d16f869d9c9bb493e5950c445c25c916ea/tlatools/org.lamport.tlatools/src/tla2sany/StandardModules/Sequences.tla    
