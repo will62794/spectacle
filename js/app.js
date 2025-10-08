@@ -1678,8 +1678,10 @@ function makeSvgAnimObj(tlaAnimElem) {
         let graphvizStr = `digraph {\n`;
 
         // Add any graph attributes.
+        if(Object.keys(graphAttrsObj).length > 0){
         let graphAttrsStr = Object.entries(graphAttrsObj).map(([key, value]) => `${key}="${value}"`).join(",");
-        graphvizStr += `${graphAttrsStr};\n`;
+            graphvizStr += `${graphAttrsStr};\n`;
+        }
 
         // Add nodes and any attributes.
         for (let i = 0; i < nodes.getElems().length; i++) {
@@ -1716,7 +1718,13 @@ function makeSvgAnimObj(tlaAnimElem) {
 
         // console.log("graphvizStr:", graphvizStr);
 
-        let ret = vizInstance.renderSVGElement(graphvizStr);
+        let ret;
+        try {
+            ret = vizInstance.renderSVGElement(graphvizStr);
+        } catch (e) {
+            console.error("Failed to render Graphviz SVG element:", graphvizStr);
+            throw e;
+        }
         return m("g", [m.trust(ret.children[0].outerHTML)]);
     }
 
