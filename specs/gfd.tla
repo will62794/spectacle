@@ -11,11 +11,17 @@ CONSTANT TableId
 \* An abstract identifier that represents a snapshot/version of a specific table.
 CONSTANT Snapshot
 
+\* Assume there is a fixed, max number of unique branch identifiers, each of
+\* which may or may not be used to currently point to a commit.
+CONSTANT BranchId
+
 \* Commits are pointers to state of the data system at a point in time.
 \* Include some type of unique identifier for each commit?
 VARIABLE commits
 
 \* Branches are simply movable pointers to commits (via referencing their commitId).
+\* We represent them as a map from branch identifiers -> commits, where the commit
+\* can possible be empty if such a branch doesn't exist yet.
 VARIABLE branches
 
 \* Assume we can label commits with globally unique identifiers, analogous to git commit hashes.
@@ -32,22 +38,24 @@ GetCommit(cid) == CHOOSE x \in {cm \in commits : cm.commitId = cid} : TRUE
 
 \* Create a new table 't' on branch 'b'.
 CreateTable(b, t, s) == 
-    /\ t \notin DOMAIN(GetCommit(b).tables)
-    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
+    /\ b \in DOMAIN branches
+    /\ t \notin DOMAIN(GetCommit(branches[b]).tables)
+    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {branches[b]}, tables |-> GetCommit(branches[b]).tables @@ (t :> s)]}
     /\ nextCommitId' = nextCommitId + 1
-    /\ branches' = (branches \ {b}) \cup {nextCommitId}
+    /\ branches' = [branches EXCEPT ![b] = nextCommitId]
     
 \* Models a generic transformation on branch 'b' that creates a new snapshot 's'
 \* for table 't'. A new table is created if 't' was not already mapped to some snapshot.
 CreateSnapshot(b, t, s) == 
-    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {b}, tables |-> GetCommit(b).tables @@ (t :> s)]}
+    /\ b \in DOMAIN branches
+    /\ commits' = commits \cup {[commitId |-> nextCommitId, parents |-> {branches[b]}, tables |-> GetCommit(branches[b]).tables @@ (t :> s)]}
     /\ nextCommitId' = nextCommitId + 1
-    /\ branches' = (branches \ {b}) \cup {nextCommitId}
+    /\ branches' = [branches EXCEPT ![b] = nextCommitId]
 
 \* Creates a new branch starting at commit 'c'.
-CreateBranch(c) == 
-    /\ c \notin branches
-    /\ branches' = (branches \cup {c})
+CreateBranch(c, b) == 
+    /\ b \notin DOMAIN branches
+    /\ branches' = branches @@ (b :> c)
     /\ UNCHANGED <<commits, nextCommitId>>
 
 \* Merge commit 'c' into branch 'b'.
@@ -63,8 +71,9 @@ Merge(b, c) ==
 \* linear sequence of commits i.e. when 'c' is backwards reachable from 'b'.
 \* 
 FFMerge(c, b) == 
-    /\ b # c
-    /\ branches' = (branches \ {b}) \cup {c}
+    /\ b \in DOMAIN branches
+    /\ branches[b] # c
+    /\ branches' = [branches EXCEPT ![b] = c]
     /\ UNCHANGED <<commits, nextCommitId>>
 
 \* Smart merge of branch 'b' into branch 'c'.
@@ -72,14 +81,14 @@ SmartMerge == TRUE
 
 Init == 
     /\ commits = {[commitId |-> 0, parents |-> {}, tables |-> EmptyFn]}
-    /\ branches = {0}
+    /\ \E b \in BranchId : branches = (b :> 0)
     /\ nextCommitId = 1
 
 Next ==
-    \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateTable(b, t, s)
-    \/ \E b \in branches, t \in TableId, s \in Snapshot : CreateSnapshot(b, t, s)
-    \/ \E c \in CommitIds : CreateBranch(c)
-    \/ \E c \in branches, b \in branches : FFMerge(c, b)
+    \/ \E b \in BranchId, t \in TableId, s \in Snapshot : CreateTable(b, t, s)
+    \/ \E b \in BranchId, t \in TableId, s \in Snapshot : CreateSnapshot(b, t, s)
+    \/ \E c \in CommitIds, b \in BranchId : CreateBranch(c, b)
+    \/ \E c \in CommitIds, b \in BranchId : FFMerge(c, b)
 
 
 ====

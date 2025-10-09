@@ -59,7 +59,7 @@ GraphvizHtml(s) == "< <FONT POINT-SIZE=38.0>" \o s \o "</FONT> >"
 
 \* Graphviz attributes
 nodeAttrsFn(n) == [
-    label |->  ToString(n) \o "\n" \o ToString(GetCommit(n).tables) \o "\n branches:" \o ToString({b \in branches : b = n}),
+    label |->  ToString(n) \o "\n" \o ToString(GetCommit(n).tables) \o "\n Branches:\n" \o ToString({b \in BranchId : b \in DOMAIN branches /\ branches[b] = n}),
     shape |-> "rect",
     fillcolor |-> "#eee",
     color |-> "#FFBF00",
