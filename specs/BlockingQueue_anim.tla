@@ -1,45 +1,5 @@
 ---- MODULE BlockingQueue_anim ----
-EXTENDS TLC, BlockingQueue
-
-\*
-\*
-\* Animation stuff
- \* Merge two records
- Merge(r1, r2) == 
-     LET D1 == DOMAIN r1 D2 == DOMAIN r2 IN
-     [k \in (D1 \cup D2) |-> IF k \in D1 THEN r1[k] ELSE r2[k]]
- 
- SVGElem(_name, _attrs, _children, _innerText) == [name |-> _name, attrs |-> _attrs, children |-> _children, innerText |-> _innerText ]
- 
- Text(x, y, text, attrs) == 
-     (**************************************************************************)
-     (* Text element.'x' and 'y' should be given as integers, and 'text' given *)
-     (* as a string.                                                           *)
-     (**************************************************************************)
-     LET svgAttrs == ("x" :> x @@ "y" :> y) IN
-     SVGElem("text", Merge(svgAttrs, attrs), <<>>, text) 
- 
- \* Circle element. 'cx', 'cy', and 'r' should be given as integers.
- Circle(cx, cy, r, attrs) == 
-     LET svgAttrs == ("cx" :> cx @@ "cy" :> cy @@ "r" :> r) IN
-     SVGElem("circle", Merge(svgAttrs, attrs), <<>>, "")
- 
- \* Rectangle element. 'x', 'y', 'w', and 'h' should be given as integers.
- Rect(x, y, w, h, attrs) == 
-     LET svgAttrs == ("x" :> x @@ "y" :> y @@ "width" :> w @@ "height" :> h) IN
-     SVGElem("rect", Merge(svgAttrs, attrs), <<>>, "")
- 
- \* Group element. 'children' is as a sequence of elements that will be contained in this group.
- Group(children, attrs) == SVGElem("g", attrs, children, "")
- 
- Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
- 
- SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
- 
-\*  Empty == [a \in {} |-> {}] \* Cannot be <<>>, which is certainly a bug in Spectacle!!!
-
- \* Fix to the above issued in https://github.com/will62794/spectacle/commit/f84efe7
- Empty == <<>>
+EXTENDS TLC, SVG, SequencesExt, BlockingQueue
  
  \* The element of buffer at index i or empty string if i is out-of-bounds.
  ElemAt(i) == 
@@ -110,7 +70,7 @@ EXTENDS TLC, BlockingQueue
                               "font-size" :> "9px" @@ "fill" :> "white"))
      IN Group(<<circle, thread_label, status_label>>, <<>>)
  
- Cons == [i \in 1..Cardinality(Consumers) |-> ConsumerCell(i)]
+ Conss == [i \in 1..Cardinality(Consumers) |-> ConsumerCell(i)]
  
  \* Consumer section label
  ConsumerLabel == Text(BASE_X + 320, BASE_Y - 30, "CONSUMERS", 
@@ -157,8 +117,19 @@ EXTENDS TLC, BlockingQueue
  
  AnimView == 
      Group(<<ProducerLabel, BufferLabel, ConsumerLabel, BufferStatus, FlowArrows>> \o 
-           Prod \o Buffer \o Cons, 
+           Prod \o Buffer \o Conss, 
            ("transform" :> "scale(1.2) translate(30 20)"))
 
+\* Animation alias for generating SVG files with TLC.
+AnimAlias ==
+    [
+        buffer |-> buffer, waitSet |-> waitSet
+    ] @@
+    LET IO == INSTANCE IOUtils IN
+    [ _anim |-> IO!Serialize("<svg viewBox='0 0 560 350' xmlns='http://www.w3.org/2000/svg'>" \o 
+                         SVGElemToString(AnimView) \o 
+                         "</svg>", 
+                         "BlockingQueue_anim_" \o ToString(TLCGet("level")) \o ".svg",
+                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
 
 ====

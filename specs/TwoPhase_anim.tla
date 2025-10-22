@@ -1,46 +1,12 @@
 ------------------------------- MODULE TwoPhase_anim ----------------------------- 
-EXTENDS TLC, Naturals, Sequences, FiniteSets, TwoPhase
-
-\* 
-\* Animation definitions.
-\* 
-
-\* Merge two records
-Merge(r1, r2) == 
-    LET D1 == DOMAIN r1 D2 == DOMAIN r2 IN
-    [k \in (D1 \cup D2) |-> IF k \in D1 THEN r1[k] ELSE r2[k]]
-
-SVGElem(_name, _attrs, _children, _innerText) == [name |-> _name, attrs |-> _attrs, children |-> _children, innerText |-> _innerText ]
-
-Text(x, y, text, attrs) == 
-    (**************************************************************************)
-    (* Text element.'x' and 'y' should be given as integers, and 'text' given *)
-    (* as a string.                                                           *)
-    (**************************************************************************)
-    LET svgAttrs == [x |-> x, 
-                     y |-> y] IN
-    SVGElem("text", Merge(svgAttrs, attrs), <<>>, text) 
-
-\* Circle element. 'cx', 'cy', and 'r' should be given as integers.
-Circle(cx, cy, r, attrs) == 
-    LET svgAttrs == [cx |-> cx, 
-                     cy |-> cy, 
-                     r  |-> r] IN
-    SVGElem("circle", Merge(svgAttrs, attrs), <<>>, "")
-
-\* Group element. 'children' is as a sequence of elements that will be contained in this group.
-Group(children, attrs) == SVGElem("g", attrs, children, "")
-
-Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
-
----------------------------------------------------------------------
+EXTENDS TLC, Naturals, Sequences, Functions, FiniteSets, SVG, TwoPhase
 
 CommitColor == "green"
 AbortColor == "red"
 
 \* Establish a fixed mapping to assign an ordering to elements in these sets.
 \* ServerId == CHOOSE f \in [Server -> 1..Cardinality(Person)] : Injective(f)
-RMId == CHOOSE f \in [1..Cardinality(RM) -> RM] : Injective(f)
+RMId == CHOOSE f \in [1..Cardinality(RM) -> RM] : IsInjective(f)
 
 \* Animation view definition.
 c1 == Circle(10, 10, 3, [fill |-> "red"])
@@ -57,7 +23,7 @@ RMElems == [i \in RMIdDomain |-> Circle(RMSpacing * i, 45, 10,
             ELSE IF rmState[RMId[i]] = "committed" THEN CommitColor 
             ELSE IF rmState[RMId[i]] = "aborted" THEN AbortColor ELSE "gray"])]
 
-TMXpos == RMSpacing * (Cardinality(RM) + 1) \div 2
+TMXpos == RMSpacing * ((Cardinality(RM) + 1) \div 2)
 TMElem == Circle(TMXpos, 95, 10, [stroke |-> "black", fill |-> IF tmState = "committed" THEN CommitColor ELSE IF tmState = "init" THEN "gray" ELSE AbortColor])
 RMTextElems == 
     [i \in RMIdDomain |->
@@ -73,5 +39,17 @@ TextElems == RMTextElems \o TMTextElems
 
 
 AnimView == Group(RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.25)"])
+
+\* Animation alias for generating SVG files with TLC.
+AnimAlias ==
+    [
+        rmState |-> rmState, tmState |-> tmState, tmPrepared |-> tmPrepared, msgs |-> msgs
+    ] @@
+    LET IO == INSTANCE IOUtils IN
+    [ _anim |-> IO!Serialize("<svg viewBox='0 0 180 200' xmlns='http://www.w3.org/2000/svg'>" \o 
+                         SVGElemToString(AnimView) \o 
+                         "</svg>", 
+                         "TwoPhase_anim_" \o ToString(TLCGet("level")) \o ".svg",
+                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
 
 =============================================================================

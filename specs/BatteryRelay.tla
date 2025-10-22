@@ -114,10 +114,4 @@ NoSolution ==
 Spec == 
     Init /\ [][Next]_vars
 
-
-
-
-
-
-
 ====

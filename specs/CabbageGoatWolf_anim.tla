@@ -1,51 +1,5 @@
 ---- MODULE CabbageGoatWolf_anim ----
-EXTENDS TLC, CabbageGoatWolf
-
-\* Merge two records
-Merge(r1, r2) == 
-    LET D1 == DOMAIN r1 D2 == DOMAIN r2 IN
-    [k \in (D1 \cup D2) |-> IF k \in D1 THEN r1[k] ELSE r2[k]]
-
-SVGElem(_name, _attrs, _children, _innerText) == [name |-> _name, attrs |-> _attrs, children |-> _children, innerText |-> _innerText ]
-
-Text(x, y, text, attrs) == 
-    (**************************************************************************)
-    (* Text element.'x' and 'y' should be given as integers, and 'text' given *)
-    (* as a string.                                                           *)
-    (**************************************************************************)
-    LET svgAttrs == [x |-> x, 
-                     y |-> y] IN
-    SVGElem("text", Merge(svgAttrs, attrs), <<>>, text) 
-
-\* Circle element. 'cx', 'cy', and 'r' should be given as integers.
-Circle(cx, cy, r, attrs) == 
-    LET svgAttrs == [cx |-> cx, 
-                     cy |-> cy, 
-                     r  |-> r] IN
-    SVGElem("circle", Merge(svgAttrs, attrs), <<>>, "")
-
-\* Rectangle element. 'x', 'y', 'w', and 'h' should be given as integers.
-Rect(x, y, w, h, attrs) == 
-    LET svgAttrs == [x      |-> x, 
-                     y      |-> y, 
-                     width  |-> w, 
-                     height |-> h] IN
-    SVGElem("rect", Merge(svgAttrs, attrs), <<>>, "")
-
-Image(x, y, width, height, href, attrs) == 
-    LET svgAttrs == ("xlink:href" :> href @@
-                     "x"         :> x @@
-                     "y"         :> y @@
-                     "width"     :> width @@
-                     "height"    :> height) IN
-    SVGElem("image", Merge(svgAttrs, attrs), <<>>, "")
-
-\* Group element. 'children' is as a sequence of elements that will be contained in this group.
-Group(children, attrs) == SVGElem("g", attrs, children, "")
-
-Injective(f) == \A x, y \in DOMAIN f : f[x] = f[y] => x = y
-
-SetToSeq(S) == CHOOSE f \in [1..Cardinality(S) -> S] : Injective(f)
+EXTENDS TLC, SVG, SequencesExt, Functions, CabbageGoatWolf
 
 ActorIcon == (
     W :> "https://www.svgrepo.com/download/484119/wolf.svg" @@
@@ -64,7 +18,7 @@ ActorsOnSide(side) == {a \in Actors : a \in banks[side]}
 \* ActorElem(actor, order) == Rect(10, order*20,10,10, <<>>)
 actorWidth == 25
 ActorElem(side, actor, order) == 
-    IF side = "boat" 
+    IF side = 3
     THEN Image(80, order*35,actorWidth,actorWidth, ActorIcon[actor], <<>>)
     ELSE Image((side-1)*140, order*35,actorWidth,actorWidth, ActorIcon[actor], <<>>)
 
@@ -74,14 +28,14 @@ SuccessElem(side) == Image((side-1)*145, 0, 13, 13, SuccessIcon, IF NotSolved TH
 
 SideElem(side) == 
     Group(SetToSeq({ 
-        LET order == CHOOSE f \in [ActorsOnSide(side) -> 1..Cardinality(ActorsOnSide(side))] : Injective(f) IN 
+        LET order == CHOOSE f \in [ActorsOnSide(side) -> 1..Cardinality(ActorsOnSide(side))] : IsInjective(f) IN 
             ActorElem(side, a, order[a]) : a \in ActorsOnSide(side)
         }) \o <<DangerElem(side)>>, [i \in {} |-> {}])
 
 BoatActorElems == 
     Group(SetToSeq({
-        LET order == CHOOSE f \in [boat -> 1..Cardinality(boat)] : Injective(f) IN  
-        ActorElem("boat", a, order[a]) : a \in boat
+        LET order == CHOOSE f \in [boat -> 1..Cardinality(boat)] : IsInjective(f) IN  
+        ActorElem(3, a, order[a]) : a \in boat
         }), [i \in {} |-> {}])
     
 BoatElem == 
@@ -92,8 +46,16 @@ RiverElem == Image(55, 5, 80, 80, RiverIcon, [style |-> "opacity:0.3;transform:s
 
 AnimView == Group(<<SideElem(1), SideElem(2), SuccessElem(2), RiverElem, BoatElem>>, [transform |-> "translate(60, 40) scale(1.75)"])
 
-
-
+\* Animation alias for generating SVG files with TLC.
+AnimAlias ==
+    [
+        banks |-> banks, boat |-> boat
+    ] @@
+    LET IO == INSTANCE IOUtils IN
+    [ _anim |-> IO!Serialize("<svg viewBox='0 0 530 420' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>" \o 
+                         SVGElemToString(AnimView) \o 
+                         "</svg>", 
+                         "CabbageGoatWolf_anim_" \o ToString(TLCGet("level")) \o ".svg",
+                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
 
 ====
-
