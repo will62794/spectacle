@@ -8,9 +8,6 @@ EXTENDS TLC, EWD998, SVG, IOUtils
 
 \* SVG functions are provided by the SVG module - no need to redefine them
 
-\* Empty element sequence for cleaner code
-Empty == <<>>
-
 -----------------------------------------------------------------------------
 
 AnimNodes ==
@@ -230,9 +227,13 @@ AnimView ==
           TerminationStatus, 
           ("transform" :> "translate(20 20)"))
 
-\* Animation alias for TLC to generate SVG files
+\* Animation alias for generating SVG files with TLC.
 AnimAlias ==
-    [ _anim |-> Serialize("<svg viewBox='0 0 800 600' xmlns='http://www.w3.org/2000/svg'>" \o 
+    [
+        active |-> active, pending |-> pending, color |-> color, counter |-> counter, token |-> token
+    ] @@
+    LET IO == INSTANCE IOUtils IN
+    [ _anim |-> IO!Serialize("<svg viewBox='0 0 760 480' xmlns='http://www.w3.org/2000/svg'>" \o 
                          SVGElemToString(AnimView) \o 
                          "</svg>", 
                          "EWD998_anim_" \o ToString(TLCGet("level")) \o ".svg",
