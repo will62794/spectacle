@@ -7,8 +7,8 @@ EXTENDS SVG, SequencesExt, MongoRaftReconfig
 
 Spacing == 40
 
-CrownIcon == "assets/crown.svg"
-BugIcon == "assets/bug.svg"
+CrownIcon == "https://www.svgrepo.com/show/274106/crown.svg"
+BugIcon == "https://www.svgrepo.com/show/525701/bug-minimalistic.svg"
 
 CrownElem(xbase, rmid, i) == Image(xbase, i * Spacing - 6, 13, 13, CrownIcon, IF state[rmid] # Primary THEN [hidden |-> "true"] ELSE <<>>)
 

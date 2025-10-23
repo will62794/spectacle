@@ -16,8 +16,8 @@ Coords ==
  10 :> [x |-> 40, y |-> 10]  @@ \* Between 4 and 5
   6 :> [x |-> 85, y |-> 25]     \* Between 5 and 1
 
-F1 == "https://www.svgrepo.com/download/205326/fork.svg"
-F2 == "https://www.svgrepo.com/download/424639/fork-food-kitchen.svg"
+F1 == "https://www.svgrepo.com/show/205326/fork.svg"
+F2 == "https://www.svgrepo.com/show/424639/fork-food-kitchen.svg"
 
 RingPhil == 
     [n \in P |-> Group(<<
