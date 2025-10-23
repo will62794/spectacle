@@ -2,15 +2,15 @@
 EXTENDS TLC, SVG, SequencesExt, Functions, CabbageGoatWolf
 
 ActorIcon == (
-    W :> "https://www.svgrepo.com/download/484119/wolf.svg" @@
-    C :> "https://www.svgrepo.com/download/489683/cabbage.svg" @@
-    G :> "https://www.svgrepo.com/download/401866/goat.svg" @@
-    F :> "https://www.svgrepo.com/download/405360/farmer.svg"
+    W :> "https://www.svgrepo.com/show/484119/wolf.svg" @@
+    C :> "https://www.svgrepo.com/show/489683/cabbage.svg" @@
+    G :> "https://www.svgrepo.com/show/401866/goat.svg" @@
+    F :> "https://www.svgrepo.com/show/405360/farmer.svg"
 )
-BoatIcon == "https://www.svgrepo.com/download/487088/boat.svg"
-RiverIcon == "https://www.svgrepo.com/download/493924/river.svg"
-DangerIcon == "assets/danger-svgrepo-com.svg"
-SuccessIcon == "https://www.svgrepo.com/download/404946/check-mark-button.svg"
+BoatIcon == "https://www.svgrepo.com/show/487088/boat.svg"
+RiverIcon == "https://www.svgrepo.com/show/493924/river.svg"
+DangerIcon == "https://www.svgrepo.com/show/474712/warning.svg"
+SuccessIcon == "https://www.svgrepo.com/show/404946/check-mark-button.svg"
 
 Actors == {C,G,W,F}
 ActorsOnSide(side) == {a \in Actors : a \in banks[side]}
