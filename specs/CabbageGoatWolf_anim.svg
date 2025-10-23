@@ -1,0 +1,27 @@
+<svg viewBox='0 0 530 420' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+    <g transform='translate(60, 40) scale(1.75)'>
+        <g>
+            <image x='0' y='35' width='25' height='25' xlink:href='https://www.svgrepo.com/show/489683/cabbage.svg'>
+            </image>
+            <image x='0' y='70' width='25' height='25' xlink:href='https://www.svgrepo.com/show/484119/wolf.svg'>
+            </image>
+            <image hidden='hidden' x='0' y='0' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/474712/warning.svg'></image>
+        </g>
+        <g>
+            <image x='140' y='35' width='25' height='25' xlink:href='https://www.svgrepo.com/show/401866/goat.svg'>
+            </image>
+            <image x='140' y='70' width='25' height='25' xlink:href='https://www.svgrepo.com/show/405360/farmer.svg'>
+            </image>
+            <image hidden='hidden' x='140' y='0' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/474712/warning.svg'></image>
+        </g>
+        <image hidden='true' x='145' y='0' width='13' height='13'
+            xlink:href='https://www.svgrepo.com/show/404946/check-mark-button.svg'></image>
+        <image style='opacity:0.3;transform:scale(1,1.75); /* W3C */' x='55' y='5' width='80' height='80'
+            xlink:href='https://www.svgrepo.com/show/493924/river.svg'></image>
+        <g>
+            <g></g>
+        </g>
+    </g>
+</svg>

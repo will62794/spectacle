@@ -1,0 +1,53 @@
+<svg viewBox='0 0 560 350' xmlns='http://www.w3.org/2000/svg'>
+    <g transform='scale(1.2) translate(30 20)'><text x='60' y='50' text-anchor='middle' font-family='monospace'
+            font-size='12px' fill='#495057' font-weight='bold'>PRODUCERS</text><text x='232' y='50' text-anchor='middle'
+            font-family='monospace' font-size='12px' fill='#495057' font-weight='bold'>BUFFER</text><text x='380' y='50'
+            text-anchor='middle' font-family='monospace' font-size='12px' fill='#495057'
+            font-weight='bold'>CONSUMERS</text><text x='232' y='224' text-anchor='middle' font-family='monospace'
+            font-size='11px' fill='#495057' font-weight='bold'>1 of 3</text>
+        <g><text x='165' y='90' text-anchor='middle' font-size='18px' fill='#6c757d'>→</text><text x='305' y='90'
+                text-anchor='middle' font-size='18px' fill='#6c757d'>→</text></g>
+        <g>
+            <circle cx='60' cy='80' r='20' fill='#28a745' stroke='#343a40' stroke-width='2'></circle><text x='60' y='77'
+                text-anchor='middle' font-family='monospace' font-size='11px' fill='white'
+                font-weight='bold'>"p1"</text><text x='60' y='88' text-anchor='middle' font-family='monospace'
+                font-size='9px' fill='white'>RUN</text>
+        </g>
+        <g>
+            <circle cx='60' cy='150' r='20' fill='#28a745' stroke='#343a40' stroke-width='2'></circle><text x='60'
+                y='147' text-anchor='middle' font-family='monospace' font-size='11px' fill='white'
+                font-weight='bold'>"p2"</text><text x='60' y='158' text-anchor='middle' font-family='monospace'
+                font-size='9px' fill='white'>RUN</text>
+        </g>
+        <g>
+            <rect x='210' y='80' width='45' height='35' fill='#17a2b8' stroke='#495057' stroke-width='2' rx='3'></rect>
+            <text x='232' y='102' text-anchor='middle' font-family='monospace' font-size='12px'
+                fill='white'>"p1"</text><text x='202' y='102' text-anchor='middle' font-family='monospace'
+                font-size='10px' fill='#6c757d'>1</text>
+        </g>
+        <g>
+            <rect x='210' y='123' width='45' height='35' fill='#f8f9fa' stroke='#495057' stroke-width='2' rx='3'></rect>
+            <text x='232' y='145' text-anchor='middle' font-family='monospace' font-size='12px'
+                fill='#6c757d'></text><text x='202' y='145' text-anchor='middle' font-family='monospace'
+                font-size='10px' fill='#6c757d'>2</text>
+        </g>
+        <g>
+            <rect x='210' y='166' width='45' height='35' fill='#f8f9fa' stroke='#495057' stroke-width='2' rx='3'></rect>
+            <text x='232' y='188' text-anchor='middle' font-family='monospace' font-size='12px'
+                fill='#6c757d'></text><text x='202' y='188' text-anchor='middle' font-family='monospace'
+                font-size='10px' fill='#6c757d'>3</text>
+        </g>
+        <g>
+            <circle cx='380' cy='80' r='20' fill='#28a745' stroke='#343a40' stroke-width='2'></circle><text x='380'
+                y='77' text-anchor='middle' font-family='monospace' font-size='11px' fill='white'
+                font-weight='bold'>"c1"</text><text x='380' y='88' text-anchor='middle' font-family='monospace'
+                font-size='9px' fill='white'>RUN</text>
+        </g>
+        <g>
+            <circle cx='380' cy='150' r='20' fill='#dc3545' stroke='#343a40' stroke-width='2'></circle><text x='380'
+                y='147' text-anchor='middle' font-family='monospace' font-size='11px' fill='white'
+                font-weight='bold'>"c2"</text><text x='380' y='158' text-anchor='middle' font-family='monospace'
+                font-size='9px' fill='white'>WAIT</text>
+        </g>
+    </g>
+</svg>
