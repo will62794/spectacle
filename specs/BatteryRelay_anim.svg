@@ -1,0 +1,33 @@
+<svg viewBox='0 0 230 200' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+    <g>
+        <g>
+            <image x='10' y='35' width='25' height='25'
+                xlink:href='https://www.svgrepo.com/show/59774/loaded-truck.svg'></image>
+            <image x='10' y='70' width='25' height='25' xlink:href='https://www.svgrepo.com/show/455224/fast-car.svg'>
+            </image>
+        </g>
+        <g>
+            <image x='130' y='35' width='25' height='25' xlink:href='https://www.svgrepo.com/show/11226/motorbike.svg'>
+            </image>
+            <image x='130' y='70' width='25' height='25' xlink:href='https://www.svgrepo.com/show/62546/scooter.svg'>
+            </image>
+        </g>
+        <g>
+            <image x='130' y='5' width='25' height='25'
+                xlink:href='https://www.svgrepo.com/show/532834/battery-empty.svg'></image><text x='155'
+                y='23'>-5</text>
+        </g>
+        <g>
+            <image x='160' y='40' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/325166/ev-plug-error.svg'></image>
+            <image x='160' y='75' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/325166/ev-plug-error.svg'></image>
+            <image x='160' y='110' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/325166/ev-plug-error.svg'></image>
+            <image x='160' y='145' width='30' height='30'
+                xlink:href='https://www.svgrepo.com/show/325166/ev-plug-error.svg'></image>
+        </g>
+        <image x='13' y='20' width='140' height='140'
+            xlink:href='https://www.svgrepo.com/show/442077/battery-empty-symbolic.svg'></image>
+    </g>
+</svg>

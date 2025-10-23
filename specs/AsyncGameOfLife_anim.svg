@@ -1,0 +1,16 @@
+<svg viewBox='-100 0 360 180' xmlns='http://www.w3.org/2000/svg'>
+    <g transform='translate(10, 10)'><text x='60' y='20' fill='black' text-anchor='middle' font-size='16px'
+            font-weight='bold'>Async Conway's Game of Life (N=3)</text>
+        <rect x='28' y='28' width='64' height='64' fill='none' stroke='black' stroke-width='2'></rect><text x='30'
+            y='110' fill='black' font-size='14px'>Live cells: 4</text>
+        <rect x='30' y='30' width='19' height='19' fill='white' stroke='gray' stroke-width='1'></rect>
+        <rect x='30' y='50' width='19' height='19' fill='black' stroke='gray' stroke-width='1'></rect>
+        <rect x='30' y='70' width='19' height='19' fill='white' stroke='gray' stroke-width='1'></rect>
+        <rect x='50' y='30' width='19' height='19' fill='black' stroke='gray' stroke-width='1'></rect>
+        <rect x='50' y='50' width='19' height='19' fill='white' stroke='gray' stroke-width='1'></rect>
+        <rect x='50' y='70' width='19' height='19' fill='black' stroke='gray' stroke-width='1'></rect>
+        <rect x='70' y='30' width='19' height='19' fill='white' stroke='gray' stroke-width='1'></rect>
+        <rect x='70' y='50' width='19' height='19' fill='black' stroke='gray' stroke-width='1'></rect>
+        <rect x='70' y='70' width='19' height='19' fill='white' stroke='gray' stroke-width='1'></rect>
+    </g>
+</svg>
