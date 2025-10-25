@@ -34,12 +34,7 @@ AnimAlias ==
         frontier |-> frontier,
         visited |-> visited,
         startNode |-> startNode
-    ] @@ 
-    LET IO == INSTANCE IOUtils IN
-    [ _anim |-> IO!Serialize("<svg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>" \o 
-                         SVGElemToString(AnimView) \o 
-                         "</svg>", 
-                         "bfs_anim_" \o ToString(TLCGet("level")) \o ".svg",
-                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
+    ] @@
+    [ _anim |-> SVGSerialize(SVGDoc(AnimView, 0, 0, 1000, 1000, <<>>), "bfs_anim_", TLCGet("level")) ]
 
 ====

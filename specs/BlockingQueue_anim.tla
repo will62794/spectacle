@@ -125,11 +125,6 @@ AnimAlias ==
     [
         buffer |-> buffer, waitSet |-> waitSet
     ] @@
-    LET IO == INSTANCE IOUtils IN
-    [ _anim |-> IO!Serialize("<svg viewBox='0 0 560 350' xmlns='http://www.w3.org/2000/svg'>" \o 
-                         SVGElemToString(AnimView) \o 
-                         "</svg>", 
-                         "BlockingQueue_anim_" \o ToString(TLCGet("level")) \o ".svg",
-                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
+    [ _anim |-> SVGSerialize(SVGDoc(AnimView, 0, 0, 560, 350, <<>>), "BlockingQueue_anim_", TLCGet("level")) ]
 
 ====

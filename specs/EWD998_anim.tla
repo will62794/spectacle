@@ -232,11 +232,6 @@ AnimAlias ==
     [
         active |-> active, pending |-> pending, color |-> color, counter |-> counter, token |-> token
     ] @@
-    LET IO == INSTANCE IOUtils IN
-    [ _anim |-> IO!Serialize("<svg viewBox='0 0 760 480' xmlns='http://www.w3.org/2000/svg'>" \o 
-                         SVGElemToString(AnimView) \o 
-                         "</svg>", 
-                         "EWD998_anim_" \o ToString(TLCGet("level")) \o ".svg",
-                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
+    [ _anim |-> SVGSerialize(SVGDoc(AnimView, 0, 0, 760, 480, <<>>), "EWD998_anim_", TLCGet("level")) ]
 
 ====
