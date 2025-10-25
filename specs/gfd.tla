@@ -1,5 +1,5 @@
 ---- MODULE gfd ----
-EXTENDS TLC, Naturals
+EXTENDS TLC, Naturals, FiniteSets, Sequences
 
 \* 
 \* Abstract model of Git for Data:
@@ -62,17 +62,36 @@ CreateBranch(c, b) ==
 Merge(b, c) == 
     /\ branches' = (branches \ {b}) \cup {c}
 
+SeqOf(set, n) == UNION {[1..m -> set] : m \in 0..n}
 
+SimplePath(V, E) ==
+    \* A simple path is a path with no repeated nodes.
+    {p \in SeqOf(V, Cardinality(V)) :
+             /\ p # << >>
+             /\ Cardinality({ p[i] : i \in DOMAIN p }) = Len(p)
+             /\ \A i \in 1..(Len(p)-1) : <<p[i], p[i+1]>> \in E}
+
+SimplePathsFrom(V, E, start, target) ==
+    {p \in SimplePath(V, E) : p[1] = start /\ p[Len(p)] = target}
+
+
+ParentEdges == UNION {{<<c.commitId, p>> : p \in c.parents} : c \in commits}
+
+\* Is commit 'ctarget' backwards reachable from commit 'cstart' via parent pointers?
+BackwardsReachable(cstart, ctarget) ==
+    SimplePathsFrom(CommitIds, ParentEdges, cstart, ctarget) # {}
 \* 
-\* Fast-forward merge of branch 'b' into branch 'c'.
+\* Fast-forward merge of commit 'c' into branch 'b'.
 \* 
 \* A fast-forward merge only needs to update the commit that branch 'b' points
 \* to. We consider this as possible when 'c' can be reached by following a
-\* linear sequence of commits i.e. when 'c' is backwards reachable from 'b'.
+\* linear sequence of commits i.e. when the commit of branch 'b' is backwards reachable from commit 'c'.
 \* 
 FFMerge(c, b) == 
     /\ b \in DOMAIN branches
     /\ branches[b] # c
+    \* Is the commit directly reachable from 'b' via parent pointers?
+    \* /\ BackwardsReachable(c, branches[b])
     /\ branches' = [branches EXCEPT ![b] = c]
     /\ UNCHANGED <<commits, nextCommitId>>
 
