@@ -80,6 +80,18 @@ ParentEdges == UNION {{<<c.commitId, p>> : p \in c.parents} : c \in commits}
 \* Is commit 'ctarget' backwards reachable from commit 'cstart' via parent pointers?
 BackwardsReachable(cstart, ctarget) ==
     SimplePathsFrom(CommitIds, ParentEdges, cstart, ctarget) # {}
+
+\* The most recent common ancestor between two commits 'c1' and 'c2'.
+NewestCommonAncestor(ci, cj) == TRUE
+
+RECURSIVE IsAncestor(_, _)
+
+\* Is commit 'ci' an ancestor of commit 'cj'?
+IsAncestor(ci, cj) == 
+    \/ ci \in GetCommit(cj).parents
+    \/ \E c \in GetCommit(cj).parents : IsAncestor(ci, c)
+
+
 \* 
 \* Fast-forward merge of commit 'c' into branch 'b'.
 \* 
@@ -91,12 +103,17 @@ FFMerge(c, b) ==
     /\ b \in DOMAIN branches
     /\ branches[b] # c
     \* Is the commit directly reachable from 'b' via parent pointers?
-    \* /\ BackwardsReachable(c, branches[b])
+    /\ IsAncestor(c, branches[b])
     /\ branches' = [branches EXCEPT ![b] = c]
     /\ UNCHANGED <<commits, nextCommitId>>
 
-\* Smart merge of branch 'b' into branch 'c'.
-SmartMerge == TRUE
+\*  A merge of diverging commits. This is only possible if the sets of tables
+\*  that were modified since `b` and `c` diverged from their most recent common
+\*  ancestor are disjoint.
+SmartMerge(b, c) == 
+    /\ ~IsAncestor(b, c)
+    /\ ~IsAncestor(c, b)
+    
 
 Init == 
     /\ commits = {[commitId |-> 0, parents |-> {}, tables |-> EmptyFn]}
