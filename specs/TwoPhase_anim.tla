@@ -45,11 +45,6 @@ AnimAlias ==
     [
         rmState |-> rmState, tmState |-> tmState, tmPrepared |-> tmPrepared, msgs |-> msgs
     ] @@
-    LET IO == INSTANCE IOUtils IN
-    [ _anim |-> IO!Serialize("<svg viewBox='0 0 180 200' xmlns='http://www.w3.org/2000/svg'>" \o 
-                         SVGElemToString(AnimView) \o 
-                         "</svg>", 
-                         "TwoPhase_anim_" \o ToString(TLCGet("level")) \o ".svg",
-                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
+    [ _anim |-> SVGSerialize(SVGDoc(AnimView, 0, 0, 180, 200, <<>>), "TwoPhase_anim_", TLCGet("level"))]
 
 =============================================================================

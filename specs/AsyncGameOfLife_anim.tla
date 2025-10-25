@@ -59,10 +59,8 @@ AnimAlias ==
     [
         grid |-> grid
     ] @@
-    [ _anim |-> Serialize("<svg viewBox='-100 0 " \o ToString(N * CellSize + 300) \o " " \o ToString(N * CellSize + 120) \o "' xmlns='http://www.w3.org/2000/svg'>" \o 
-                         SVGElemToString(AnimView) \o 
-                         "</svg>", 
-                         "AsyncGameOfLife_anim_" \o ToString(TLCGet("level")) \o ".svg",
-                         [format |-> "TXT", charset |-> "UTF-8", openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>]) ]
+    [ _anim |-> SVGSerialize(
+                    SVGDoc(AnimView, -100, 0, N * CellSize + 300, N * CellSize + 120, <<>>),
+                    "AsyncGameOfLife_anim_", TLCGet("level")) ]
 
 =============================================================================
