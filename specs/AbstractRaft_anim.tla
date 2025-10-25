@@ -78,7 +78,7 @@ logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], 
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 5)]
 
 
-CrownIcon == "https://www.svgrepo.com/download/274106/crown.svg"
+CrownIcon == "https://www.svgrepo.com/show/274106/crown.svg"
 
 CrownElem(rmid, i) == Image(20, i * Spacing - 6, 15, 15, CrownIcon, IF state[rmid] # Primary THEN [hidden |-> "true"] ELSE <<>>)
 
