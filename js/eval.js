@@ -1380,35 +1380,6 @@ function parseExprToNode(exprStr) {
     return exprNode;
 }
 
-// Apply a map of overrides { defName: exprStr } to a cloned global definition table.
-// Only overrides definitions in the root module to avoid unintentionally clobbering imported modules.
-// TODO: Manually review this!!!!
-function applyDefinitionOverridesToGlobalDefTable(globalDefTable, overridesMap, spec) {
-    try {
-        if (!overridesMap || Object.keys(overridesMap).length === 0) {
-            return;
-        }
-        let rootModuleName = (spec && spec.spec_obj && spec.spec_obj["root_mod_name"]) ? spec.spec_obj["root_mod_name"] : null;
-        for (const defId in globalDefTable) {
-            const defObj = globalDefTable[defId];
-            if (!defObj || !defObj.name) continue;
-            if (rootModuleName !== null && defObj.parent_module_name !== rootModuleName) continue;
-            if (overridesMap.hasOwnProperty(defObj.name)) {
-                const exprStr = overridesMap[defObj.name];
-                try {
-                    const newNode = parseExprToNode(exprStr);
-                    // Replace the node while preserving other metadata (args, etc.).
-                    defObj.node = newNode;
-                } catch (e) {
-                    console.error("Failed to parse override expression for definition:", defObj.name, e);
-                }
-            }
-        }
-    } catch (e) {
-        console.error("Error applying definition overrides:", e);
-    }
-}
-
 /**
  * Return action name for a given action node.
  */
@@ -2351,7 +2322,7 @@ class TLASpec {
 class Context {
     constructor(val, state, defns, quant_bound, constants, prev_func_val, operators_bound, module_table, 
                 eval_node, substitutionsNew, module_eval_namespace_prefix, 
-                var_decls_context, defns_curr_context) {
+                var_decls_context, defns_curr_context, def_overrides) {
 
         // @type: TLAValue
         // The result value of a TLA expression, or 'null' if no result has been
@@ -2412,6 +2383,8 @@ class Context {
         // Used to store the current set of definitions that existed (i.e. were
         // in scope) for a given definition.
         this.defns_curr_context = defns_curr_context;
+
+        this.def_overrides = def_overrides || {};
     }
 
     setGlobalDefTable(global_def_table){
@@ -2420,6 +2393,10 @@ class Context {
 
     setSpecObj(spec_obj){
         this.spec_obj = spec_obj;
+    }
+
+    setDefOverrides(def_overrides){
+        this.def_overrides = def_overrides;
     }
 
     getDefnInCurrContext(defnName) {
@@ -2488,6 +2465,7 @@ class Context {
         ctxNew.setGlobalDefTable(this["global_def_table"]);
         ctxNew.setSpecObj(this.spec_obj);
         ctxNew.setPrimed(this.primed);
+        ctxNew.setDefOverrides(this.def_overrides);
         return ctxNew;
     }
 
@@ -3773,6 +3751,13 @@ function evalIdentifierRef(node, ctx) {
 
     let ident_name = node.text;
     evalLog(`evalIdentifierRef, '${node.text}' context:`, ctx.clone(), "ident_name:", ident_name);
+    console.log("ctx   ---", ctx);
+    // See if this identifier is an override definition.
+    if(ctx.def_overrides.hasOwnProperty(ident_name)){
+        let overrideExpr = ctx.def_overrides[ident_name];
+        let overrideNode = parseExprToNode(overrideExpr);
+        return evalExpr(overrideNode, ctx);
+    }
 
     // If this identifier ref has any substitutions, then we
     // consider those in the context during evaluation.
@@ -5279,7 +5264,7 @@ function evalExpr(node, ctx) {
  * initial state predicate and an object 'vars' which contains exactly the
  * specification's state variables as keys.
  */
-function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTable, spec, initDefName="Init") {
+function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTable, spec, initDefName="Init", defOverrides={}) {
     // TODO: Pass this variable value as an argument to the evaluation functions.
     ASSIGN_PRIMED = false;
     depth = 0;
@@ -5297,6 +5282,7 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
     let initCtx = new Context(null, emptyInitState, defns, {}, constvals, null, null, moduleTable);
     initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
+    initCtx.setDefOverrides(defOverrides);
     initCtx["defns_curr_context"] = spec.getDefinitionByName(initDefName)["curr_defs_context"];
 
     let ret_ctxs = evalExpr(initDef, initCtx);
@@ -5310,7 +5296,7 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
  * Generates all possible successor states from a given state and the syntax
  * tree node for the definition of the next state predicate.
  */
-function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, globalDefTable, spec, nextDefName="Next") {
+function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, globalDefTable, spec, nextDefName="Next", defOverrides={}) {
     // TODO: Pass this variable value as an argument to the evaluation functions.
     ASSIGN_PRIMED = true;
     depth = 0;
@@ -5325,6 +5311,7 @@ function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, gl
     let initCtx = new Context(null, currStateVars, defns, {}, constvals, null, null, moduleTable);
     initCtx.setGlobalDefTable(_.cloneDeep(globalDefTable));
     initCtx.setSpecObj(spec);
+    initCtx.setDefOverrides(defOverrides);
     initCtx["defns_curr_context"] = spec.getDefinitionByName(nextDefName)["curr_defs_context"];
     // console.log("currStateVars:", currStateVars);
     let ret = evalExpr(nextDef, initCtx);
@@ -5373,7 +5360,7 @@ function getNextStates(nextDef, currStateVars, defns, constvals, moduleTable, gl
 
 class TlaInterpreter {
 
-    computeInitStates(treeObjs, constvals, includeFullCtx, spec, initDefName=null) {
+    computeInitStates(treeObjs, constvals, includeFullCtx, spec, initDefName=null, defOverrides={}) {
         var includeFullCtx = includeFullCtx || false;
 
         var initDefName = initDefName || "Init";
@@ -5394,7 +5381,7 @@ class TlaInterpreter {
         evalLog("initDef.childCount: ", initDef["node"].childCount);
         evalLog("initDef.type: ", initDef["node"].type);
 
-        let initStates = getInitStates(initDef["node"], vars, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, initDefName);
+        let initStates = getInitStates(initDef["node"], vars, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, initDefName, defOverrides);
         // Keep only the valid states.
         if(includeFullCtx){
             return initStates.filter(actx => actx["val"].getVal())
@@ -5403,7 +5390,7 @@ class TlaInterpreter {
         }
     }
 
-    computeNextStates(treeObjs, constvals, initStates, action, spec, nextDefName) {
+    computeNextStates(treeObjs, constvals, initStates, action, spec, nextDefName, defOverrides={}) {
         let consts = treeObjs["const_decls"];
         let vars = treeObjs["var_decls"];
         let defns = treeObjs["op_defs"];
@@ -5430,7 +5417,7 @@ class TlaInterpreter {
         for (const istate of initStates) {
             let currState = _.cloneDeep(istate);
             // console.log("###### Computing next states from state: ", currState);
-            let ret = getNextStates(nextDef, currState, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, nextDefName);
+            let ret = getNextStates(nextDef, currState, defns, constvals, treeObjs["module_table"], spec.globalDefTable, spec, nextDefName, defOverrides);
             allNext = allNext.concat(ret);
         }
         return allNext;

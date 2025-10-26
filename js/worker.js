@@ -48,7 +48,7 @@ function recomputeNextStates(model,fromState) {
             console.log("fromState:", fromState);
             console.log("actions:", model.actions);
             console.log("actions:", model.specTreeObjs);
-            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec, model.nextDefName)
+            let nextStatesForAction = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], action.node, model.spec, model.nextDefName, model.definitionOverrides)
             console.log("nextStatesForAction", nextStatesForAction); 
 
             nextStatesForAction = nextStatesForAction.map(c => {
@@ -68,7 +68,7 @@ function recomputeNextStates(model,fromState) {
         }
         nextStates = nextStatesByAction;
     } else {
-        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec, model.nextDefName)
+        nextStates = interp.computeNextStates(model.specTreeObjs, model.specConstVals, [fromState], undefined, model.spec, model.nextDefName, model.definitionOverrides)
             .map(c => {
                 let deprimed = c["state"].deprimeVars();
                 return { "state": deprimed, "quant_bound": c["quant_bound"] };
@@ -161,6 +161,7 @@ onmessage = async (e) => {
     let invariantExpr = e.data.invariantExpr;
     let initDefName = e.data.initDefName;
     let nextDefName = e.data.nextDefName;
+    let definitionOverrides = e.data.definitionOverrides;
 
     await TreeSitter.init();
     parser = new TreeSitter();
@@ -203,6 +204,7 @@ onmessage = async (e) => {
         model.errorObj = null;
         model.nextDefName = nextDefName;
         model.initDefName = initDefName;
+        model.definitionOverrides = definitionOverrides;
 
         let nextDef = model.spec.getDefinitionByName(model.nextDefName);
         model.actions = spec.parseActionsFromNode(nextDef["node"]);
@@ -210,6 +212,7 @@ onmessage = async (e) => {
         // Evaluate each CONSTANT value expression.
         for (var constDecl in constValInputs) {
             let constValText = constValInputs[constDecl];
+
             if (constValText === undefined) {
                 throw "no constant value given for " + constDecl;
             }
@@ -240,7 +243,7 @@ onmessage = async (e) => {
                 // Generate initial states.
                 let interp = new TlaInterpreter();
 
-                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec, model.initDefName);
+                let initStates = interp.computeInitStates(spec.spec_obj, constTlaVals, true, spec, model.initDefName, model.definitionOverrides);
                 console.log("initStates:", initStates);
                 model.currNextStates = initStates;
 
