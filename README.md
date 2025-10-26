@@ -40,25 +40,19 @@ You can also explore some interesting (and infamous) traces of different protoco
 
 You can also see a live demo of the tool and its features in [this presentation](https://www.youtube.com/watch?v=kSSWmxQLvmw), which also gives a very high level overview of the tool architecture and implementation details. 
 
-## Animations
-
-Spectacle provides an easy way to create animated visualizations of your specifications by defining them in an SVG-based format right in a specification. See [here](./doc/animation.md) for more details on how to define these animations.
-
 ## Running Locally
 
 If you would like to run Spectacle locally and offline, you can do so by cloning the repo and running
 ```
-python3 serve.py
+python3 serve.py [--local_dir /path/to/local/specs/dir]
 ``` 
-from the root directory. This will start up a local server for the app at [`127.0.0.1:8000`](http://127.0.0.1:8000).
+from the root directory. This will start up a local server for the app at [`127.0.0.1:8000`](http://127.0.0.1:8000). 
 
-Another common pattern is to use Spectacle to explore a local specification that you may be working on (e.g. in a separate code editor). To do this, you can clone the repo and instead run
-```
-python3 serve.py --local_dir /path/to/local/specs/dir
-``` 
-which will start serving the app at [`127.0.0.1:8000`](http://127.0.0.1:8000), but will also automatically detect any `*.tla` spec files located in the directory specified by the `local_dir` argument. 
+The `local_dir` argument is optional and allows you to use Spectacle to explore a local specification that you may be editing (e.g. in a local IDE). Any `*.tla` files located in the directory specified by the argument will automatically be detected. You can then load one of these specs from within the "Load" tab under the "From local server" section, where they should be automatically listed. This allows Spectacle to load the specification from your local system and have it be updated as you edit your spec file locally.
 
-You can then load one of these specs from the "Load" tab under the "From local server" section, where they should be automatically listed. This will allow Spectacle to load the specification from your local system and have it be updated as you edit your spec file locally.
+## Animations
+
+Spectacle provides an easy way to create animated visualizations of your specifications by defining them in an SVG-based format right in a specification. See [here](./doc/animation.md) for more details on how to define these animations.
 
 ## Testing
 
