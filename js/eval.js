@@ -3751,7 +3751,6 @@ function evalIdentifierRef(node, ctx) {
 
     let ident_name = node.text;
     evalLog(`evalIdentifierRef, '${node.text}' context:`, ctx.clone(), "ident_name:", ident_name);
-    console.log("ctx   ---", ctx);
     // See if this identifier is an override definition.
     if(ctx.def_overrides.hasOwnProperty(ident_name)){
         let overrideExpr = ctx.def_overrides[ident_name];
