@@ -4528,6 +4528,12 @@ function evalSetOfRecords(node, ctx) {
 function evalFunctionLiteralInner(ctx, quant_bounds, fexpr, selectedDomainVal) {
     evalLog("function_literal inner", fexpr, quant_bounds);
 
+    //
+    // TODO: Need to be able to handle function definitions like
+    // sc[<<a, b>> \in (0 .. 5) \X (8 .. 12)] == a + b
+    // 
+    // Will need some fiddling of variable binding domains below.
+    //
     let idents = quant_bounds.map(qb => {
         let domainVal = evalExpr(_.last(qb.namedChildren), ctx)[0]["val"];
         return qb.namedChildren
