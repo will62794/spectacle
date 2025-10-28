@@ -3869,7 +3869,7 @@ function evalIdentifierRef(node, ctx) {
             let fexpr = _.last(defNode.namedChildren);
             evalLog("EVAL function literal inner.")
 
-            let ret = evalFunctionLiteralInner(evalCtx, quant_bounds, fexpr);
+            ret = evalFunctionLiteralInner(evalCtx, quant_bounds, fexpr);
             evalLog("ret:", ret);
             evalLog("origCurrDefns:", origCurrDefns);
             ret.map(c => c.defns_curr_context = origCurrDefns);
