@@ -13,6 +13,7 @@ let cloneTime = 0.0;
 let numClones = 0;
 const TLA_STANDARD_MODULES = [
     "TLC",
+    "TLCExt",
     "FiniteSets",
     "Sequences",
     "Integers",
