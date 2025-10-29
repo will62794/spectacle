@@ -773,11 +773,7 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
         class: "init-state",
         style: `opacity: ${opac}%`,
         onclick: function () {
-            if (actionLabelObj.params.length == 0) {
-                // let hash = nextStatesForAction[0]["state"].fingerprint();
-                // console.log("choose nhhhhhhhhhext hash:", hash);
-                // chooseNextState(hash);
-            }
+            model.currHoveredAction = actionName;
         }        // onmouseover: () => {
         //     model.nextStatePreview = state;
         // },
@@ -2844,12 +2840,26 @@ function stateSelectionPane(hidden){
             componentNextStateChoices()
         ]);
 
+    function currActionText(){
+        if(model.actions === undefined){
+            return "";
+        }
+        let pickedAction = model.actions.filter(a => a.name.includes(model.currHoveredAction));
+        if(pickedAction.length === 0){
+            return "";
+        }
+        let actDef = model.spec.getDefinitionByName(model.currHoveredAction);
+        console.log("actDef:", actDef);
+        return pickedAction[0].name + " == \n" + actDef["node"].text;
+    }
+
     // return m("div", {id:"mid-pane", hidden: hidden}, 
     return m("div", {id: "state-choices-pane", hidden: hidden}, [
         // chooseConstantsPane(),
         fullNextStatesSwitch,
         // m("h5", { id: "poss-next-states-title", class: "" }, (model.currTrace.length > 0) ? "Choose Next Action" : "Choose Initial State"),
         model.traceLoadingInProgress || model.traceLoadingError ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...") : stateChoicesDiv,
+        // m("pre", {style: "font-size:12px;padding-left:10px;padding-top:10px"}, currActionText()),
     ]);    
 }
 
