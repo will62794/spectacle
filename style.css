@@ -11,6 +11,11 @@ body {
     src: url(assets/Roboto-VariableFont_wdth,wght.ttf);
   }
 
+  @font-face {
+    font-family: "Inter";
+    src: url(assets/Inter-VariableFont_opsz,wght.ttf);
+  }
+
   h1,h2,h3,h4{
       font-family: Arial, Helvetica, sans-serif;
       /* text-decoration: underline; */
@@ -27,6 +32,8 @@ body {
 
   #tla-web-explorer-title{
     text-decoration: none;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
   }
 
   #tla-web-explorer-title:hover{
