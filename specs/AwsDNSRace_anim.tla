@@ -251,19 +251,41 @@ ConnectionArrows == Group(<<
         <<>>, "")
 >>, <<>>)
 
-\* Warning indicator for race condition
+\* Invariant status indicator
+InvariantStatus ==
+    LET invariantHolds == current_plan = 0 \/ ~plan_deleted[current_plan]
+        bgColor == IF invariantHolds THEN "#90EE90" ELSE "#FFB6C1"
+        borderColor == IF invariantHolds THEN "green" ELSE "red"
+        textColor == IF invariantHolds THEN "darkgreen" ELSE "darkred"
+        statusText == IF invariantHolds THEN "✓ SATISFIED" ELSE "✗ VIOLATED"
+    IN
+    Group(<<
+        \* Background box
+        Rect(350, 250, 500, 100,
+            ("fill" :> bgColor @@ "stroke" :> borderColor @@ 
+             "stroke-width" :> "3" @@ "rx" :> "10")),
+        \* Invariant title
+        Text(600, 275, "Invariant: NeverDeleteActive",
+            ("text-anchor" :> "middle" @@ "font-size" :> "16px" @@ 
+             "font-weight" :> "bold")),
+        \* Invariant formula
+        Text(600, 300, "current_plan > 0 => ~plan_deleted[current_plan]",
+            ("text-anchor" :> "middle" @@ "font-size" :> "14px" @@ 
+             "font-family" :> "monospace")),
+        \* Status
+        Text(600, 325, statusText,
+            ("text-anchor" :> "middle" @@ "font-size" :> "18px" @@ 
+             "font-weight" :> "bold" @@ "fill" :> textColor))
+    >>, <<>>)
+
+\* Warning indicator for race condition (shown only when violated)
 RaceConditionWarning ==
     IF /\ current_plan > 0 
        /\ plan_deleted[current_plan] THEN
         Group(<<
-            Rect(400, 250, 400, 80,
-                ("fill" :> "#FFE4B5" @@ "stroke" :> "red" @@ 
-                 "stroke-width" :> "3" @@ "rx" :> "10")),
-            Text(600, 280, "⚠️ RACE CONDITION DETECTED! ⚠️",
-                ("text-anchor" :> "middle" @@ "font-size" :> "18px" @@ 
-                 "font-weight" :> "bold" @@ "fill" :> "red")),
-            Text(600, 305, "Active plan " \o ToString(current_plan) \o " has been deleted!",
-                ("text-anchor" :> "middle" @@ "font-size" :> "14px" @@ "fill" :> "darkred"))
+            Text(600, 365, "Active plan " \o ToString(current_plan) \o " has been deleted!",
+                ("text-anchor" :> "middle" @@ "font-size" :> "14px" @@ 
+                 "fill" :> "darkred" @@ "font-weight" :> "bold"))
         >>, <<>>)
     ELSE
         Group(<<>>, <<>>)
@@ -320,6 +342,7 @@ AnimView ==
         Route53Component,
         TimelineComponent,
         ConnectionArrows,
+        InvariantStatus,
         RaceConditionWarning,
         Legend
     >>, <<>>)
@@ -337,12 +360,10 @@ AnimAlias ==
          plan_channel |-> plan_channel,
          enactor_processing |-> enactor_processing,
          enactor_pc |-> enactor_pc]] @@
-    [_anim |-> Serialize(
-        "<svg viewBox='0 0 " \o ToString(CanvasWidth) \o " " \o 
-        ToString(CanvasHeight) \o "' xmlns='http://www.w3.org/2000/svg'>" \o 
-        SVGElemToString(AnimView) \o "</svg>", 
-        "AwsDNSRace_anim_" \o ToString(TLCGet("level")) \o ".svg",
-        [format |-> "TXT", charset |-> "UTF-8", 
-         openOptions |-> <<"WRITE", "CREATE", "TRUNCATE_EXISTING">>])]
+    [_anim |-> SVGSerialize(
+        SVGDoc(AnimView, 0, 0, CanvasWidth, CanvasHeight, <<>>),
+        "AwsDNSRace_anim_", 
+        TLCGet("level")
+    )]
 
 ============================== MODULE AwsDNSRace_anim ==============================
