@@ -163,6 +163,14 @@ const exampleSpecs = {
         constant_vals: {
             "N": 5
         }
+    },
+    "AWS Outage (animated)": {
+        specpath: "./specs/AwsDNSRace.tla",
+        constant_vals: {
+            "ENACTORS": "{e1,e2}",
+            "PLAN_AGE_THRESHOLD": 2,
+            "MAX_PLAN": 5
+        }
     }
 
 };
