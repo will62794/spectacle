@@ -164,7 +164,7 @@ const exampleSpecs = {
             "N": 5
         }
     },
-    "AWS Outage (animated)": {
+    "AWS Outage 101925 - DNS Race (animated)": {
         specpath: "./specs/AwsDNSRace.tla",
         constant_vals: {
             "ENACTORS": "{e1,e2}",
