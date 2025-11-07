@@ -1,3 +1,9 @@
+Summary of the Amazon DynamoDB Service Disruption in the Northern Virginia (US-EAST-1) Region:
+https://aws.amazon.com/message/101925/
+
+TLA+ Modeling of AWS outage DNS race condition:
+https://muratbuffalo.blogspot.com/2025/11/tla-modeling-of-aws-outage-dns-race.html
+
 ------------------------------ MODULE AwsDNSRace ------------------------------
 EXTENDS Naturals, Sequences, TLC
 
