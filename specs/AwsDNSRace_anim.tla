@@ -253,11 +253,10 @@ ConnectionArrows == Group(<<
 
 \* Invariant status indicator
 InvariantStatus ==
-    LET invariantHolds == current_plan = 0 \/ ~plan_deleted[current_plan]
-        bgColor == IF invariantHolds THEN "#90EE90" ELSE "#FFB6C1"
-        borderColor == IF invariantHolds THEN "green" ELSE "red"
-        textColor == IF invariantHolds THEN "darkgreen" ELSE "darkred"
-        statusText == IF invariantHolds THEN "✓ SATISFIED" ELSE "✗ VIOLATED"
+    LET bgColor == IF NeverDeleteActive THEN "#90EE90" ELSE "#FFB6C1"
+        borderColor == IF NeverDeleteActive THEN "green" ELSE "red"
+        textColor == IF NeverDeleteActive THEN "darkgreen" ELSE "darkred"
+        statusText == IF NeverDeleteActive THEN "✓ SATISFIED" ELSE "✗ VIOLATED"
     IN
     Group(<<
         \* Background box
