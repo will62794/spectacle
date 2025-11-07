@@ -1166,6 +1166,42 @@ function traceStepForward() {
     model.currNextStates = _.cloneDeep(nextStates);
 }
 
+// Jump to the initial state of the current trace without fully resetting.
+// This preserves the trace but navigates back to the first state.
+function jumpToInitialState() {
+    // Clear out a lasso condition in this case.
+    if (model.lassoTo !== null) {
+        model.lassoTo = null;
+    }
+    
+    // If trace is empty or only has one state, nothing to do
+    if (model.currTrace.length <= 1) {
+        return;
+    }
+    
+    // Save all states after the first one to forward history (in reverse order)
+    // so they can be stepped forward through later
+    for (let i = model.currTrace.length - 1; i >= 1; i--) {
+        model.forwardHistory.push(model.currTrace[i]);
+        model.forwardHistoryActions.push(model.currTraceActions[i]);
+    }
+    
+    // Keep only the first state in the trace
+    let firstState = model.currTrace[0];
+    let firstAction = model.currTraceActions[0];
+    model.currTrace = [firstState];
+    model.currTraceActions = [firstAction];
+    
+    updateTraceRouteParams();
+    
+    model.errorInfo = null;
+    clearErrorMarks();
+    
+    // Update next states to show what's possible from the first state
+    let nextStates = recomputeNextStates(firstState["state"]);
+    model.currNextStates = _.cloneDeep(nextStates);
+}
+
 // Adds the given new params to the current route params and updates the route.
 function updateRouteParams(newParams){
     let oldParams = m.route.param();
@@ -2624,6 +2660,25 @@ function linkIcon(){
         })
     ])
 }
+function playPreviousIcon() {
+    // SVG markup based on assets/back-svgrepo-com.svg
+    return m("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "16",
+        height: "16",
+        style: { width: "20px", height: "20px", marginBottom: "0px" },
+        viewBox: "0 0 24 24",
+        fill: "none"
+    }, [
+        m("path", {
+            "fill-rule": "evenodd",
+            "clip-rule": "evenodd",
+            d: "M6.75 5.25V18.75H8.25L8.25 5.25H6.75ZM9.14792 12L18 17.9014L18 6.09862L9.14792 12ZM16.5 8.9014L16.5 15.0986L11.8521 12L16.5 8.9014Z",
+            fill: "#0d6efd",
+            class:"btn-outline-primary"
+        })
+    ]);
+}
 
 function gearIcon(){
     return m("svg", {
@@ -2710,6 +2765,30 @@ function componentButtonsContainer() {
         m("div", { id: "trace-buttons", class:"btn-group mr-2", role:"group" }, [
             m("button", { 
                 class: "btn btn-sm btn-outline-primary button-bagse", 
+                id: "trace-jump-to-initial-button", 
+                "data-bs-toggle": "tooltip",
+                "data-bs-placement": "top",
+                title: "Jump to Init",
+                disabled: model.currTrace.length <= 1,
+                oncreate: function(vnode) {
+                    // Initialize Bootstrap tooltip
+                    // if (window.bootstrap && window.bootstrap.Tooltip) {
+                    //     new window.bootstrap.Tooltip(vnode.dom);
+                    // }
+                },
+                onupdate: function(vnode) {
+                    // Re-initialize tooltip if it was destroyed
+                    // if (window.bootstrap && window.bootstrap.Tooltip) {
+                    //     let tooltipInstance = window.bootstrap.Tooltip.getInstance(vnode.dom);
+                    //     if (!tooltipInstance) {
+                    //         new window.bootstrap.Tooltip(vnode.dom);
+                    //     }
+                    // }
+                },
+                onclick: jumpToInitialState 
+            }, [playPreviousIcon(), m("span", {style: {"margin-left": "4px"}}, "")]),
+            m("button", { 
+                class: "btn btn-sm btn-outline-primary button-bagse", 
                 id: "trace-back-button", 
                 disabled: model.currTrace.length <= 1,
                 onclick: traceStepBack 
@@ -2720,6 +2799,7 @@ function componentButtonsContainer() {
                 disabled: model.forwardHistory.length === 0,
                 onclick: traceStepForward 
             }, "Forward"),
+
             m("button", { 
                 class: "btn btn-sm btn-outline-primary button-bagse", 
                 id: "trace-reset-button", 
