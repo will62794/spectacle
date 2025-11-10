@@ -3881,6 +3881,13 @@ function loadSpecFromPath(specPath){
     model.animationExists = false;
     model.externalAnimationExists = false;
     // Download the specified spec and load it in the editor pane.
+
+    console.log("Loading spec from path '" + specPath + "'");
+    if(specPath.length === 0){
+        console.log("Spec path is empty");
+        model.loadSpecFailed = true;
+        return;
+    }
     return m.request(specPath, { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
         if(!model.inlineAnimationExists){
