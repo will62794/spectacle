@@ -606,6 +606,27 @@ body {
     padding-bottom:5px;
   }
 
+  .action-expand-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .action-definition-display {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      max-height: 0;
+    }
+    to {
+      opacity: 1;
+      max-height: 300px;
+    }
+  }
+
   .blue-hover:hover{
     color:steelblue;
   }

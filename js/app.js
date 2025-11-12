@@ -93,7 +93,8 @@ let model = {
     traceLoadingInProgress: false,
     traceLoadingProgress: { currentState: 0, totalStates: 0 }, // 0-100
     traceLoadingError: null,
-    traceLoadingStart: null
+    traceLoadingStart: null,
+    expandedActionName: null // Track which action definition is currently expanded
 }
 
 const exampleSpecs = {
@@ -747,8 +748,29 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
     if(actionLabelObj.params.length === 0 && !actionDisabled){
         classList.push("blue-hover");
     }
+    
+    // Check if this action is currently expanded
+    let isExpanded = model.expandedActionName === actionName;
+
+    let expandIcon =
+    m("span", {
+        class: "action-expand-icon",
+        style: "cursor: pointer; user-select: none; font-size: 12px; color: #666;",
+        onclick: function(e) {
+            // Toggle expanded state
+            e.stopPropagation();
+            if (model.expandedActionName === actionName) {
+                model.expandedActionName = null;
+            } else {
+                model.expandedActionName = actionName;
+            }
+        },
+        title: "Click to show/hide action definition"
+    }, isExpanded ? "▼" : "▶") 
+    
     let actionNameDiv = [m("div", {
         class: classList.join(" "),
+        style: "display: flex; align-items: center; gap: 8px;",
         onclick: function (e) {
             if (!actionDisabled && actionLabelObj.params.length == 0) {
                 let hash = nextStatesForAction[0]["state"].fingerprint();
@@ -758,7 +780,10 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
                 chooseNextState(hash);
             }
         }
-    }, actionName)];
+    }, [
+        // expandIcon, // Expandable icon/button for the action name (disabled for now)
+        m("span", actionName) // Action name text
+    ])];
 
     let actionNameElem = [m("tr", {}, 
         [m("td", {}, [m("div", {class: ""}, 
@@ -774,6 +799,82 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
     if (model.currTrace.length > 0 && actionLabel) {
         // Don't need this for initial state.
         allElems = allElems.concat(actionNameElem);
+        
+        // Add action definition display if expanded
+        if (isExpanded) {
+            let actionDefText = "";
+            try {
+                let actDef = model.spec.getDefinitionByName(actionName);
+                if (actDef && actDef.node) {
+                    actionDefText = actDef.node.text;
+                }
+            } catch (e) {
+                actionDefText = "Could not retrieve action definition";
+            }
+            
+            let actionDefElem = m("tr", {}, [
+                m("td", {colspan: 2, style: "padding: 10px; background-color: #f8f9fa;"}, [
+                    m("div", {
+                        style: "margin: 0; padding: 0; background-color: #fff; border: 1px solid #dee2e6; border-radius: 4px; font-size: 8px; overflow-x: auto; max-height: 300px; overflow-y: auto;",
+                        oncreate: function(vnode) {
+                            // Clean up existing CodeMirror instance if any
+                            if (vnode.dom && vnode.dom.codeMirrorInstance) {
+                                vnode.dom.codeMirrorInstance.toTextArea 
+                                    ? vnode.dom.codeMirrorInstance.toTextArea()
+                                    : vnode.dom.codeMirrorInstance.destroy && vnode.dom.codeMirrorInstance.destroy();
+                                vnode.dom.codeMirrorInstance = null;
+                            }
+
+                            // Create the CodeMirror on the next tick, to ensure DOM node exists.
+                            setTimeout(() => {
+                                // Remove any child nodes, just in case
+                                while (vnode.dom.firstChild) vnode.dom.removeChild(vnode.dom.firstChild);
+
+                                // Create a <textarea> for CodeMirror to attach
+                                let textarea = document.createElement("textarea");
+                                textarea.value = actionDefText || "";
+                                vnode.dom.appendChild(textarea);
+
+                                // Load mode for highlighting TLA+ or fallback to Haskell or plain text if not available
+                                let mode = "tla";
+                                // if (!window.CodeMirror || !CodeMirror.modes[mode]) mode = "haskell"; // Closest indent mode
+                                // if (!window.CodeMirror || !CodeMirror.modes[mode]) mode = "text";
+
+                                // Instantiate CodeMirror
+                                let cm = window.CodeMirror.fromTextArea(textarea, {
+                                    mode: mode,
+                                    theme: "default",
+                                    readOnly: true,
+                                    tabSize: 3,
+                                    lineNumbers: false,
+                                    viewportMargin: Infinity,
+                                    lineWrapping: true,
+                                    // Use small font size
+                                    extraKeys: {},
+                                });
+                                // Set a small font size on the CodeMirror wrapper
+                                cm.getWrapperElement().style["font-size"] = "10px";
+                                vnode.dom.codeMirrorInstance = cm;
+                                cm.refresh();
+                            }, 0);
+                        },
+                        onupdate: function(vnode) {
+                            // If Codemirror exists, update text if actionDefText has changed
+                            let cm = vnode.dom && vnode.dom.codeMirrorInstance;
+                            if (cm) {
+                                let currValue = cm.getValue();
+                                if (currValue !== actionDefText) {
+                                    cm.setValue(actionDefText || "");
+                                    cm.refresh();
+                                }
+                            }
+                        },
+                        style: "margin: 0; padding: 0; background-color: #fff; border: 1px solid #dee2e6; border-radius: 4px; font-size: 12px; overflow-x: auto; max-height: 300px; overflow-y: auto;"
+                    }),
+                ])
+            ]);
+            allElems.push(actionDefElem);
+        }
     }
 
     let opac = model.lassoTo === null ? "100" : "50";
