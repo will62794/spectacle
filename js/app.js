@@ -767,6 +767,50 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
         },
         title: "Click to show/hide action definition"
     }, isExpanded ? "▼" : "▶") 
+
+
+    // let action = action; // TODO: Get the full action object.
+    // let jumpToSourceIcon =
+    //     m("a", {
+    //         // If you have route or click logic to jump, add it here!
+    //         title: "Jump to definition in source",
+    //         style: "margin-right: 2px;",
+    //         href: "#", // Update to actual route/hash/scroll as appropriate
+    //         onclick: function(e) {
+    //             e.stopPropagation();
+    //             // If you have editor jump logic, call it here!
+    //             // e.g. jumpToSource(actionLabelObj.codeSourcePos);
+    //         // Switch to the Spec Editor tab when the jump-to-source icon/link is clicked
+    //         model.selectedTab = Tab.SpecEditor;
+    //         setTimeout(() => {
+    //             const $codeEditor = document.querySelector('.CodeMirror');
+    //             const editor = $codeEditor.CodeMirror;
+    //             console.log("ACTION NODE:", action.node)
+    //             let actDef = model.spec.getDefinitionByName(action.name);
+    //             console.log("ACTION DEF:", actDef)
+
+    //             editor.scrollIntoView(actDef.node.startPosition.row, 0, 0);
+    //             // editor.setCursor(errLine,errCol);
+    //             // editor.refresh();
+    //         }, 50);
+    //         m.redraw();
+    //         }
+    //     }, m("svg", {
+    //         xmlns: "http://www.w3.org/2000/svg",
+    //         width: "14",
+    //         height: "14",
+    //         viewBox: "0 0 24 24",
+    //         fill: "none",
+    //         style: "vertical-align: middle;"
+    //     }, [
+    //         m("path", {
+    //             d: "M7 8L3 11.6923L7 16M17 8L21 11.6923L17 16M14 4L10 20",
+    //             stroke: "#666",
+    //             "stroke-width": "2",
+    //             "stroke-linecap": "round",
+    //             "stroke-linejoin": "round"
+    //         })
+    //     ]));
     
     let actionNameDiv = [m("div", {
         class: classList.join(" "),
@@ -782,6 +826,7 @@ function componentNextStateChoiceElementForAction(ind, actionLabel, nextStatesFo
         }
     }, [
         // expandIcon, // Expandable icon/button for the action name (disabled for now)
+        // jumpToSourceIcon,
         m("span", actionName) // Action name text
     ])];
 
