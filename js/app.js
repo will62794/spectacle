@@ -4010,8 +4010,10 @@ function tryLoadAnimSpec(specPath) {
             // onSpecParse(newText, spec.spec_obj, spec);
             // m.redraw(); //explicitly re-draw on promise resolution.
         }).catch(function (e) {
-            console.log("Error parsing and loading spec.", e);
+            console.log("Error parsing and loading ANIMATION spec.", e);
             model.errorObj = { parseError: true, obj: e, message: "Error parsing spec." };
+            model.animationExists = false;
+            model.externalAnimationExists = false;
         });
 
     }).catch(function (e) {
