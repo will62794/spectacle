@@ -123,11 +123,6 @@ LogTreeEdges == UNION {LogEdges(s) : s \in Server}
 LogNodes(s) == {<<i, log[s][i]>> : i \in DOMAIN log[s]}
 LogTreeNodes == UNION {LogNodes(s) : s \in Server}
 
-SVGElem(_name, _attrs, _children, _innerText) == [name |-> _name, attrs |-> _attrs, children |-> _children, innerText |-> _innerText ]
-
-\* Group element. 'children' is as a sequence of elements that will be contained in this group.
-Group(children, attrs) == SVGElem("g", attrs, children, "")
-
 \* Edges can also be specified as tuples of length > 2, such as <<n1,n2,x,y,z>>,
 \* which defines an edge between n1 -> n2, but x,y,z define additional metadata
 \* specific to that edge e.g. this also allows for multiple edges between the
