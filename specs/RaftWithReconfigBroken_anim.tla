@@ -52,12 +52,35 @@ XBase == -15
 \* 
 \* Define log elements visuals.
 \* 
+
+\* Mark if [i][ind] is a *reconfig* log entry: 
+\* it is the first entry in log[i] with its config version value.
+IsReconfigEntry(i, ind) ==
+    LET configVersion == log[i][ind].v IN
+      \A j \in 1..(ind-1) : log[i][j].v # configVersion
+
+\* Show committed entries with limegreen border, others with black. No special color for reconfig.
 logEntryStyle(i,ind) == 
     IF \E c \in committedEntries : c.index = ind /\ c.term = log[i][ind].term 
         THEN ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px")
         ELSE ("fill" :> "lightgray" @@ "stroke" :> "black" @@ "stroke-width" :> "1px")
-logEntry(i, ybase, ind) == Group(<<Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)), 
-                                   Text(18 * ind + 115, ybase + 12, ToString(log[i][ind].term), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))>>, [h \in {} |-> {}])
+
+\* Log entry text always just the term.
+logEntryText(i, ind) == ToString(log[i][ind].term)
+
+\* If it's a reconfig entry, add a small "RC" label atop the box.
+logEntry(i, ybase, ind) == 
+    IF IsReconfigEntry(i, ind)
+        THEN Group(<<
+                Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)),
+                Text(18 * ind + 115, ybase - 5, "RC", ("text-anchor" :> "start" @@ "font-size" :> "7px" @@ "font-family" :> "monospace" @@ "fill" :> "blue")),
+                Text(18 * ind + 115, ybase + 12, logEntryText(i, ind), ("text-anchor" :> "start" @@ "font-size" :> "10px"))
+            >>, [h \in {} |-> {}])
+        ELSE Group(<<
+                Rect(18 * ind + 110, ybase, 16, 16, logEntryStyle(i,ind)),
+                Text(18 * ind + 115, ybase + 12, logEntryText(i, ind), ("text-anchor" :>  "start" @@ "font-size" :> "10px"))
+            >>, [h \in {} |-> {}])
+
 logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], [h \in {} |-> {}])
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 
