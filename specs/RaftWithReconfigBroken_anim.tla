@@ -128,7 +128,8 @@ LogTreeNodes == UNION {LogNodes(s) : s \in Server}
 \* specific to that edge e.g. this also allows for multiple edges between the
 \* same nodes in the same direction, but with potentially different edge
 \* "types".
-DiGraph(V, E, nodeAttrsFn, edgeAttrsFn) == SVGElem("digraph", [V |-> V, E |-> E, nodeAttrsFn |-> nodeAttrsFn, edgeAttrsFn |-> edgeAttrsFn], <<>>, "")
+graphAttrs == ("rankdir" :> "LR")
+DiGraph(V, E, nodeAttrsFn, edgeAttrsFn) == SVGElem("digraph", [V |-> V, E |-> E, nodeAttrsFn |-> nodeAttrsFn, edgeAttrsFn |-> edgeAttrsFn, graphAttrs |-> graphAttrs], <<>>, "")
 
 
 NodeIsServer(n) == \E s \in Server : ToString(s) = n
@@ -156,7 +157,10 @@ LogTreeNodesStr == {LogTreeNodeStr(n) : n \in LogTreeNodes}
 LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges}
 \* LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges} \cup {<<ToString(s), LogTreeNodeStr(<<Len(log[s]), log[s][Len(log[s])]>>)>> : s \in Server}
 
-GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,[n \in LogTreeNodesStr |-> nodeAttrsFn(n)], [e \in LogTreeEdgesStr |-> edgeAttrsFn(e)])>>, [transform |-> "translate(0, 220) scale(0.75)"])>>
+GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,
+                                   [n \in LogTreeNodesStr |-> nodeAttrsFn(n)], 
+                                   [e \in LogTreeEdgesStr |-> edgeAttrsFn(e)])>>, 
+                                   [transform |-> "translate(0, 220) scale(0.7)"])>>
 
 
 
