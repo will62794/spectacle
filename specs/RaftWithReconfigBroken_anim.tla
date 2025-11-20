@@ -179,10 +179,13 @@ LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTr
 
 
 \* Graphviz attributes
-nodeAttrsFn(n) == [
-    label |-> IF NodeIsServer(n) THEN n ELSE ToString(<<LogTreeNodeMap[n][1],LogTreeNodeMap[n][2].term>>),
-    color |-> IF NodeIsServer(n) THEN "none" ELSE "black",
+nodeAttrsFn(n) == 
+    LET node == LogTreeNodeMap[n] IN
+    [
+    label |-> IF NodeIsServer(n) THEN n ELSE "(" \o ToString(node[1]) \o "," \o ToString(node[2].term) \o ")",
+    color |-> IF \E c \in committedEntries : c.index = node[1] /\ c.term = node[2].term THEN "green" ELSE "black",
     fillcolor |-> IF NodeIsServer(n) THEN "none" ELSE "white",
+    penwidth |-> "2",
     fontsize |-> "12",
     shape |-> "rect", 
     style |-> "rounded,filled"
@@ -203,7 +206,7 @@ GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,
 \* 
 \* Animation view.
 \* 
-AnimView == Group(<<LegendGroup>> \o cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(100, 40) scale(1.65)"])
+AnimView == Group(<<LegendGroup>> \o cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(100, 40) scale(1.7)"])
 
 
 
