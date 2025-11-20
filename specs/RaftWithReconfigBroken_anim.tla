@@ -84,9 +84,10 @@ logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 \* 
 \* Define legend for visualization.
 \* 
-LegendCommittedEntryBox == Rect(32, 2, 13, 13, ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px"))
-LegendCommittedEntryLabel == Text(52, 12, "Committed", ("fill" :> "black" @@ "font-size" :> "8px" @@ "text-anchor" :> "start"))
-LegendGroup == Group(<<LegendCommittedEntryBox, LegendCommittedEntryLabel>>, [transform |-> "translate(0,0)"])
+LegendCommittedEntryBox == Rect(22, -3, 13, 13, ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px"))
+LegendCommittedEntryLabel == Text(42, 7, "Committed", ("fill" :> "black" @@ "font-size" :> "8px" @@ "text-anchor" :> "start"))
+ConfigLabel == Text(48, 30, "Config", ("fill" :> "gray" @@ "font-size" :> "7px" @@ "text-anchor" :> "start" @@ "text-decoration" :> "underline"))
+LegendGroup == Group(<<LegendCommittedEntryBox, LegendCommittedEntryLabel, ConfigLabel>>, [transform |-> "translate(0,0)"])
 
 \* 
 \* Define server elements visuals.
@@ -136,8 +137,14 @@ termLabels ==
 
 \* Exists a different server with a conflicting committed entry at the same index.
 existsConflictingEntry(ind) == \E x,y \in committedEntries : x.index = ind /\ (x.index = y.index) /\ x.term # y.term
-violationEntry(ybase, ind) == Image(16 * ind + 115, ybase - 6 , 13, 13, BugIcon, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
+violationEntry(ybase, ind) == 
+    Group(<<
+       Text(16 * ind + 85, ybase - 9, "(StateMachineSafety)", ("fill" :> "red" @@ "font-size" :> "7px" @@ "text-anchor" :> "start")),
+       Image(16 * ind + 115, ybase - 6 , 13, 13, BugIcon, <<>>) 
+    >>, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
 violationElem(ybase) == Group([ind \in 1..5 |-> violationEntry(ybase, ind)], <<>>)
+violationText == Text(165, 9, "(StateMachineSafety)", (
+    "fill" :> "red" @@ "font-size" :> "7px" @@ "text-anchor" :> "start"))
 safetyViolationElems ==  <<violationElem(5)>>
 
 
@@ -206,7 +213,7 @@ GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,
 \* 
 \* Animation view.
 \* 
-AnimView == Group(<<LegendGroup>> \o cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(100, 40) scale(1.7)"])
+AnimView == Group(<<LegendGroup>> \o cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(100, 50) scale(1.7)"])
 
 
 
