@@ -19,9 +19,8 @@ EXTENDS TLC, Naturals
 (* protocol--that is, what is allowed to happen.  What must happen would   *)
 (* be described by liveness properties, which we do not specify.           *)
 (***************************************************************************)
-\* CONSTANT RM \* The set of resource managers
 
-CONSTANT RM
+CONSTANT RM \* The set of resource managers
 
 VARIABLES
   rmState,       \* $rmState[rm]$ is the state of resource manager RM.
