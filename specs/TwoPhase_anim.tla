@@ -1,6 +1,7 @@
 ------------------------------- MODULE TwoPhase_anim ----------------------------- 
 EXTENDS TLC, Naturals, Sequences, Functions, FiniteSets, SVG, TwoPhase
 
+PrepareColor == "steelblue"
 CommitColor == "green"
 AbortColor == "red"
 
@@ -19,7 +20,7 @@ RMSpacing == 40
 RMElems == [i \in RMIdDomain |-> Circle(RMSpacing * i, 45, 10, 
         [stroke |-> "black", fill |-> 
             IF rmState[RMId[i]] = "prepared" 
-                THEN "steelblue" 
+                THEN PrepareColor 
             ELSE IF rmState[RMId[i]] = "committed" THEN CommitColor 
             ELSE IF rmState[RMId[i]] = "aborted" THEN AbortColor ELSE "gray"])]
 
