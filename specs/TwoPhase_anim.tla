@@ -49,7 +49,7 @@ LegendElems == <<
 >>
 LegendGroup == Group(LegendElems, [transform |-> "translate(170, 32)"])
 
-AnimView == Group(<<LegendGroup>> \o RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.25)"])
+AnimView == Group(<<LegendGroup>> \o RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.35)"])
 
 \* Animation alias for generating SVG files with TLC.
 AnimAlias ==
