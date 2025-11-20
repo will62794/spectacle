@@ -82,6 +82,7 @@ TMRcvPrepared(rm) ==
   (* The TM receives a $"Prepared"$ message from resource manager $rm$.    *)
   (*************************************************************************)
   /\ tmState = "init"
+  /\ rm \notin tmPrepared
   /\ [type |-> "Prepared", rm |-> rm] \in msgs
   /\ tmPrepared' = tmPrepared \cup {rm}
   /\ UNCHANGED <<rmState, tmState, msgs>>

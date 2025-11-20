@@ -38,8 +38,18 @@ TMTextElems == <<
 >>
 TextElems == RMTextElems \o TMTextElems
 
+\* --- Legend for node colors ---
+LegendElems == <<
+    Rect(10, 8, 13, 13, [stroke |-> "black", fill |-> PrepareColor]),
+    Text(30, 17, "Prepared", ("fill" :> "black" @@ "font-size" :> "10")),
+    Rect(10, 34, 13, 13, [stroke |-> "black", fill |-> CommitColor]),
+    Text(30, 45, "Committed", ("fill" :> "black" @@ "font-size" :> "10")),
+    Rect(10, 60, 13, 13, [stroke |-> "black", fill |-> AbortColor]),
+    Text(30, 71, "Aborted", ("fill" :> "black" @@ "font-size" :> "10"))
+>>
+LegendGroup == Group(LegendElems, [transform |-> "translate(170, 32)"])
 
-AnimView == Group(RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.25)"])
+AnimView == Group(<<LegendGroup>> \o RMElems \o <<TMElem>> \o TextElems, [transform |-> "translate(40, 40) scale(1.25)"])
 
 \* Animation alias for generating SVG files with TLC.
 AnimAlias ==
