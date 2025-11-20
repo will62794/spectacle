@@ -101,7 +101,7 @@ const exampleSpecs = {
     "TwoPhase (animated)": {
         specpath: "./specs/TwoPhase.tla",
         constant_vals: {
-            "RM": "{rm1,rm2}",
+            "RM": "{rm1,rm2,rm3}",
         }
     },
     "TeachingConcurrency": {
