@@ -85,6 +85,13 @@ logElem(i, ybase) == Group([ind \in DOMAIN log[i] |-> logEntry(i, ybase, ind)], 
 logElems ==  [i \in RMIdDomain |-> logElem(RMId[i], i * Spacing - 9)]
 
 \* 
+\* Define legend for visualization.
+\* 
+LegendCommittedEntryBox == Rect(32, 2, 13, 13, ("fill" :> "lightgray" @@ "stroke" :> "limegreen" @@ "stroke-width" :> "1.5px"))
+LegendCommittedEntryLabel == Text(52, 12, "Committed", ("fill" :> "black" @@ "font-size" :> "8px" @@ "text-anchor" :> "start"))
+LegendGroup == Group(<<LegendCommittedEntryBox, LegendCommittedEntryLabel>>, [transform |-> "translate(0,0)"])
+
+\* 
 \* Define server elements visuals.
 \* 
 cs == [i \in RMIdDomain |-> 
@@ -199,7 +206,7 @@ GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,
 \* 
 \* Animation view.
 \* 
-AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(120, 20) scale(1.65)"])
+AnimView == Group(<<LegendGroup>> \o cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(100, 40) scale(1.65)"])
 
 
 
