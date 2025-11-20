@@ -157,15 +157,31 @@ DiGraph(V, E, nodeAttrsFn, edgeAttrsFn) == SVGElem("digraph", [V |-> V, E |-> E,
 
 NodeIsServer(n) == \E s \in Server : ToString(s) = n
 
+
+
+
+
+LogTreeNodeStr(n) == ToString(n[1]) \o "_" \o ToString(n[2])
+LogTreeNodesStr == {LogTreeNodeStr(n) : n \in LogTreeNodes}
+
+\* Mapping from log tree node string reprs to their underlying node values.
+LogTreeNodeMap == [n \in LogTreeNodesStr |-> CHOOSE x \in LogTreeNodes : LogTreeNodeStr(x) = n]
+
+
+\* LogTreeNodesStr == {LogTreeNodeStr(n) : n \in LogTreeNodes} \cup {ToString(s) : s \in Server}
+LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges}
+\* LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges} \cup {<<ToString(s), LogTreeNodeStr(<<Len(log[s]), log[s][Len(log[s])]>>)>> : s \in Server}
+
+
+
 \* Graphviz attributes
 nodeAttrsFn(n) == [
-    label |-> IF NodeIsServer(n) THEN n ELSE "(" \o n \o ")",
-    style |-> IF NodeIsServer(n) THEN "none" ELSE "filled",
+    label |-> IF NodeIsServer(n) THEN n ELSE ToString(<<LogTreeNodeMap[n][1],LogTreeNodeMap[n][2].term>>),
     color |-> IF NodeIsServer(n) THEN "none" ELSE "black",
     fillcolor |-> IF NodeIsServer(n) THEN "none" ELSE "white",
-    fontsize |-> IF NodeIsServer(n) THEN "6" ELSE "10",
-    shape |-> "rect"
-    \* fillcolor |-> IF n \in CommittedTxns(txnHistory) THEN "lightgreen" ELSE "lightgray"
+    fontsize |-> "12",
+    shape |-> "rect", 
+    style |-> "rounded,filled"
 ]
 
 edgeAttrsFn(e) == [
@@ -174,24 +190,16 @@ edgeAttrsFn(e) == [
     \* fontsize |-> "8"
 ]
 
-LogTreeNodeStr(n) == ToString(n[1]) \o "_" \o ToString(n[2])
-LogTreeNodesStr == {LogTreeNodeStr(n) : n \in LogTreeNodes}
-\* LogTreeNodesStr == {LogTreeNodeStr(n) : n \in LogTreeNodes} \cup {ToString(s) : s \in Server}
-LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges}
-\* LogTreeEdgesStr == {<<LogTreeNodeStr(e[1]), LogTreeNodeStr(e[2])>> : e \in LogTreeEdges} \cup {<<ToString(s), LogTreeNodeStr(<<Len(log[s]), log[s][Len(log[s])]>>)>> : s \in Server}
-
 GraphElem == <<Group(<<DiGraph(LogTreeNodesStr,LogTreeEdgesStr,
                                    [n \in LogTreeNodesStr |-> nodeAttrsFn(n)], 
                                    [e \in LogTreeEdgesStr |-> edgeAttrsFn(e)])>>, 
-                                   [transform |-> "translate(0, 220) scale(0.7)"])>>
-
-
+                                   [transform |-> "translate(0, 210) scale(0.67)"])>>
 
 
 \* 
 \* Animation view.
 \* 
-AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(120, 30) scale(1.75)"])
+AnimView == Group(cs \o labels \o termLabels \o logElems \o safetyViolationElems \o GraphElem, [transform |-> "translate(120, 20) scale(1.65)"])
 
 
 

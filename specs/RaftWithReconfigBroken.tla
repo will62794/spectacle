@@ -79,7 +79,7 @@ ServerViewOn(i) == configs[GetConfigVersion(i)]
 
 \* The set of all quorums. This just calculates simple majorities, but the only
 \* important property is that every quorum overlaps with every other.
-Quorum(me) == {sub \in SUBSET(ServerViewOn(me)) : Cardinality(sub) * 2 > Cardinality(ServerViewOn(me))}
+Quorum(me) == {sub \in SUBSET(ServerViewOn(me)) : Cardinality(sub) * 2 \in {Cardinality(ServerViewOn(me)) + 1, Cardinality(ServerViewOn(me)) + 2}}
 
 ----
 \* Define initial values for all variables
@@ -256,19 +256,5 @@ TwoPrimariesInSameTerm ==
         /\ state[j] = Leader
 
 NoTwoPrimariesInSameTerm == ~TwoPrimariesInSameTerm
-
----------------------------------------------------------------
-
-CONSTANT MaxTerm
-CONSTANT MaxLogLen
-
-StateConstraint == 
-    /\ \A s \in Server : currentTerm[s] <= MaxTerm
-    /\ \A s \in Server : Len(log[s]) <= MaxLogLen
-
-Symmetry == Permutations(Server)
-
-
-------------------------------------------------------------
 
 ===============================================================================
