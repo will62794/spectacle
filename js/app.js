@@ -4062,7 +4062,6 @@ async function loadApp() {
     // let specPath = "./specs/simple_test.tla";
     // model.specPath = "./specs/simple_lockserver.tla";
 
-
     //
     // Mithril app setup.
     //
@@ -4102,6 +4101,15 @@ async function loadApp() {
                     model.local_tla_file_list = data["tla_files"];
                     console.log("Local files:", model.local_tla_file_list);
                 });
+
+            // Initialize default spec.
+            let twoPhaseSpec = exampleSpecs["TwoPhase (animated)"];
+            if (twoPhaseSpec.constant_vals !== undefined) {
+                for (const constDecl in twoPhaseSpec.constant_vals) {
+                    model.specConstInputVals[constDecl] = twoPhaseSpec.constant_vals[constDecl];
+                }
+                setConstantValues();
+            }
         },
         onupdate: function () {
             // Keep trace viewer scrolled to bottom.
