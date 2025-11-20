@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 // 
 
 test('two-phase-basic', async ({ page }) => {
-    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla');
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
   
     // Expect a title "to contain" a substring.
     // await expect(page).toHaveTitle(/Playwright/);
@@ -84,7 +84,7 @@ test('two-phase-basic', async ({ page }) => {
   });
 
 test('reset-trace-functionality', async ({ page }) => {
-    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla');
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
   
     // Wait for the initial state selection to be visible
     await expect(page.getByText('Choose Initial State')).toBeVisible();
