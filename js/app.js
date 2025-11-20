@@ -4058,7 +4058,7 @@ async function loadApp() {
     // let specPath = "./specs/lockserver_nodefs_anim.tla";
     // let specPath = "./specs/MongoLoglessDynamicRaft.tla";
     // let specPath = "./specs/Paxos.tla";
-    model.specPath = "./specs/TwoPhase.tla";
+    model.specPath = "./specs/TwoPhase_demo.tla";
     // let specPath = "./specs/simple_test.tla";
     // model.specPath = "./specs/simple_lockserver.tla";
 
