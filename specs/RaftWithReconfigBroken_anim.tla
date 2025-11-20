@@ -136,7 +136,7 @@ termLabels ==
 
 \* Exists a different server with a conflicting committed entry at the same index.
 existsConflictingEntry(ind) == \E x,y \in committedEntries : x.index = ind /\ (x.index = y.index) /\ x.term # y.term
-violationEntry(ybase, ind) == Image(16 * ind + 115, ybase - 9 , 13, 13, BugIcon, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
+violationEntry(ybase, ind) == Image(16 * ind + 115, ybase - 6 , 13, 13, BugIcon, IF existsConflictingEntry(ind) THEN <<>> ELSE [hidden |-> "true"]) 
 violationElem(ybase) == Group([ind \in 1..5 |-> violationEntry(ybase, ind)], <<>>)
 safetyViolationElems ==  <<violationElem(5)>>
 
