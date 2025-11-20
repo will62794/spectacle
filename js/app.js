@@ -654,7 +654,6 @@ function componentChooseConfig(hidden) {
 
     return m("div", {id: "config-box", hidden: hidden, style: { "padding": "20px" }}, [
         m("div", { id: "constant-buttons-div" }, setConfigButtons()),
-        m("div", { id: "constant-buttons-div", style: { "border-bottom": "1px solid #dee2e6" } }, initNextDef()),
         // TODO: Enable once worked out more clearly in interpreter.
         m("div", { 
             id: "choose-constants-elems", 
@@ -666,6 +665,7 @@ function componentChooseConfig(hidden) {
             m("h6", {style: { "margin-top": "18px" }}, "Instantiate Constants"),
             chooseConstantsTable(specConsts)
             ]),
+        m("div", { id: "constant-buttons-div", style: { "border-bottom": "1px solid #dee2e6" } }, initNextDef()),
         defOverridesElems(),
     ]);
 }
