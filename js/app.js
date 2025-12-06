@@ -4150,7 +4150,18 @@ async function loadApp() {
                             }, [
                                 "Spectacle",
                                 m("img", { id: "glasses-logo", src: "assets/glasses-svgrepo-com.svg", style: { "height": "26px", "margin-left": "6px" } })
-                            ])
+                            ]),
+                            // m("a", {
+                            //     href: "gallery.html",
+                            //     class: "btn btn-outline-primary btn-sm",
+                            //     style: {
+                            //         "margin-left": "15px",
+                            //         "font-size": "13px"
+                            //     }
+                            // }, [
+                            //     m("i", { class: "bi bi-grid-3x3-gap" }),
+                            //     " Protocol Gallery"
+                            // ])
                         ]),
                         m("span", { class: "navbar-text", href: "https://github.com/will62794/spectacle", style: "padding-right:15px" },
                             [

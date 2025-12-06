@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Protocol Gallery - Spectacle</title>
+    <meta name="description" content="A gallery of distributed protocol specifications and counterexample traces visualized in Spectacle.">
+    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Protocol Gallery - Spectacle">
+    <meta property="og:description" content="A gallery of distributed protocol specifications and counterexample traces visualized in Spectacle.">
+    <meta property="og:type" content="website">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-bottom: 50px;
+        }
+
+        .protocol-entry {
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            padding: 14px 15px 11px 15px; /* smaller padding */
+            margin-bottom: 16px;          /* less vertical space */
+            border-left: 3px solid #0d6efd;
+            font-size: 0.93rem;           /* smaller font for entry */
+            /* Left align content explicitly */
+            text-align: left;
+        }
+
+        .protocol-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .protocol-entry .protocol-header {
+            font-size: 1.03rem;           /* smaller title */
+            font-weight: 600;
+        }
+
+        .protocol-meta {
+            margin-bottom: 7px;
+            color: #6c757d;
+            font-size: 0.96em;
+        }
+
+        .badge-animated {
+            background-color: #0d6efd;
+            color: #fff;
+            font-weight: normal;
+            margin-left: 7px;
+            font-size: 0.78em;           /* even smaller badge */
+            vertical-align: middle;
+            padding: 2px 7px;
+        }
+
+        .spec-link {
+            margin-right: 7px;
+            font-size: 0.95em;
+            padding: 2px 10px;
+        }
+
+        .trace-link {
+            display: block;
+            padding: 4px 8px;
+            margin: 2px 0;
+            background-color: #f8f9fa;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #495057;
+            transition: background-color 0.2s;
+            font-size: 0.94em;
+        }
+
+        .trace-link:hover {
+            background-color: #e9ecef;
+            color: #212529;
+        }
+        .trace-link i {
+            margin-right: 4px;
+        }
+
+        .section-header {
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 7px;
+            margin-bottom: 22px;
+            font-size: 1.3rem;
+            /* left aligned section header */
+            text-align: left !important;
+        }
+
+        .navbar-brand {
+            font-weight: 500;
+        }
+
+        #glasses-logo {
+            height: 21px;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .trace-note {
+            margin-bottom: 0;
+            margin-left: 8px;
+            color: #6c757d;
+            font-size: 0.89em;
+        }
+
+        /* Make main gallery slightly narrower on large screens */
+        @media (min-width: 992px) {
+            .protocol-gallery-narrow {
+                max-width: 600px !important;
+            }
+        }
+
+        /* Ensure "protocol-gallery-narrow" is left aligned and not centered */
+        .protocol-gallery-narrow {
+            margin-left: 0 !important;
+            margin-right: auto !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar bg-body-tertiary border-bottom mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html" style="font-size: 18px;">
+                Spectacle
+                <img id="glasses-logo" src="assets/glasses-svgrepo-com.svg" alt="Spectacle logo">
+            </a>
+            <span class="navbar-text">
+                <a href="index.html" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-house-door"></i> Back to Explorer
+                </a>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Title -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h1 class="display-6" style="font-size:2rem; text-align:left;">Protocol Gallery</h1>
+                <p class="lead text-muted" style="font-size:1.02rem; text-align:left;">
+                    Explore distributed protocols and consensus algorithms with interactive TLA+ specifications.<br>
+                    Each protocol also highlights notable traces and counterexamples directly alongside.
+                </p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="section-header" style="font-size:1.14rem;">
+                    <i class="bi bi-diagram-2"></i> Protocols & Counterexamples
+                </h2>
+            </div>
+        </div>
+
+        <!-- Protocols List (Single Column) -->
+        <div class="row">
+            <div class="col-lg-10 col-xl-8 protocol-gallery-narrow">
+                <!-- Lock Server -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">Lock Server</div>
+                    <div class="protocol-meta">A simple distributed lock service where clients acquire and release locks from servers.</div>
+                    <a href="https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2Flockserver.tla&constants%5BServer%5D=%7B%22s1%22%2C%20%22s2%22%7D&constants%5BClient%5D=%7B%22c1%22%2C%20%22c2%22%7D"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+
+                <!-- Cabbage Goat Wolf -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">
+                        Cabbage Goat Wolf Puzzle
+                        <span class="badge badge-animated">animated</span>
+                    </div>
+                    <div class="protocol-meta">The classic river-crossing puzzle formalized as a state machine.</div>
+                    <a href="https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FCabbageGoatWolf.tla" class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                    <div class="mt-2 mb-1" style="font-size:0.94em;"><strong>Interesting traces:</strong></div>
+                    <a href="https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FCabbageGoatWolf.tla&trace=f3cb45ca%2C4357915f_7da698e2%2C126ae834_bf3b326e%2C76c2f092_652fccef%2C7229f089_f598e730%2C29e91cea_2ac3323e%2C50fe2821_bf3b326e%2C1d26e01c_9abe74ba%2C5f98d202_f598e730%2C3a9fa186_34b35f78%2Ca49994fc_bf3b326e%2Ceec0674a_652fccef%2C2afe63ed_f598e730%2C2883b61a_7da698e2%2C73ea1058_bf3b326e"
+                        class="trace-link">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Solution to the river crossing puzzle
+                    </a>
+                </div>
+
+                <!-- EWD998 -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">EWD998
+                        <span class="badge badge-animated">animated</span>
+                    </div>
+                    <div class="protocol-meta">Dijkstra's distributed termination detection algorithm for ring-based systems.</div>
+                    <a href="https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FEWD998.tla&constants%5BN%5D=3" class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+
+                <!-- Two Phase Commit -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">
+                        Two Phase Commit
+                        <span class="badge badge-animated">animated</span>
+                    </div>
+                    <div class="protocol-meta">Classic atomic commit protocol for distributed transactions.</div>
+                    <a href="https://will62794.github.io/spectacle/#!/home?specpath=.%2Fspecs%2FTwoPhase.tla&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D"
+                       class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+
+                <!-- Paxos -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">Paxos</div>
+                    <div class="protocol-meta">The foundational consensus protocol for agreeing on a single value among distributed processes.</div>
+                    <a href="#!/home?specpath=.%2Fspecs%2FPaxos.tla&constants%5BServer%5D=%7B%22s1%22%2C%22s2%22%2C%20%22s3%22%7D&constants%5BSecondary%5D=%22Secondary%22&constants%5BPrimary%5D=%22Primary%22&constants%5BNil%5D=%22Nil%22&constants%5BInitTerm%5D=0&constants%5BAcceptor%5D=%7Ba1%2Ca2%2Ca3%7D&constants%5BQuorum%5D=%7B%7Ba1%2Ca2%7D%2C%7Ba2%2Ca3%7D%2C%7Ba1%2Ca3%7D%2C%7Ba1%2Ca2%2Ca3%7D%7D&constants%5BProposer%5D=%7Bp1%2Cp2%7D&constants%5BValue%5D=%7Bv1%2Cv2%7D&constants%5BBallot%5D=%7B0%2C1%2C2%2C3%7D&constants%5BNone%5D=None"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+
+                <!-- Flexible Paxos -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">Flexible Paxos</div>
+                    <div class="protocol-meta">A generalization of Paxos that allows flexible quorum configurations.</div>
+                    <a href="#!/home?specpath=.%2Fspecs%2FFlexiblePaxos.tla&constants%5BValue%5D=%7Bv1%2Cv2%7D&constants%5BAcceptor%5D=%7Ba1%2Ca2%7D&constants%5BQuorum1%5D=%7B%7Ba1%7D%2C%20%7Ba2%7D%7D&constants%5BQuorum2%5D=%7B%7Ba1%2Ca2%7D%7D&constants%5BBallot%5D=%7B0%2C1%2C2%2C3%7D"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+
+                <!-- Raft -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">
+                        Raft
+                        <span class="badge badge-animated">animated</span>
+                    </div>
+                    <div class="protocol-meta">An understandable consensus algorithm designed as an alternative to Paxos.</div>
+                    <a href="#!/home?specpath=.%2Fspecs%2FAbstractRaft.tla&constants%5BServer%5D=%7Bs1%2Cs2%2C%20s3%7D&constants%5BSecondary%5D=%22Secondary%22&constants%5BPrimary%5D=%22Primary%22&constants%5BNil%5D=%22Nil%22&constants%5BInitTerm%5D=0"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                    <div class="mt-2 mb-1" style="font-size:0.94em;"><strong>Interesting traces:</strong></div>
+                    <a href="#!/home?specpath=.%2Fspecs%2FAbstractRaft.tla&constants%5BServer%5D=%7Bs1%2Cs2%2Cs3%7D&constants%5BSecondary%5D=%22Secondary%22&constants%5BPrimary%5D=%22Primary%22&constants%5BNil%5D=%22Nil%22&constants%5BInitTerm%5D=0&trace=318c702a%2C0785f33f%2Cbbf1576c%2C79ad3285%2C708acdc2%2C2cd8de84%2Cfbeeee44%2Cac5d32a8%2Cc1e2949e%2Cd8547bce%2C7735c8df"
+                        class="trace-link">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Log entry written and later rolled back
+                    </a>
+                    <div class="trace-note small">Demonstrates how uncommitted log entries can be overwritten due to leader changes.</div>
+                </div>
+
+                <!-- Snapshot Isolation -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">Snapshot Isolation</div>
+                    <div class="protocol-meta">A multiversion concurrency control method used in database systems.</div>
+                    <a href="#!/home?specpath=https%3A%2F%2Fraw.githubusercontent.com%2Fwill62794%2Fsnapshot-isolation-spec%2Frefs%2Fheads%2Fmaster%2FSnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D=%22Empty%22"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                    <div class="mt-2 mb-1" style="font-size:0.94em;"><strong>Anomalous traces:</strong></div>
+                    <a href="#!/home?specpath=https%3A%2F%2Fraw.githubusercontent.com%2Fwill62794%2Fsnapshot-isolation-spec%2Frefs%2Fheads%2Fmaster%2FSnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D=%22Empty%22&trace=4d9d875e%2Cb0868cc6%2C2f4fe314%2C351c185a%2C9af072f2%2C0ad7710e%2C39e3312d%2Cc5dbe6f2%2C0005740a"
+                        class="trace-link">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Write skew anomaly
+                    </a>
+                    <a href="#!/home?specpath=https%3A%2F%2Fraw.githubusercontent.com%2Fwill62794%2Fsnapshot-isolation-spec%2Frefs%2Fheads%2Fmaster%2FSnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D=%22Empty%22&trace=4d9d875e%2C27dfd06a%2C639eed1f%2C4cb5a71b%2C4708fef8%2C429a81d3%2Ce9311886%2C7478057a%2C2ea8cbe7%2C6a3128ec%2Cd2bef298%2C071ae0d9"
+                        class="trace-link">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        Read-only anomaly
+                    </a>
+                    <div class="trace-note small">Classic examples of anomalies that can occur under snapshot isolation but not under serializability.</div>
+                </div>
+
+                <!-- CASPaxos -->
+                <div class="protocol-entry">
+                    <div class="protocol-header">CASPaxos</div>
+                    <div class="protocol-meta">A replicated state machine protocol based on compare-and-swap operations.</div>
+                    <a href="#!/home?specpath=https%3A%2F%2Fgist.githubusercontent.com%2Fwill62794%2F618e607eaa216ed6118904e711d7eca2%2Fraw%2F06fa5b0871a556e5d5e98b99363f488ac6a93938%2FGryadkaCasRegister.tla&initPred=Init&nextPred=Next&constants%5BTimestamps%5D=%7B1%2C2%2C3%7D&constants%5BValues%5D=%7B%22v1%22%2C%22v2%22%7D&constants%5BAcceptors%5D=%7Ba1%2Ca2%2Ca3%7D&constants%5BQuorums%5D=%7B%7Ba1%2Ca2%7D%2C%7Ba2%2Ca3%7D%2C%7Ba1%2Ca3%7D%7D&trace=cce6c728"
+                        class="btn btn-primary btn-sm spec-link">
+                        <i class="bi bi-box-arrow-up-right"></i> Open Spec
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="row mt-4">
+            <div class="col-12 text-center text-muted">
+                <hr>
+                <p style="font-size: 0.98em;">
+                    <a href="https://github.com/will62794/spectacle" target="_blank">
+                        <i class="bi bi-github"></i> View on GitHub
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a href="index.html">Back to Spectacle Explorer</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/lib/bootstrap.bundle.min.js"></script>
+</body>
+</html>
