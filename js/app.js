@@ -3644,8 +3644,10 @@ function checkPane(hidden) {
             }, "View Trace"),
             ")"
         ]),
-        m("div", {hidden: !(!model.invariantViolated && model.invariantCheckingDuration > 0 && !model.invariantCheckerRunning), style: {color: "green"}}, [
-            `Invariant passed in ${model.invariantCheckingDuration.toFixed(0)}ms, ${invCheckStatesExplored} distinct states explored.`,
+        m("div", {hidden: !(!model.invariantViolated && model.invariantCheckingDuration > 0 && !model.invariantCheckerRunning), style: {color: "gray", "font-size": "13px", "margin-top": "8px"}}, [
+            m("span", {style: {color: "green"}}, "Invariant passed"),
+            ": ",
+            `${invCheckStatesExplored} states explored in ${model.invariantCheckingDuration.toFixed(0)} ms`,
         ])
     ]);
 }
