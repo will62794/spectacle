@@ -5434,7 +5434,7 @@ class TlaInterpreter {
      * constant values. If 'checkInvExpr' is given, check if this invariant
      * holds in each state, and terminate upon encountering the first violation.
      */
-    computeReachableStates(treeObjs, constvals, checkInvExpr, spec, logMetricsInterval=null) {
+    computeReachableStates(treeObjs, constvals, checkInvExpr, spec, logMetricsInterval=null, logMetricsFn=null) {
         // console.log("TREEOBJS:", treeObjs);
         // console.log("TREEOBJS:", spec.globalDefTable);
         let vars = treeObjs["var_decls"];
@@ -5476,6 +5476,10 @@ class TlaInterpreter {
             // For online reporting of metrics.
             if(logMetricsInterval !== null && seenStatesHashSet.size % logMetricsInterval === 0){
                 console.log(`${seenStatesHashSet.size} reachable states computed.`);
+                // Send progress update to worker (if running in worker context)
+                if(typeof logMetricsFn === 'function'){
+                    logMetricsFn(seenStatesHashSet.size);
+                }
             }
 
             // Compute next states reachable from the current state, and add

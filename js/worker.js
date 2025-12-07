@@ -317,8 +317,15 @@ onmessage = async (e) => {
         // Generate initial states.
         let interp = new TlaInterpreter();
 
+        function logMetrics(numStatesExplored){
+            postMessage({
+                type: "progress",
+                numStatesExplored: numStatesExplored
+            });
+        }
+
         let start = performance.now();
-        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, invariantExpr, spec, logMetricsInterval=200);
+        let reachableStates = interp.computeReachableStates(spec.spec_obj, constTlaVals, invariantExpr, spec, logMetricsInterval=200, logMetricsFn=logMetrics);
         const duration = (performance.now() - start).toFixed(1);
         console.log("Reachable states from WebWorker.", reachableStates, `duration: ${duration}ms`);
         console.log(`Computed ${reachableStates.states.length} reachable states in ${duration}ms.`);

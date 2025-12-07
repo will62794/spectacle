@@ -88,6 +88,7 @@ let model = {
     invariantViolated: false,
     invariantCheckerRunning: false,
     invariantCheckingDuration: 0,
+    invariantCheckingStatesExplored: 0,
     // Trace loading state
     traceLoadingWorker: null,
     traceLoadingInProgress: false,
@@ -2503,6 +2504,14 @@ function startCheckInvariantWebWorker(invariantExpr){
         console.log("Message received from worker");
         let response = e.data;
         console.log("Response from worker:", response);
+        
+        // Handle progress updates
+        if(response.type === "progress"){
+            model.invariantCheckingStatesExplored = response.numStatesExplored;
+            m.redraw();
+            return;
+        }
+        
         model.generatingInitStates = false;
         m.redraw();
 
@@ -3601,6 +3610,7 @@ function checkPane(hidden) {
                 onclick: () => {
                     console.log(`Starting web worker for checking invariant expression: '${model.invariantExprToCheck}'.`)
                     model.invariantViolated = false;
+                    model.invariantCheckingStatesExplored = 0;
                     startCheckInvariantWebWorker(model.invariantExprToCheck);
                 }
             }, [
@@ -3620,6 +3630,11 @@ function checkPane(hidden) {
             }, [
                 "Stop"
             ]),
+        ]),
+        // Live metrics indicator when checking is running
+        m("div", {hidden: !model.invariantCheckerRunning, style: {color: "#666", "font-size": "13px", "margin-top": "8px"}}, [
+            m("span", {class: "spinner-border spinner-border-sm", style: {"margin-right": "6px"}}),
+            `Checking... ${model.invariantCheckingStatesExplored || 0} states explored so far`
         ]),
         m("div", {hidden: !model.invariantViolated, style: {color: "red"}}, [
             `Invariant violated in ${model.invariantCheckingDuration.toFixed(0)}ms, ${invCheckStatesExplored} distinct states explored (`,
