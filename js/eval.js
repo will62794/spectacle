@@ -1707,6 +1707,16 @@ class TLASpec {
 
         // If an action is just a plain identifier, then we treat it as its own action.
         if (node.type === "identifier_ref") {
+
+            // Unwrap identifiers that point to bounded quantifications one
+            // level deep, if they exist.
+            // console.log("identifier_ref NAMED:", node.text);
+            let defNode = this.getDefinitionByName(node.text);
+            if (defNode !== undefined && defNode.hasOwnProperty("node")
+                && defNode.node.type === "bounded_quantification") {
+                return this.parseActionsFromNodeRec(defNode.node, ind);
+            }
+            
             return [new TLAAction(ind, node, extractActionName(node))];
         }
 
