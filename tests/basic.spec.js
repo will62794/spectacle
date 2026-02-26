@@ -32,6 +32,25 @@ test('two-phase-basic', async ({ page }) => {
     // Should now have 2 states in the trace.
     await expect(traceStates).toHaveCount(2, { timeout: 2000 });
   });
+
+test('enabled-any-branch', async ({ page }) => {
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/enabled_any_branch.tla&initPred=Init&nextPred=Next');
+
+    await expect(page.getByText('Choose Initial State')).toBeVisible();
+
+    let nextStateChoices = page.getByTestId('next-state-choice');
+    await expect(nextStateChoices).toHaveCount(1, { timeout: 2000 });
+    await nextStateChoices.nth(0).click();
+
+    let traceStates = page.getByTestId('trace-state-elem');
+    await expect(traceStates).toHaveCount(1, { timeout: 2000 });
+
+    let actionChoices = page.locator('[data-testid="action-choice-param"], [data-testid="next-state-choice"]');
+    await expect(actionChoices).toHaveCount(1, { timeout: 2000 });
+    await actionChoices.nth(0).click();
+
+    await expect(traceStates).toHaveCount(2, { timeout: 2000 });
+});
   
   test('lockserver-basic', async ({ page }) => {
     await page.goto('http://localhost:3000/#!/home?specpath=./specs/lockserver.tla');
