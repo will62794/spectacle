@@ -3450,10 +3450,13 @@ function evalBoundInfix(node, ctx) {
 
 function evalEnabled(node, ctx) {
     let rhs = node.childForFieldName("rhs");
-    let rhsVal = evalExpr(rhs, ctx)[0]["val"];
-    evalLog("rhs ENABLED: ", rhsVal);
-    assert(rhsVal instanceof BoolValue);
-    return [ctx.withVal(rhsVal)];
+    let rhsVals = evalExpr(rhs, ctx.clone());
+    // ENABLED A is true if any branch of A is enabled.
+    let anyEnabled = rhsVals.some(retCtx => {
+        return retCtx["val"] instanceof BoolValue && retCtx["val"].getVal() === true;
+    });
+    evalLog("rhs ENABLED any:", anyEnabled, "num branches:", rhsVals.length);
+    return [ctx.withVal(new BoolValue(anyEnabled))];
 }
 
 // M!Op
