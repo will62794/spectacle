@@ -54,6 +54,10 @@ class MultiDirHandler(http.server.SimpleHTTPRequestHandler):
         return http.server.SimpleHTTPRequestHandler.translate_path(self, path)
 
 PORT = 8000
-with socketserver.TCPServer(("", PORT), MultiDirHandler) as httpd:
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
+with ReusableTCPServer(("", PORT), MultiDirHandler) as httpd:
     print(f"Serving at port {PORT}")
     httpd.serve_forever()
