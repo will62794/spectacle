@@ -51,6 +51,25 @@ test('enabled-any-branch', async ({ page }) => {
 
     await expect(traceStates).toHaveCount(2, { timeout: 2000 });
 });
+
+  test('hide-empty-action-groups', async ({ page }) => {
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/action_filter_empty.tla&initPred=Init&nextPred=Next');
+
+    await expect(page.getByText('Choose Initial State')).toBeVisible();
+
+    let nextStateChoices = page.getByTestId('next-state-choice');
+    await expect(nextStateChoices).toHaveCount(1, { timeout: 2000 });
+    await nextStateChoices.nth(0).click();
+
+    let stateChoicesPane = page.locator('#state-choices-pane');
+    await expect(stateChoicesPane.getByText('ActionDisabled', { exact: true })).toHaveCount(0, { timeout: 2000 });
+    await expect(stateChoicesPane.getByText('ActionEnabled', { exact: true })).toHaveCount(1, { timeout: 2000 });
+
+    await stateChoicesPane.getByText('ActionEnabled', { exact: true }).first().click();
+
+    let traceStates = page.getByTestId('trace-state-elem');
+    await expect(traceStates).toHaveCount(2, { timeout: 2000 });
+  });
   
   test('lockserver-basic', async ({ page }) => {
     await page.goto('http://localhost:3000/#!/home?specpath=./specs/lockserver.tla');
