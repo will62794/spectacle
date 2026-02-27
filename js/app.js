@@ -1151,6 +1151,9 @@ function componentNextStateChoices(nextStates) {
     else {
         // Action specific case.
         for (const [actionId, nextStatesForAction] of Object.entries(nextStates)) {
+            if (nextStatesForAction.length === 0) {
+                continue;
+            }
             let i = 0;
             let action = model.actions[actionId];
 
