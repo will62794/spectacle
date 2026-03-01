@@ -3,6 +3,7 @@ import socketserver
 import os
 import json
 import argparse
+from urllib.parse import urlparse
 
 #
 # Starts a local server to serve the Spectacle app but also allows for serving of local spec files
@@ -25,7 +26,8 @@ class MultiDirHandler(http.server.SimpleHTTPRequestHandler):
     }
 
     def do_GET(self):
-        if self.path == "/api/local_dir_files" and args.local_dir is not None:
+        path_only = urlparse(self.path).path
+        if path_only == "/api/local_dir_files" and args.local_dir is not None:
             # Get list of .tla files in local_data directory
             local_data_dir = self.roots["/local_dir"]
             tla_files = []
@@ -45,13 +47,14 @@ class MultiDirHandler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def translate_path(self, path):
+        path_only = urlparse(path).path
         for prefix, root in self.roots.items():
-            if path.startswith(prefix):
+            if path_only.startswith(prefix):
                 # strip prefix and join with root dir
-                rel = path[len(prefix):].lstrip("/")
+                rel = path_only[len(prefix):].lstrip("/")
                 return os.path.join(root, rel)
         # fallback: default directory
-        return http.server.SimpleHTTPRequestHandler.translate_path(self, path)
+        return http.server.SimpleHTTPRequestHandler.translate_path(self, path_only)
 
 PORT = 8000
 class ReusableTCPServer(socketserver.TCPServer):
