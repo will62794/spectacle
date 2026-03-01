@@ -51,6 +51,23 @@ test('enabled-any-branch', async ({ page }) => {
 
     await expect(traceStates).toHaveCount(2, { timeout: 2000 });
 });
+
+  test('spec fetch uses cache bust query param', async ({ page }) => {
+    const specRequestUrls = [];
+
+    page.on('request', (request) => {
+      const reqUrl = request.url();
+      if (reqUrl.includes('/specs/TwoPhase.tla')) {
+        specRequestUrls.push(reqUrl);
+      }
+    });
+
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
+    await expect(page.getByText('Choose Initial State')).toBeVisible();
+
+    expect(specRequestUrls.length).toBeGreaterThan(0);
+    expect(specRequestUrls.some((reqUrl) => /[?&]__ts=\d+/.test(reqUrl))).toBeTruthy();
+  });
   
   test('lockserver-basic', async ({ page }) => {
     await page.goto('http://localhost:3000/#!/home?specpath=./specs/lockserver.tla');

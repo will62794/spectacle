@@ -10,6 +10,11 @@ let vizInstance = null;
 
 const LOCAL_SERVER_URL = "http://127.0.0.1:8000";
 
+function withCacheBust(path) {
+    const sep = path.includes("?") ? "&" : "?";
+    return `${path}${sep}__ts=${Date.now()}`;
+}
+
 let Pane = {
     Constants: 1,
     Trace: 2
@@ -4011,7 +4016,7 @@ function tryLoadAnimSpec(specPath) {
 
     let animSpecPath = specPath.replace(".tla", "_anim.tla");
     model.externalAnimationExists = false;
-    m.request(animSpecPath, { responseType: "text" }).then(function (animText) {
+    m.request(withCacheBust(animSpecPath), { responseType: "text" }).then(function (animText) {
         model.specAnimText = animText;
         model.animationExists = true;
         model.externalAnimationExists = true;
@@ -4066,7 +4071,7 @@ function loadSpecFromPath(specPath){
         model.loadSpecFailed = true;
         return;
     }
-    return m.request(specPath, { responseType: "text" }).then(function (specText) {
+    return m.request(withCacheBust(specPath), { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
         if(!model.inlineAnimationExists){
             tryLoadAnimSpec(specPath);
