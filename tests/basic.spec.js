@@ -189,6 +189,35 @@ test('two-phase-alt-init-next-defs', async ({ page }) => {
     // await expect(traceStates.nth(1)).toHaveText('FALSE');
   });
 
+test('evalLnot-empty-inner-eval-regression', async ({ page }) => {
+    await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
+    await expect(page.getByText('Choose Initial State')).toBeVisible();
+
+    const probe = await page.evaluate(() => {
+      const originalEvalExpr = evalExpr;
+      try {
+        evalExpr = () => [];
+        const out = evalLnot({ text: 'dummy' }, { withVal: () => ({}) });
+        return {
+          threw: false,
+          isArray: Array.isArray(out),
+          len: Array.isArray(out) ? out.length : -1,
+        };
+      } catch (e) {
+        return {
+          threw: true,
+          message: String(e),
+        };
+      } finally {
+        evalExpr = originalEvalExpr;
+      }
+    });
+
+    expect(probe.threw).toBeFalsy();
+    expect(probe.isArray).toBeTruthy();
+    expect(probe.len).toBe(0);
+  });
+
 // let si_url_params = 'specpath=./specs/SnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D="Empty"'
 // test('snapshot-isolation-basic', async ({ page }) => {
 //     await page.goto('http://127.0.0.1:8000/#!/home?' + si_url_params);
