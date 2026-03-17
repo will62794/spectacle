@@ -189,6 +189,42 @@ test('two-phase-alt-init-next-defs', async ({ page }) => {
     // await expect(traceStates.nth(1)).toHaveText('FALSE');
   });
 
+test('evalLand-empty-lhs-guard', async ({ page }) => {
+  await page.goto('http://localhost:3000/#!/home?initPred=Init&nextPred=Next&specpath=./specs/evalLand_empty_lhs_guard_min.tla');
+
+  const out = await page.evaluate(() => {
+    const prevEvalExpr = evalExpr;
+    evalExpr = () => [];
+
+    try {
+      const ctx = new Context(
+        null,
+        new TLAState({}),
+        {},
+        {},
+        {},
+        null,
+        {},
+        {},
+        null,
+        {},
+        '',
+        [],
+        [],
+        {}
+      );
+      evalLand({ text: 'lhs' }, { text: 'rhs' }, ctx);
+      return { threw: false };
+    } catch (e) {
+      return { threw: true };
+    } finally {
+      evalExpr = prevEvalExpr;
+    }
+  });
+
+  expect(out.threw).toBeFalsy();
+});
+
 // let si_url_params = 'specpath=./specs/SnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D="Empty"'
 // test('snapshot-isolation-basic', async ({ page }) => {
 //     await page.goto('http://127.0.0.1:8000/#!/home?' + si_url_params);
