@@ -2617,6 +2617,9 @@ function evalLand(lhs, rhs, ctx) {
     evalLog("## LAND - LHS:", lhs.text, ", RHS: ", rhs.text);
     let lhsEval = _.flattenDeep(evalExpr(lhs, ctx));
     evalLog("lhsEval:", lhsEval);
+    if (!Array.isArray(lhsEval) || lhsEval.length === 0 || !lhsEval[0] || !(lhsEval[0]["val"] instanceof BoolValue)) {
+        return [];
+    }
     if (!lhsEval[0]["val"].getVal()) {
         // Short-circuit.
         return lhsEval;
@@ -2624,7 +2627,13 @@ function evalLand(lhs, rhs, ctx) {
     let rhsEval = lhsEval.map(lctx => {
         evalLog("rhs:", rhs.text);
         evalLog("lctx:", lctx);
+        if (!lctx || !(lctx["val"] instanceof BoolValue)) {
+            return [];
+        }
         return evalExpr(rhs, lctx).map(actx => {
+            if (!actx || !(actx["val"] instanceof BoolValue)) {
+                return [];
+            }
             return [actx.withValAndState((lctx["val"].and(actx["val"])), actx["state"])];
         })
     });
