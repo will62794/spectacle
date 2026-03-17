@@ -4105,6 +4105,15 @@ function evalUserBoundOp(node, opDefObj, ctx){
         opEvalContext["quant_bound"] = {};
     }
 
+    // Apply INSTANCE WITH substitutions from imported definitions.
+    if (opDefObj !== undefined && opDefObj.hasOwnProperty("substitutions")) {
+        opEvalContext["substitutions"] = _.merge(
+            {},
+            opEvalContext["substitutions"] || {},
+            opDefObj["substitutions"]
+        );
+    }
+
     // If the operator definition has a context of variable declarations, then we need to
     // propagate this to the evaluation context so that we can correctly identify undefined
     // variables in the operator definition.
