@@ -227,6 +227,7 @@ test('evalLand-empty-lhs-guard', async ({ page }) => {
 
 test('evalUserBoundOp-substitutions-guard', async ({ page }) => {
   await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
+  await page.waitForFunction(() => typeof evalUserBoundOp === 'function' && typeof Context === 'function');
 
   const out = await page.evaluate(() => {
     const n = (name) => ({
@@ -278,11 +279,13 @@ test('evalUserBoundOp-substitutions-guard', async ({ page }) => {
       evalUserBoundOp({ type: 'bound_op', namedChildren: [n('Op'), n('k')], children: [] }, opDefObj, ctx);
       return { threw: false };
     } catch (e) {
-      return { threw: true };
+      return { threw: true, error: String(e) };
     }
   });
 
-  expect(out.threw).toBeFalsy();
+  if (out.threw) {
+    throw new Error(`evalUserBoundOp threw: ${out.error}`);
+  }
 });
 
 // let si_url_params = 'specpath=./specs/SnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D="Empty"'
