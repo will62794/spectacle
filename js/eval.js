@@ -1871,6 +1871,19 @@ class TLASpec {
                     self.moduleTableParsed[modName] = parsedObj;
                 }
 
+                let allNonSubDecls = _.union(_.keys(parsedObj.var_decls), _.keys(parsedObj.const_decls))
+                    .filter(d => !substs.some(s => s.namedChildren[0].text === d));
+
+                let allCurrDefsAndDecls = _.keys(op_defs).map(k => op_defs[k].name)
+                    .concat(_.keys(const_decls), _.keys(var_decls));
+
+                for (const d of allNonSubDecls) {
+                    assert(
+                        allCurrDefsAndDecls.includes(d),
+                        `Substitution '${d}' is not defined in the current scope of module '${modName}'`
+                    );
+                }
+
                 //
                 // Go ahead and add all definitions from this module to the
                 // current module.
@@ -1886,12 +1899,13 @@ class TLASpec {
                     let origOpDef = parsedObj["op_defs"][opName];
 
                     let substPairs = substs.map(s => [s.namedChildren[0].text, {"node":s.namedChildren[2], "curr_defs_context": _.keys(op_defs)}]);
+                    let identitySubstPairs = allNonSubDecls.map(d => [d, {"node": null, "curr_defs_context": _.keys(op_defs), "identity": true}]);
                     let currentSubs = parsedObj["op_defs"][opName]["substitutions"];
 
                     // Add any new substitutions to already existing set of substitutions for this definition.
-                    parsedObj["op_defs"][opName]["substitutions"] = _.merge(currentSubs, _.fromPairs(substPairs));
+                    parsedObj["op_defs"][opName]["substitutions"] = _.merge(currentSubs, _.fromPairs(substPairs), _.fromPairs(identitySubstPairs));
 
-                    let newSubs = _.merge(currentSubs, _.fromPairs(substPairs));
+                    let newSubs = _.merge(currentSubs, _.fromPairs(substPairs), _.fromPairs(identitySubstPairs));
 
                     op_defs[defId] = { 
                         "id": defId,
