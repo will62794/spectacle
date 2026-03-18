@@ -288,6 +288,45 @@ test('evalUserBoundOp-substitutions-guard', async ({ page }) => {
   }
 });
 
+test('instance-implicit-substitutions-guard', async ({ page }) => {
+  await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
+  await page.waitForFunction(() => typeof TLASpec === 'function');
+
+  const out = await page.evaluate(async () => {
+    const [txSpec, memSpec] = await Promise.all([
+      fetch('/specs/instance_implicit_sub_guard_Tx.tla').then((r) => r.text()),
+      fetch('/specs/instance_implicit_sub_guard_Mem.tla').then((r) => r.text()),
+    ]);
+
+    try {
+      const tlaSpec = new TLASpec(txSpec, '/specs/instance_implicit_sub_guard_Tx.tla');
+      tlaSpec.moduleTable = { Mem: memSpec };
+      const parsed = tlaSpec.parseSpecModule(txSpec);
+
+      const imported = Object.values(parsed.op_defs).find((d) => d.module_name === 'Mem');
+      if (!imported) {
+        return { ok: false, error: 'No imported defs from Mem found' };
+      }
+
+      const subs = imported.substitutions || {};
+      const hasStorageIdentity = subs.Storage && subs.Storage.identity === true && subs.Storage.node === null;
+      const hasMemIdentity = subs.mem && subs.mem.identity === true && subs.mem.node === null;
+
+      return {
+        ok: hasStorageIdentity && hasMemIdentity,
+        hasStorageIdentity,
+        hasMemIdentity,
+      };
+    } catch (e) {
+      return { ok: false, error: String(e) };
+    }
+  });
+
+  if (!out.ok) {
+    throw new Error(`implicit INSTANCE substitution check failed: ${JSON.stringify(out)}`);
+  }
+});
+
 // let si_url_params = 'specpath=./specs/SnapshotIsolation.tla&constants%5BtxnIds%5D=%7Bt0%2Ct1%2Ct2%7D&constants%5Bkeys%5D=%7Bk1%2Ck2%7D&constants%5Bvalues%5D=%7Bv1%2Cv2%7D&constants%5BEmpty%5D="Empty"'
 // test('snapshot-isolation-basic', async ({ page }) => {
 //     await page.goto('http://127.0.0.1:8000/#!/home?' + si_url_params);
