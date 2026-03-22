@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 // 
 
 test('interpreter-tests', async ({ page }) => {
-    await page.goto('http://127.0.0.1:8000/test.html');
+    await page.goto('http://localhost:3000/test.html');
     // await page.goto('http://127.0.0.1:8000/test.html?test=simple5&debug=0');
   
     // Expect a title "to contain" a substring.
