@@ -291,6 +291,11 @@ test('evalUserBoundOp-substitutions-guard', async ({ page }) => {
 test('instance-implicit-substitutions-guard', async ({ page }) => {
   await page.goto('http://localhost:3000/#!/home?specpath=./specs/TwoPhase.tla&initPred=Init&nextPred=Next&constants%5BRM%5D=%7Brm1%2Crm2%2Crm3%7D');
   await page.waitForFunction(() => typeof TLASpec === 'function');
+  await page.waitForFunction(() =>
+    typeof parser !== 'undefined' && parser !== null &&
+    typeof model !== 'undefined' && model !== null && model.spec !== null &&
+    model.generatingInitStates === false
+  );
 
   const out = await page.evaluate(async () => {
     const [txSpec, memSpec] = await Promise.all([
@@ -300,7 +305,7 @@ test('instance-implicit-substitutions-guard', async ({ page }) => {
 
     try {
       const tlaSpec = new TLASpec(txSpec, '/specs/instance_implicit_sub_guard_Tx.tla');
-      tlaSpec.moduleTable = { Mem: memSpec };
+      tlaSpec.moduleTable = Object.assign({}, tlaSpec.moduleTable || {}, { Mem: memSpec });
       const parsed = tlaSpec.parseSpecModule(txSpec);
 
       const imported = Object.values(parsed.op_defs).find((d) => d.module_name === 'Mem');
