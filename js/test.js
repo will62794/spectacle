@@ -732,6 +732,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 // testColName.innerHTML = testId;
                 testColStatus.innerHTML = statusText;
                 testColStatus.id = "test_status-" + testId;
+                testColStatus.className = "test-status";
 
                 testRow.appendChild(testColName);
                 testRow.appendChild(testColStatus);
@@ -752,10 +753,10 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         let statusDiv = document.getElementById("test_status-" + test["spec"]);
         if (statusObj["pass"]) {
             statusDiv.style = "margin-bottom:5px; font-weight: bold; color:" + "green";
-            statusDiv.innerHTML = "STATUS: PASS &#10003 (" + (statusObj["duration_ms"] + "ms)");
+            statusDiv.innerHTML = "STATUS: Done - PASS &#10003 (" + (statusObj["duration_ms"] + "ms)");
         } else {
             statusDiv.style = "margin-bottom:5px; font-weight: bold; color:" + "red";
-            statusDiv.innerHTML = "STATUS: FAIL &#10007 (" + statusObj["duration_ms"] + "ms)";
+            statusDiv.innerHTML = "STATUS: Done-  FAIL &#10007 (" + statusObj["duration_ms"] + "ms)";
         }
 
         // Show generated spec with reachable states for debugging single tests.
