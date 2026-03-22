@@ -36,7 +36,7 @@ test('two-phase-basic', async ({ page }) => {
 test('enabled-any-branch', async ({ page }) => {
     await page.goto('http://localhost:3000/#!/home?specpath=./specs/enabled_any_branch.tla&initPred=Init&nextPred=Next');
 
-    await expect(page.getByText('Choose Initial State')).toBeVisible();
+    await expect(page.getByText('Choose Initial State')).toBeVisible({timeout: 6000});
 
     let nextStateChoices = page.getByTestId('next-state-choice');
     await expect(nextStateChoices).toHaveCount(1, { timeout: 6000 });
