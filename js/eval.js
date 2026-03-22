@@ -11,6 +11,8 @@
 let depth = 0;
 let cloneTime = 0.0;
 let numClones = 0;
+// Assignment mode flag used by evalEq; default to init-style when not explicitly set.
+var ASSIGN_PRIMED = false;
 const TLA_STANDARD_MODULES = [
     "TLC",
     "TLCExt",
