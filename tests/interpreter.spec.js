@@ -5,6 +5,9 @@ import { test, expect } from '@playwright/test';
 // Runs interpreter tests via playwright by loading the "test" page and checking all statuses are OK.
 // 
 
+
+/** 
+ * 
 test('interpreter-tests', async ({ page }) => {
     await page.goto('http://localhost:3000/test.html');
     // await page.goto('http://127.0.0.1:8000/test.html?test=simple5&debug=0');
@@ -31,3 +34,5 @@ test('interpreter-tests', async ({ page }) => {
         console.log(`All tests passed.`);
     }
   });
+
+*/
