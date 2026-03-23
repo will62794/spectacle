@@ -214,7 +214,7 @@ async function testSemanticError(test, parsedSpec, specPath, constvals, spec) {
     }
 }
 
-async function testEvalLnotMultiContextRegression(test, parsedSpec, specPath, constvals, spec) {
+async function testValidateTxNegationEquivalenceRegression(test, parsedSpec, specPath, constvals, spec) {
     const start = performance.now();
 
     let probe;
@@ -225,35 +225,55 @@ async function testEvalLnotMultiContextRegression(test, parsedSpec, specPath, co
             withVal: (nextVal) => ({ label, val: nextVal.getVal() }),
         });
 
-        evalExpr = () => [mkCtx("a", true), mkCtx("b", false)];
+        const validateTxNode = { type: "bound_op", text: "ValidateTx(txn)" };
+        const validateTxContexts = [
+            mkCtx("txn1", true),
+            mkCtx("txn2", false),
+            mkCtx("txn3", true),
+        ];
 
-        const out = evalLnot(
-            { text: "dummy" },
+        evalExpr = (expr) => {
+            if (expr === validateTxNode || (expr && expr.text === "ValidateTx(txn)")) {
+                return validateTxContexts;
+            }
+            return [];
+        };
+
+        // left form: ~ValidateTx(txn)
+        const negOut = evalLnot(
+            validateTxNode,
             { withVal: (nextVal) => ({ label: "ctx", val: nextVal.getVal() }) },
         );
 
+        // right form: ValidateTx(txn) = FALSE
+        const eqFalseOut = validateTxContexts.map(c => c.withVal(new BoolValue(c.val.getVal() === false)));
+
+        const toPairs = (arr) => _.sortBy(arr.map(o => `${o.label}:${o.val}`));
+
         probe = {
             threw: false,
-            isArray: Array.isArray(out),
-            len: Array.isArray(out) ? out.length : -1,
-            labels: Array.isArray(out) ? out.map(o => o.label).sort() : [],
-            vals: Array.isArray(out) ? out.map(o => o.val).sort() : [],
+            negIsArray: Array.isArray(negOut),
+            negLen: Array.isArray(negOut) ? negOut.length : -1,
+            eqLen: Array.isArray(eqFalseOut) ? eqFalseOut.length : -1,
+            negPairs: Array.isArray(negOut) ? toPairs(negOut) : [],
+            eqPairs: Array.isArray(eqFalseOut) ? toPairs(eqFalseOut) : [],
         };
     } catch (e) {
         probe = {
             threw: true,
             message: String(e),
-            isArray: false,
-            len: -1,
-            labels: [],
-            vals: [],
+            negIsArray: false,
+            negLen: -1,
+            eqLen: -1,
+            negPairs: [],
+            eqPairs: [],
         };
     } finally {
         evalExpr = originalEvalExpr;
     }
 
-    let pass = !probe.threw && probe.isArray && probe.len === 2 &&
-        _.isEqual(probe.labels, ["a", "b"]) && _.isEqual(probe.vals, [false, true]);
+    let pass = !probe.threw && probe.negIsArray && probe.negLen === 3 && probe.eqLen === 3 &&
+        _.isEqual(probe.negPairs, probe.eqPairs);
 
     return {
         "pass": pass,
@@ -643,7 +663,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
     ],
     "Interpreter Regressions": [
         {
-            "spec": "evalLnot_multi_context_regression",
+            "spec": "negation_equiv_regression",
             "constvals": undefined,
             "isInterpreterRegressionTest": true
         },
@@ -923,7 +943,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                     return testSemanticError(test, parsedSpec, specPath, test["constvals"], spec);
                 }
                 if(test["isInterpreterRegressionTest"]) {
-                    return testEvalLnotMultiContextRegression(test, parsedSpec, specPath, test["constvals"], spec);
+                    return testValidateTxNegationEquivalenceRegression(test, parsedSpec, specPath, test["constvals"], spec);
                 }
                 return testStateGraphEquiv(test["spec"], specStateGraph, parsedSpec, specPath, test["constvals"], spec, test["isSemanticErrorTest"])
             }).then(function (statusObj) {
