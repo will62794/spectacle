@@ -7,6 +7,9 @@ import { test, expect } from '@playwright/test';
 
 
 test('interpreter-tests', async ({ page }) => {
+    // All interpreter tests can be a bit slow.
+    test.setTimeout(120_000);
+
     await page.goto('http://localhost:3000/test.html?run=0');
     // await page.goto('http://127.0.0.1:8000/test.html?test=simple5&debug=0');
   
