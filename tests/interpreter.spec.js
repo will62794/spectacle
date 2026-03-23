@@ -31,7 +31,7 @@ test('interpreter-tests', async ({ page }) => {
         }, testName);
 
         // Optionally, fail immediately if status is a FAIL (for fast feedback)
-        const statusText = await page.$eval(`td#test_status-${testName}`, td => td.textContent);
+        const statusText = await page.locator(`td#test_status-${testName}`).textContent();
         if (statusText.includes("FAIL")) {
             throw new Error(`Test ${testName} failed: ${statusText}`);
         }
