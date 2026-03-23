@@ -673,6 +673,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
     const urlSearchParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlSearchParams.entries());
     const arg = params["test"];
+    const listTestsOnly = params["run"] === "0";
 
     let allTestsList = [];
     for(const [key, value] of Object.entries(testGroups)) {
@@ -688,7 +689,10 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         testsToRun = allTestsList.filter(t => t["spec"] === arg);
     }
 
-    function createTestStatusElems(tests) {
+    function createTestStatusElems(tests, listOnly) {
+        if (listOnly === undefined) {
+            listOnly = false;
+        }
         // For when running a single test.
         if (tests instanceof Array) {
             tests = { "": tests }
@@ -703,7 +707,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         let testHeaderName = document.createElement("th");
         let testHeaderStatus = document.createElement("th");
         testHeaderName.innerHTML = "Test";
-        testHeaderStatus.innerHTML = "Status";
+        testHeaderStatus.innerHTML = listOnly ? "&mdash;" : "Status";
         testHeader.appendChild(testHeaderName);
         testHeader.appendChild(testHeaderStatus);
         testTable.appendChild(testHeader);
@@ -729,7 +733,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 // testHeader.setAttribute("onclick", `toggleTestDetails(\"${testId}\")`);
                 // testsDiv.appendChild(testHeader);
 
-                let statusText = "STATUS: -"; //(areEquiv ? "PASS &#10003" : "FAIL &#10007");
+                let statusText = listOnly ? "&mdash;" : "STATUS: -"; //(areEquiv ? "PASS &#10003" : "FAIL &#10007");
                 let statusColor = "gray"; // areEquiv ? "green" : "red";
                 div = document.createElement("div");
                 div.id = "test_status-" + testId;
@@ -740,7 +744,7 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 let testColName = document.createElement("td");
 
 
-                testColName.innerHTML = `<b><a href='?test=${testId}&debug=1'> ${testId} </a></b>`;
+                testColName.innerHTML = `<b><a class='test-name-link' href='?test=${testId}&debug=1'> ${testId} </a></b>`;
                 if (!urlParams.hasOwnProperty("test")) {
                     testHeader.href = "?test=" + testId;
                 } else {
@@ -766,7 +770,14 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         // testsDiv.appendChild(infoDiv);
     }
 
-    createTestStatusElems(testsToRun);
+    let testsDiv = document.getElementById("tests");
+    if (listTestsOnly) {
+        let banner = document.createElement("p");
+        banner.style.marginBottom = "12px";
+        banner.textContent = "Listing tests only (run=0). Remove run=0 from the URL to execute tests.";
+        testsDiv.appendChild(banner);
+    }
+    createTestStatusElems(testsToRun, listTestsOnly);
 
     function handleTestResult(test, statusObj) {
         let testsDiv = document.getElementById("tests");
@@ -974,11 +985,13 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         console.log("total spec test LOC: ", totalLOC);
     }
 
-    // Run all tests sequentially.
-    if(testsToRun instanceof Array){
-        testAllSpecs(testsToRun, onTestCompletion);
-    } else{
-        testAllSpecs(allTestsList, onTestCompletion);
+    // Run all tests sequentially (skipped when run=0; list only).
+    if (!listTestsOnly) {
+        if(testsToRun instanceof Array){
+            testAllSpecs(testsToRun, onTestCompletion);
+        } else{
+            testAllSpecs(allTestsList, onTestCompletion);
+        }
     }
 
 

@@ -6,33 +6,37 @@ import { test, expect } from '@playwright/test';
 // 
 
 
-/** 
- * 
 test('interpreter-tests', async ({ page }) => {
-    await page.goto('http://localhost:3000/test.html');
+    // All interpreter tests can be a bit slow.
+    test.setTimeout(120_000);
+
+    await page.goto('http://localhost:3000/test.html?run=0');
     // await page.goto('http://127.0.0.1:8000/test.html?test=simple5&debug=0');
   
     // Expect a title "to contain" a substring.
     await expect(page.getByText('TLA+ Web Interpreter Tests')).toBeVisible();
 
-    // Wait until all <td class="test-status"> elements contain "Done" in their text.
-    await page.waitForFunction(() => {
-        const statusCells = Array.from(document.querySelectorAll('td.test-status'));
-        return statusCells.length > 0 && statusCells.every(td => td.textContent && td.textContent.includes("Done"));
-    });
+    // Retrieve all test elements with class 'test-name-link' and extract test names into a list
+    const testNameLinks = await page.$$eval('.test-name-link', links => links.map(link => link.textContent.trim()));
+    // testNameLinks now contains a list of test name strings, e.g., ["simple5", ...]
 
-    // Check until all <td class="test-status"> elements contain "PASS" in their status text. 
-    // Otherwise, mark those that have "FAIL" in their status text as failed and fail the test reporting
-    // the number of failed tests.
-    const failedTests = await page.evaluate(() => {
-        const statusCells = Array.from(document.querySelectorAll('td.test-status'));
-        return statusCells.filter(td => td.textContent && td.textContent.includes("FAIL")).map(td => td.textContent);
-    });
-    if (failedTests.length > 0) {
-        throw new Error(`Failed tests: ${failedTests.join(', ')}`);
-    } else {
-        console.log(`All tests passed.`);
+    for (const testName of testNameLinks) {
+        const url = `http://localhost:3000/test.html?test=${encodeURIComponent(testName)}`;
+        await page.goto(url);
+
+        // Wait for page to be loaded
+        await expect(page.getByText('TLA+ Web Interpreter Tests')).toBeVisible();
+
+        // Wait until the test status cell for this test contains 'Done'
+        await page.waitForFunction((name) => {
+            const td = document.querySelector(`td#test_status-${name}`);
+            return td && td.textContent && td.textContent.includes("Done");
+        }, testName);
+
+        // Optionally, fail immediately if status is a FAIL (for fast feedback)
+        const statusText = await page.locator(`td#test_status-${testName}`).textContent();
+        if (statusText.includes("FAIL")) {
+            throw new Error(`Test ${testName} failed: ${statusText}`);
+        }
     }
   });
-
-*/
