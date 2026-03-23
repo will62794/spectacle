@@ -2,7 +2,7 @@
 VARIABLE x
 VARIABLE y
 Init == 
-    /\ x = 1 \/ x = 233
+    /\ x = 1 \/ x = 2
     /\ y = 3 \/ y = 6
 
 Next ==
