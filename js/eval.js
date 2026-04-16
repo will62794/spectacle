@@ -11,6 +11,8 @@
 let depth = 0;
 let cloneTime = 0.0;
 let numClones = 0;
+// Assignment mode flag used by evalEq; default to init-style when not explicitly set.
+var ASSIGN_PRIMED = false;
 const TLA_STANDARD_MODULES = [
     "TLC",
     "TLCExt",
@@ -1871,6 +1873,19 @@ class TLASpec {
                     self.moduleTableParsed[modName] = parsedObj;
                 }
 
+                let allNonSubDecls = _.union(_.keys(parsedObj.var_decls), _.keys(parsedObj.const_decls))
+                    .filter(d => !substs.some(s => s.namedChildren[0].text === d));
+
+                let allCurrDefsAndDecls = _.keys(op_defs).map(k => op_defs[k].name)
+                    .concat(_.keys(const_decls), _.keys(var_decls));
+
+                for (const d of allNonSubDecls) {
+                    assert(
+                        allCurrDefsAndDecls.includes(d),
+                        `Substitution '${d}' is not defined in the current scope of module '${modName}'`
+                    );
+                }
+
                 //
                 // Go ahead and add all definitions from this module to the
                 // current module.
@@ -1886,12 +1901,13 @@ class TLASpec {
                     let origOpDef = parsedObj["op_defs"][opName];
 
                     let substPairs = substs.map(s => [s.namedChildren[0].text, {"node":s.namedChildren[2], "curr_defs_context": _.keys(op_defs)}]);
+                    let identitySubstPairs = allNonSubDecls.map(d => [d, {"node": null, "curr_defs_context": _.keys(op_defs), "identity": true}]);
                     let currentSubs = parsedObj["op_defs"][opName]["substitutions"];
 
                     // Add any new substitutions to already existing set of substitutions for this definition.
-                    parsedObj["op_defs"][opName]["substitutions"] = _.merge(currentSubs, _.fromPairs(substPairs));
+                    parsedObj["op_defs"][opName]["substitutions"] = _.merge(currentSubs, _.fromPairs(substPairs), _.fromPairs(identitySubstPairs));
 
-                    let newSubs = _.merge(currentSubs, _.fromPairs(substPairs));
+                    let newSubs = _.merge(currentSubs, _.fromPairs(substPairs), _.fromPairs(identitySubstPairs));
 
                     op_defs[defId] = { 
                         "id": defId,
@@ -2617,6 +2633,9 @@ function evalLand(lhs, rhs, ctx) {
     evalLog("## LAND - LHS:", lhs.text, ", RHS: ", rhs.text);
     let lhsEval = _.flattenDeep(evalExpr(lhs, ctx));
     evalLog("lhsEval:", lhsEval);
+    if (!Array.isArray(lhsEval) || lhsEval.length === 0 || !lhsEval[0] || !(lhsEval[0]["val"] instanceof BoolValue)) {
+        return [];
+    }
     if (!lhsEval[0]["val"].getVal()) {
         // Short-circuit.
         return lhsEval;
@@ -2624,7 +2643,13 @@ function evalLand(lhs, rhs, ctx) {
     let rhsEval = lhsEval.map(lctx => {
         evalLog("rhs:", rhs.text);
         evalLog("lctx:", lctx);
+        if (!lctx || !(lctx["val"] instanceof BoolValue)) {
+            return [];
+        }
         return evalExpr(rhs, lctx).map(actx => {
+            if (!actx || !(actx["val"] instanceof BoolValue)) {
+                return [];
+            }
             return [actx.withValAndState((lctx["val"].and(actx["val"])), actx["state"])];
         })
     });
@@ -4094,6 +4119,15 @@ function evalUserBoundOp(node, opDefObj, ctx){
     let opEvalContext = ctx.clone();
     if (!opEvalContext.hasOwnProperty("quant_bound")) {
         opEvalContext["quant_bound"] = {};
+    }
+
+    // Apply INSTANCE WITH substitutions from imported definitions.
+    if (opDefObj !== undefined && opDefObj.hasOwnProperty("substitutions")) {
+        opEvalContext["substitutions"] = _.merge(
+            {},
+            opEvalContext["substitutions"] || {},
+            opDefObj["substitutions"]
+        );
     }
 
     // If the operator definition has a context of variable declarations, then we need to

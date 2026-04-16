@@ -214,6 +214,189 @@ async function testSemanticError(test, parsedSpec, specPath, constvals, spec) {
     }
 }
 
+function buildInterpreterRegressionStatus(start, probe, pass) {
+    return {
+        "pass": pass,
+        "duration_ms": (performance.now() - start).toFixed(1),
+        "probe": probe,
+        "initialJS": [],
+        "initialTLC": [],
+        "reachableEdgesJS": [],
+        "reachableEdgesTLC": [],
+        "initStatesDiffInJS": [],
+        "initStatesDiffInTLC": [],
+        "edgesDiffInJS": [],
+        "edgesDiffInTLC": [],
+    };
+}
+
+function withMockedEvalExpr(mockEvalExpr, bodyFn) {
+    const originalEvalExpr = evalExpr;
+    try {
+        evalExpr = mockEvalExpr;
+        return bodyFn();
+    } finally {
+        evalExpr = originalEvalExpr;
+    }
+}
+
+async function testEvalLandEmptyBranchContextRegression(test, parsedSpec, specPath, constvals, spec) {
+    const start = performance.now();
+
+    let probe;
+    try {
+        const lhsCtx = { val: new BoolValue(true) };
+        const out = withMockedEvalExpr(
+            (expr, evalCtx) => {
+                if (expr && expr.text === "lhs") {
+                    return [lhsCtx];
+                }
+                if (expr && expr.text === "rhs") {
+                    // Simulate a malformed branch context returned by nested evaluation.
+                    return [undefined];
+                }
+                return [];
+            },
+            () => evalLand(
+                { text: "lhs" },
+                { text: "rhs" },
+                new Context(),
+            )
+        );
+
+        probe = {
+            threw: false,
+            isArray: Array.isArray(out),
+            len: Array.isArray(out) ? out.length : -1,
+        };
+    } catch (e) {
+        probe = {
+            threw: true,
+            message: String(e),
+            isArray: false,
+            len: -1,
+        };
+    }
+
+    let pass = !probe.threw && probe.isArray && probe.len === 0;
+    return buildInterpreterRegressionStatus(start, probe, pass);
+}
+
+async function testEvalUserBoundOpInstanceSubstitutionsRegression(test, parsedSpec, specPath, constvals, spec) {
+    const start = performance.now();
+
+    let probe;
+    try {
+        const argNode = { type: "identifier_ref", text: "Arg" };
+        const opBodyNode = { type: "identifier_ref", text: "Body" };
+
+        const opCallNode = {
+            type: "bound_op",
+            namedChildren: [{ type: "identifier_ref", text: "Op" }, argNode],
+        };
+
+        const opDefObj = {
+            node: opBodyNode,
+            args: [{ text: "p" }],
+            substitutions: { InstSubst: new IntValue(7) },
+        };
+
+        const baseCtx = new Context();
+        baseCtx["quant_bound"] = {};
+        baseCtx["substitutions"] = { ExistingSubst: new IntValue(1) };
+
+        let seenSubstitutions = undefined;
+        const out = withMockedEvalExpr(
+            (expr, evalCtx) => {
+                if (expr === argNode) {
+                    return [{ val: new BoolValue(true) }];
+                }
+                if (expr === opBodyNode) {
+                    seenSubstitutions = evalCtx["substitutions"];
+                    return [evalCtx.withVal(new BoolValue(true))];
+                }
+                return [];
+            },
+            () => evalUserBoundOp(opCallNode, opDefObj, baseCtx)
+        );
+
+        probe = {
+            threw: false,
+            isArray: Array.isArray(out),
+            len: Array.isArray(out) ? out.length : -1,
+            hasExistingSubst: seenSubstitutions !== undefined &&
+                Object.prototype.hasOwnProperty.call(seenSubstitutions, "ExistingSubst"),
+            hasInstanceSubst: seenSubstitutions !== undefined &&
+                Object.prototype.hasOwnProperty.call(seenSubstitutions, "InstSubst"),
+        };
+    } catch (e) {
+        probe = {
+            threw: true,
+            message: String(e),
+            isArray: false,
+            len: -1,
+            hasExistingSubst: false,
+            hasInstanceSubst: false,
+        };
+    }
+
+    let pass = !probe.threw && probe.isArray && probe.len === 1 &&
+        probe.hasExistingSubst && probe.hasInstanceSubst;
+    return buildInterpreterRegressionStatus(start, probe, pass);
+}
+
+async function testImplicitSubstitutionsGuardRegression(test, parsedSpec, specPath, constvals, spec) {
+    const start = performance.now();
+
+    let probe;
+    try {
+        const allDefs = [];
+        if (parsedSpec && parsedSpec.op_defs) {
+            allDefs.push(...Object.values(parsedSpec.op_defs));
+        }
+        if (parsedSpec && parsedSpec.imported_op_defs) {
+            allDefs.push(...Object.values(parsedSpec.imported_op_defs));
+        }
+
+        const defsWithSubstitutions = allDefs.filter(d => d && d.substitutions && typeof d.substitutions === "object");
+
+        const hasValExplicit = defsWithSubstitutions.some(d => {
+            const subst = d.substitutions["Val"];
+            return subst && subst.identity !== true && subst.node !== null;
+        });
+        const hasStorageIdentity = defsWithSubstitutions.some(d => {
+            const subst = d.substitutions["Storage"];
+            return subst && subst.identity === true && subst.node === null;
+        });
+        const hasMemIdentity = defsWithSubstitutions.some(d => {
+            const subst = d.substitutions["mem"];
+            return subst && subst.identity === true && subst.node === null;
+        });
+
+        probe = {
+            threw: false,
+            defsScanned: allDefs.length,
+            defsWithSubstitutions: defsWithSubstitutions.length,
+            hasValExplicit,
+            hasStorageIdentity,
+            hasMemIdentity,
+        };
+    } catch (e) {
+        probe = {
+            threw: true,
+            message: String(e),
+            defsScanned: 0,
+            defsWithSubstitutions: 0,
+            hasValExplicit: false,
+            hasStorageIdentity: false,
+            hasMemIdentity: false,
+        };
+    }
+
+    let pass = !probe.threw && probe.hasValExplicit && probe.hasStorageIdentity && probe.hasMemIdentity;
+    return buildInterpreterRegressionStatus(start, probe, pass);
+}
+
 // Check equivalence of given state graph and state graph
 // generated by given spec.
 async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, constvals, spec, isSemanticErrorTest) {
@@ -585,6 +768,23 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
             "errLine": 10
         },
     ],
+    "Interpreter Regressions": [
+        {
+            "spec": "evalLand_empty_branch_context_regression",
+            "constvals": undefined,
+            "isInterpreterRegressionTest": true
+        },
+        {
+            "spec": "evalUserBoundOp_instance_substitutions_regression",
+            "constvals": undefined,
+            "isInterpreterRegressionTest": true
+        },
+        {
+            "spec": "implicit_substitutions_guard_regression",
+            "constvals": undefined,
+            "isInterpreterRegressionTest": true
+        },
+    ],
 }
 
     const urlSearchParams = new URLSearchParams(window.location.search);
@@ -847,8 +1047,8 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
         let specPath = `./specs/with_state_graphs/${test["spec"]}.tla`;
 
         let fetchGraph, fetchSpec;
-        // For error tests we don't need to fetch the TLC generated state graph.
-        if(test["isSemanticErrorTest"]) {
+        // For semantic/interpreter regression tests we don't need the TLC state graph.
+        if(test["isSemanticErrorTest"] || test["isInterpreterRegressionTest"]) {
             fetchGraph = Promise.resolve(null);
             fetchSpec = fetch(specPath).then(response => response.text());
         } else{
@@ -869,6 +1069,17 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                 console.log("The parsed spec:", parsedSpec);
                 if(test["isSemanticErrorTest"]) {
                     return testSemanticError(test, parsedSpec, specPath, test["constvals"], spec);
+                }
+                if(test["isInterpreterRegressionTest"]) {
+                    if (test["spec"] === "evalLand_empty_branch_context_regression") {
+                        return testEvalLandEmptyBranchContextRegression(test, parsedSpec, specPath, test["constvals"], spec);
+                    }
+                    if (test["spec"] === "evalUserBoundOp_instance_substitutions_regression") {
+                        return testEvalUserBoundOpInstanceSubstitutionsRegression(test, parsedSpec, specPath, test["constvals"], spec);
+                    }
+                    if (test["spec"] === "implicit_substitutions_guard_regression") {
+                        return testImplicitSubstitutionsGuardRegression(test, parsedSpec, specPath, test["constvals"], spec);
+                    }
                 }
                 return testStateGraphEquiv(test["spec"], specStateGraph, parsedSpec, specPath, test["constvals"], spec, test["isSemanticErrorTest"])
             }).then(function (statusObj) {
