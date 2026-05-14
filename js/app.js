@@ -1727,6 +1727,13 @@ function tlaValView(tlaVal, prevTlaVal = null) {
         }
 
         let borderStyle = { style: "border:solid 0.5px gray;vertical-align:middle" };
+
+        // If domain is all strings or model values, then sort valPairs lexicographically by keyfor display.
+        let domain = tlaVal.getDomain();
+        if (domain.every(v => v instanceof StringValue || v instanceof ModelValue)) {
+            valPairs = _.sortBy(valPairs, p => p[0].toString());
+        }
+
         return m("table", {style: {"background-color": wholeDiff ? "lightyellow" : "none"}}, valPairs.map(p => {
             let key = p[0];
             let val = p[1];
