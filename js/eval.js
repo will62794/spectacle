@@ -4397,6 +4397,11 @@ function evalBoundOp(node, ctx) {
         return [ctx.withVal(argExprVal)];
     }
 
+    // Just treat Assert as a no-op in the web interpreter and return TRUE.
+    if (opName == "Assert") {
+        return [ctx.withVal(new BoolValue(true))];
+    }
+
     // See if this is defined as via a CONSTANT assignment.
     let opDef = null;
     if (ctx["constants"] !== undefined && ctx["constants"].hasOwnProperty(opName) && !(ctx["constants"][opName] instanceof TLAValue)) {
