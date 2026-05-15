@@ -2,14 +2,14 @@ strict digraph DiskGraph {
 nodesep=0.35;
 subgraph cluster_graph {
 color="white";
-2707385369330286023 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
--1741781993312497955 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
--2002673408723696656 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
-2770963926199693546 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
--1039127884387336635 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
-3734931695246839135 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
-3473336559527362674 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
--976534458311429272 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ localColl = [d1 |-> Nil, d2 |-> Nil]\n/\\ lws = [d1 |-> Nil, d2 |-> Nil]\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
-{rank = same; -1741781993312497955;2770963926199693546;3473336559527362674;-1039127884387336635;-976534458311429272;3734931695246839135;2707385369330286023;-2002673408723696656;}
+-3737515201942837941 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+2209896551167380917 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+1670878299901192946 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+-4198856254096506356 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> Nil], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+8434165985933500993 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+-6375230331274016065 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> Nil]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+-5900377379650900488 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d1\", \"d2\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+8977691134281778438 [label="/\\ pseudoInsertOplog = <<>>\n/\\ seqno = 0\n/\\ remoteColl = [d1 |-> [k1 |-> 0], d2 |-> [k1 |-> 0]]\n/\\ remoteCollSeq = <<\"d2\", \"d1\">>\n/\\ cursor = 1\n/\\ oplog = <<>>",style = filled]
+{rank = same; -3737515201942837941;1670878299901192946;8434165985933500993;-5900377379650900488;2209896551167380917;-4198856254096506356;-6375230331274016065;8977691134281778438;}
 }
 }

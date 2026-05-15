@@ -31,22 +31,11 @@ VARIABLE remoteCollSeq
 \* Current cursor position (positive integer or EOF).
 VARIABLE cursor
 
-\* Destination collection: Document -> DocumentVal | Nil.
-VARIABLE localColl
-
 \* Global monotonically increasing sequence number counter.
 \* Incremented each time a new oplog entry is created.
 VARIABLE seqno
 
-\* LastWriteStates: per-document record of the most recently applied event.
-\*   lws[d] = Nil
-\*       No event has been applied for document d yet.
-\*   lws[d] = [lastOpTs |-> n, lastOpWasRefetch |-> b]
-\*       The last applied event for d had sequence number n.
-\*       b is TRUE if that application was a re-fetch of the current source image.
-VARIABLE lws
-
-vars == <<oplog, remoteColl, remoteCollSeq, cursor, localColl, seqno, lws, pseudoInsertOplog>>
+vars == <<oplog, remoteColl, remoteCollSeq, cursor, seqno, pseudoInsertOplog>>
 
 ----
 
@@ -71,28 +60,18 @@ Insert(d, dv) ==
     /\ remoteColl'    = [remoteColl EXCEPT ![d] = dv]
     /\ remoteCollSeq' = Append(remoteCollSeq, d)
     /\ oplog'         = Append(oplog, <<"i", d, Nil, dv, seqno + 1>>)
-    /\ UNCHANGED <<localColl, cursor, lws, pseudoInsertOplog>>
-
-Update(d, k) ==
-    /\ remoteColl[d] # Nil
-    /\ LET newVer == IF remoteColl[d][k] = Nil THEN 0 ELSE remoteColl[d][k] + 1 IN
-        /\ seqno'      = seqno + 1
-        /\ remoteColl' = [remoteColl EXCEPT ![d][k] = newVer]
-        /\ oplog'      = Append(oplog, <<"u", d, k, newVer, seqno + 1>>)
-    /\ UNCHANGED <<remoteCollSeq, cursor, localColl, lws, pseudoInsertOplog>>
+    /\ UNCHANGED <<cursor, pseudoInsertOplog>>
 
 Init ==
-    /\ oplog             = <<>>
-	/\ pseudoInsertOplog = <<>>
-    /\ seqno             = 0
-    /\ localColl = [d \in Document |-> Nil]
-    /\ lws       = [d \in Document |-> Nil]
-    /\ \E c \in [Document -> DocumentVal] :
+    (/\ oplog             = <<>>
+     /\ pseudoInsertOplog = <<>>
+     /\ seqno             = 0) 
+    /\ (\E c \in [Document -> DocumentVal] :
         /\ remoteColl = c
         /\ LET docs == {d \in DOMAIN c : c[d] # Nil} IN
            /\ remoteCollSeq \in [1..Cardinality(docs) -> docs]
            /\ Injective(remoteCollSeq)
-    /\ cursor = 1
+    /\ cursor = 1)
 
 
 Next ==

@@ -435,7 +435,13 @@ async function testStateGraphEquiv(testId, stateGraph, parsedSpec, specPath, con
                     "Client": new SetValue([new StringValue("c1"), new StringValue("c2")])
                 }
             },
-
+            { "spec": "cea_simple", "constvals": {
+                "Document": new SetValue([new StringValue("d1"), new StringValue("d2")]),
+                "Key": new SetValue([new StringValue("k1")]),
+                "Nil": new StringValue("Nil"),
+                "EOF": new StringValue("EOF"),
+                "MaxSourceChanges": new IntValue(3),
+            } },
         ],
     "UNCHANGED": [
         { "spec": "simple_unchanged_no_tuple", "constvals": undefined },
