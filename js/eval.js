@@ -2617,14 +2617,18 @@ function evalLand(lhs, rhs, ctx) {
     evalLog("## LAND - LHS:", lhs.text, ", RHS: ", rhs.text);
     let lhsEval = _.flattenDeep(evalExpr(lhs, ctx));
     evalLog("lhsEval:", lhsEval);
-    if (!lhsEval[0]["val"].getVal()) {
-        // Short-circuit.
-        return lhsEval;
-    }
+
     let rhsEval = lhsEval.map(lctx => {
         evalLog("rhs:", rhs.text);
         evalLog("lctx:", lctx);
         return evalExpr(rhs, lctx).map(actx => {
+            // If this branch of lhs eval is already FALSE, then we can just
+            // short-circuit and return, since we won't care about this branch
+            // generating any states anyway.
+            if (!lctx["val"].getVal()) {
+                // Short-circuit.
+                return [lctx];
+            }
             return [actx.withValAndState((lctx["val"].and(actx["val"])), actx["state"])];
         })
     });
