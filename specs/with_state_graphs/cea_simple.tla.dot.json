@@ -1,0 +1,223 @@
+{
+  "name": "DiskGraph",
+  "directed": true,
+  "strict": true,
+  "nodesep": "0.35",
+  "_subgraph_cnt": 2,
+  "objects": [
+    {
+      "name": "cluster_graph",
+      "color": "white",
+      "nodesep": "0.35",
+      "_gvid": 0,
+      "subgraphs": [
+        1
+      ],
+      "nodes": [
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33
+      ]
+    },
+    {
+      "name": "%1",
+      "color": "white",
+      "nodesep": "0.35",
+      "rank": "same",
+      "_gvid": 1,
+      "nodes": [
+        2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33
+      ]
+    },
+    {
+      "_gvid": 2,
+      "name": "439470856042711371",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 3,
+      "name": "732648018249756289",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 4,
+      "name": "-7446465011286082830",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 5,
+      "name": "-7738480958234337992",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 6,
+      "name": "4388599508516693383",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 7,
+      "name": "3518651715122152013",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 8,
+      "name": "-6748934396689148354",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 9,
+      "name": "-5880217890978385420",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 10,
+      "name": "-2209234980896583832",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 11,
+      "name": "-1340793499436357470",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 12,
+      "name": "9216264318363909329",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 13,
+      "name": "8346591257195944731",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 14,
+      "name": "-2618535219609885788",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 15,
+      "name": "-2910826190271544210",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 16,
+      "name": "4978905290007597085",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 17,
+      "name": "5272357183903561687",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> Nil @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 18,
+      "name": "6924874171676285043",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 19,
+      "name": "7793948962103328697",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 20,
+      "name": "-95807377463301174",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 21,
+      "name": "-965973031584560128",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 22,
+      "name": "6549421556576924863",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 23,
+      "name": "6257623191753462645",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 24,
+      "name": "-4299319331961485562",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 25,
+      "name": "-4006500734147436340",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> Nil) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 26,
+      "name": "-8695201518744232368",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 27,
+      "name": "-8401531769757910630",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 28,
+      "name": "1866169911050169833",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 29,
+      "name": "1573520652719180323",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> Nil @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 30,
+      "name": "-4779919940128378212",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 31,
+      "name": "-5649234443615021738",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> Nil))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 32,
+      "name": "2529852902033162533",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d1, d2>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    },
+    {
+      "_gvid": 33,
+      "name": "3398076799489812207",
+      "label": "\/\\\\ pseudoInsertOplog = <<>>\\n\/\\\\ seqno = 0\\n\/\\\\ remoteColl = (d1 :> (k1 :> 0 @@ k2 :> 0) @@ d2 :> (k1 :> 0 @@ k2 :> 0))\\n\/\\\\ remoteCollSeq = <<d2, d1>>\\n\/\\\\ localColl = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ lws = (d1 :> Nil @@ d2 :> Nil)\\n\/\\\\ cursor = 1\\n\/\\\\ oplog = <<>>",
+      "style": "filled"
+    }
+  ]
+}
