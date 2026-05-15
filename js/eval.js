@@ -5308,6 +5308,27 @@ function getInitStates(initDef, vars, defns, constvals, moduleTable, globalDefTa
     if (ret_ctxs === undefined) {
         console.error("Set of generated initial states is 'undefined'.");
     }
+
+    // If there are some satisfied initial states with unassigned variables,
+    // throw an error log info.
+    let origVars = Object.keys(vars);
+    let init_states_with_unassigned = [];
+    for (const ctx of ret_ctxs.filter(c => c["val"].getVal())) {
+        let unassigned_vars = [];
+        for (const v of origVars) {
+            if (ctx.state.getVarVal(v) === null) {
+                if (!init_states_with_unassigned.includes(ctx)) {
+                    init_states_with_unassigned.push(ctx);
+                    unassigned_vars.push(v);
+                }
+            }
+        }
+        if (unassigned_vars.length !== 0) {
+            console.log("unassigned variables for state:", unassigned_vars);
+            throw new Error(`${unassigned_vars.length} variables were unassigned in initial state.`);
+        }
+    }
+
     return ret_ctxs;
 }
 
