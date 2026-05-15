@@ -3083,10 +3083,40 @@ function stateSelectionPane(hidden){
 
     let fetchingInProgress = model.rootModName.length === 0 && !model.loadSpecFailed;
 
+    // Compute initial state count if in initial state selection view
+    let showInitialStatesCount = model.currTrace.length === 0 && Array.isArray(model.currNextStates);
+    let initialStatesCount = showInitialStatesCount ? model.currNextStates.length : 0;
+
+    // Info box for Choose Initial State - no monospaced, no gray background
+    let initialStatesInfoElem = (showInitialStatesCount && model.nextStatePred !== null) ? m("div", {
+        style: "border-radius: 6px; padding: 10px 12px; margin: 10px 0 0 0; display: flex; align-items: center; gap: 18px; font-size: 13px; color: #333; font-family: inherit; background: none;",
+        id: "initial-states-info"
+    }, [
+        m("span", { 
+            style: "font-weight: 600; color: black; letter-spacing: 0.01em;" 
+        }, "Choose Initial State"),
+        m("span", { 
+            style: "color: #777; font-weight:normal;" 
+        }, `(total initial states: ${initialStatesCount})`)
+    ]) : null;
+
     let stateChoicesDiv =
         m("div", { id: "initial-states", class: "tlc-state" }, [
-            model.currTrace.length === 0 && model.nextStatePred !== null ? m("div", {style: "padding:10px;", id:"choose-initial-state-title"}, "Choose Initial State") : m("span"),
-            model.nextStatePred === null && !fetchingInProgress ? m("div", {style: "padding:20px;"}, "No transition relation found. Spec can be explored in the REPL.") : m("span"),
+            // Render info box at the top for initial states selection (no gray bg)
+            (showInitialStatesCount && model.nextStatePred !== null) ? initialStatesInfoElem : null,
+            // fallback: only one or the other in some edge cases
+            (!showInitialStatesCount && model.currTrace.length === 0 && model.nextStatePred !== null)
+                ? m("div", {
+                    style: "border-radius: 6px; padding: 10px 12px; margin: 10px 0 0 0; font-weight:600; color:#393974; font-size:13px; font-family: inherit; background: none;",
+                    id:"choose-initial-state-title"
+                  }, "Choose Initial State")
+                : null,
+            (!showInitialStatesCount && model.currTrace.length === 0)
+                ? m("div", { style: "color: #777; font-size: 13px; margin-bottom: 4px; font-family: inherit;", id: "num-initial-states" }, "")
+                : null,
+            model.nextStatePred === null && !fetchingInProgress
+                ? m("div", {style: "padding:20px;"}, "No transition relation found. Spec can be explored in the REPL.")
+                : m("span"),
             componentNextStateChoices()
         ]);
 
@@ -3103,13 +3133,11 @@ function stateSelectionPane(hidden){
         return pickedAction[0].name + " == \n" + actDef["node"].text;
     }
 
-    // return m("div", {id:"mid-pane", hidden: hidden}, 
     return m("div", {id: "state-choices-pane", hidden: hidden}, [
-        // chooseConstantsPane(),
         fullNextStatesSwitch,
-        // m("h5", { id: "poss-next-states-title", class: "" }, (model.currTrace.length > 0) ? "Choose Next Action" : "Choose Initial State"),
-        model.traceLoadingInProgress || model.traceLoadingError ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...") : stateChoicesDiv,
-        // m("pre", {style: "font-size:12px;padding-left:10px;padding-top:10px"}, currActionText()),
+        model.traceLoadingInProgress || model.traceLoadingError
+            ? m("div", {style: "padding:20px;color:gray;"}, "Waiting for trace to load...")
+            : stateChoicesDiv,
     ]);    
 }
 
