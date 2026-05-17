@@ -10,6 +10,11 @@ let vizInstance = null;
 
 const LOCAL_SERVER_URL = "http://127.0.0.1:8000";
 
+function withCacheBust(path) {
+    const sep = path.includes("?") ? "&" : "?";
+    return `${path}${sep}__ts=${Date.now()}`;
+}
+
 let Pane = {
     Constants: 1,
     Trace: 2
@@ -2018,8 +2023,21 @@ function animationViewForTraceState(state){
     }
     catch(e){
         console.error(e);
-        console.error("Error evaluating animation view. Error node:", evalNodeError[0]);
-        return null;
+        const errNode = (typeof evalNodeError !== "undefined" && evalNodeError && evalNodeError[0]) ? evalNodeError[0] : null;
+        console.error("Error evaluating animation view. Error node:", errNode);
+
+        const nodePos = (errNode && errNode.startPosition)
+            ? (`row ${errNode.startPosition.row}, col ${errNode.startPosition.column}`)
+            : "unknown";
+        const nodeText = (errNode && errNode.text) ? errNode.text : "<unknown>";
+        const fp = (state && state.fingerprint) ? state.fingerprint() : "n/a";
+        console.error("AnimView fallback diagnostics:", { nodePos, nodeText, fingerprint: fp });
+
+        return m("g", [
+            m("rect", { x: 12, y: 10, width: 980, height: 56, fill: "#fee2e2", stroke: "#ef4444", rx: 8 }),
+            m("text", { x: 24, y: 35, fill: "#991b1b", style: { fontFamily: "monospace", fontSize: "13px" } },
+                "AnimView eval failed; fallback view rendered. See console for details.")
+        ]);
     }
     // console.log("evalNodeGraph:", evalNodeGraph.length);
     const duration = (performance.now() - start).toFixed(1);
@@ -4033,7 +4051,7 @@ function tryLoadAnimSpec(specPath) {
 
     let animSpecPath = specPath.replace(".tla", "_anim.tla");
     model.externalAnimationExists = false;
-    m.request(animSpecPath, { responseType: "text" }).then(function (animText) {
+    m.request(withCacheBust(animSpecPath), { responseType: "text" }).then(function (animText) {
         model.specAnimText = animText;
         model.animationExists = true;
         model.externalAnimationExists = true;
@@ -4088,7 +4106,7 @@ function loadSpecFromPath(specPath){
         model.loadSpecFailed = true;
         return;
     }
-    return m.request(specPath, { responseType: "text" }).then(function (specText) {
+    return m.request(withCacheBust(specPath), { responseType: "text" }).then(function (specText) {
         loadSpecText(specText, specPath);
         if(!model.inlineAnimationExists){
             tryLoadAnimSpec(specPath);
