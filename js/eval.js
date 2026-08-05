@@ -2604,10 +2604,24 @@ function isCommentNode(node){
 
 function evalLnot(v, ctx) {
     evalLog("evalLnot: ", v);
-    lval = evalExpr(v, ctx)[0]["val"];
-    let retval = new BoolValue(!lval.getVal())
+    const innerEval = _.flattenDeep(evalExpr(v, ctx));
+    if (!Array.isArray(innerEval) || innerEval.length === 0) {
+        return [];
+    }
+
+    const retval = [];
+    for (const evalCtx of innerEval) {
+        if (!evalCtx) {
+            continue;
+        }
+        const lval = evalCtx["val"];
+        if (!(lval instanceof BoolValue)) {
+            continue;
+        }
+        retval.push(evalCtx.withVal(new BoolValue(!lval.getVal())));
+    }
     evalLog("evalLnot retval: ", retval);
-    return [ctx.withVal(retval)];
+    return retval;
 }
 
 function evalLand(lhs, rhs, ctx) {
